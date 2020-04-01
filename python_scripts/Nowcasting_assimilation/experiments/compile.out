@@ -1,0 +1,307 @@
+running build
+running config_cc
+unifing config_cc, config, build_clib, build_ext, build commands --compiler options
+running config_fc
+unifing config_fc, config, build_clib, build_ext, build commands --fcompiler options
+running build_src
+build_src
+building extension "motion_vectors" sources
+f2py options: []
+f2py:> /tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c
+creating /tmp/tmpjfrbaze3/src.linux-x86_64-3.6
+Reading fortran codes...
+	Reading file 'w_motion_vectors_parallel_old.f90' (format:free)
+Post-processing...
+	Block: motion_vectors
+			Block: motion_vector
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:motion_vector
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:motion_vector
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+			Block: horn_schunck
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:horn_schunck
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:horn_schunck
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '0.01d0'
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:horn_schunck
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '0.0d0'
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:horn_schunck
+get_parameters: got "invalid syntax (<string>, line 1)" on '1d-3'
+			Block: cdfcorrelation
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:cdfcorrelation
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+			Block: mse
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:mse
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+			Block: undef_mean
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:undef_mean
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+			Block: cotrec_sor
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:cotrec_sor
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:cotrec_sor
+get_parameters: got "invalid syntax (<string>, line 1)" on '1.0d-4'
+			Block: correlation
+			Block: covar
+			Block: stdev
+			Block: barnes
+			Block: gaussian_filter
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:gaussian_filter
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+			Block: filter_outlier
+In: :motion_vectors:w_motion_vectors_parallel_old.f90:filter_outlier
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '-999.0d0'
+			Block: damp_latbnd
+Post-processing (stage 2)...
+Building modules...
+	Building module "motion_vectors"...
+		Constructing wrapper function "motion_vector"...
+		  u_motion,v_motion,max_corr,trend,nref,aux_output = motion_vector(field_t0,field_t1,dt,dx,box_size,sigma,desp_max,min_box_fraction,aux_inputi,aux_inputj,motion_vector_option,motion_vector_weigth,motion_vector_norm,[nx,ny])
+		Constructing wrapper function "horn_schunck"...
+		  u_motion,v_motion = horn_schunck(field_t0,field_t1,dt,dx,alpha,max_iter,[nx,ny])
+		Constructing wrapper function "cdfcorrelation"...
+		  cdfindex = cdfcorrelation(a,b,w,thresholds,[l,nt])
+		Constructing wrapper function "mse"...
+		  wmse = mse(a,b,w,[l])
+		Constructing wrapper function "undef_mean"...
+		  mean = undef_mean(field,[nx,ny])
+		Constructing wrapper function "cotrec_sor"...
+		  u_field,v_field,forcing,lambda = cotrec_sor(uo_field,vo_field,dx,alpha,max_iter,[nx,ny])
+		Constructing wrapper function "correlation"...
+		  cor = correlation(a,b,w,[n])
+		Constructing wrapper function "covar"...
+		  cov = covar(a,b,w,[n])
+		Constructing wrapper function "stdev"...
+		  std = stdev(a,w,[n])
+		Constructing wrapper function "barnes"...
+		  zo = barnes(x,y,z,xo,yo,xr,yr,npassmax,[nx,ny,no])
+		Constructing wrapper function "gaussian_filter"...
+		  field1 = gaussian_filter(field0,dx,sigma,[nx,ny])
+		Constructing wrapper function "filter_outlier"...
+		  fieldoutu,fieldoutv = filter_outlier(fieldu,fieldv,threshold,box_size,[nx,ny])
+		Constructing wrapper function "damp_latbnd"...
+		  vard = damp_latbnd(spec_bdy_width,var,[nx,ny])
+	Wrote C/API module "motion_vectors" to file "/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c"
+  adding '/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.c' to sources.
+  adding '/tmp/tmpjfrbaze3/src.linux-x86_64-3.6' to include_dirs.
+copying /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/f2py/src/fortranobject.c -> /tmp/tmpjfrbaze3/src.linux-x86_64-3.6
+copying /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/f2py/src/fortranobject.h -> /tmp/tmpjfrbaze3/src.linux-x86_64-3.6
+build_src: building npy-pkg config files
+running build_ext
+customize UnixCCompiler
+customize UnixCCompiler using build_ext
+get_default_fcompiler: matching types: '['gnu95', 'intel', 'lahey', 'pg', 'absoft', 'nag', 'vast', 'compaq', 'intele', 'intelem', 'gnu', 'g95', 'pathf95', 'nagfor']'
+customize Gnu95FCompiler
+Found executable /usr/bin/gfortran
+customize Gnu95FCompiler
+customize Gnu95FCompiler using build_ext
+building 'motion_vectors' extension
+compiling C sources
+C compiler: gcc -pthread -B /home/jruiz/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+
+creating /tmp/tmpjfrbaze3/tmp
+creating /tmp/tmpjfrbaze3/tmp/tmpjfrbaze3
+creating /tmp/tmpjfrbaze3/tmp/tmpjfrbaze3/src.linux-x86_64-3.6
+compile options: '-I/tmp/tmpjfrbaze3/src.linux-x86_64-3.6 -I/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/jruiz/anaconda3/include/python3.6m -c'
+gcc: /tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c
+In file included from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarraytypes.h:1816:0,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarrayobject.h:18,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/arrayobject.h:4,
+                 from /tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.h:13,
+                 from /tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c:16:
+/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:15:2: warning: #warning "Using deprecated NumPy API, disable it by " "#defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+ #warning "Using deprecated NumPy API, disable it by " \
+  ^
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c: In function ‘f2py_rout_motion_vectors_damp_latbnd’:
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c:86:28: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 4 has type ‘long_long {aka long long int}’ [-Wformat=]
+         sprintf(errstring, "%s: "show, "("tcheck") failed for "name, var);\
+                            ^
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c:2457:3: note: in expansion of macro ‘CHECKSCALAR’
+   CHECKSCALAR(shape(var,0)==nx,"shape(var,0)==nx","1st keyword nx","damp_latbnd:nx=%ld",nx) {
+   ^
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c:86:28: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 4 has type ‘long_long {aka long long int}’ [-Wformat=]
+         sprintf(errstring, "%s: "show, "("tcheck") failed for "name, var);\
+                            ^
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c:2462:3: note: in expansion of macro ‘CHECKSCALAR’
+   CHECKSCALAR(shape(var,1)==ny,"shape(var,1)==ny","2nd keyword ny","damp_latbnd:ny=%ld",ny) {
+   ^
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c: At top level:
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.c:115:12: warning: ‘f2py_size’ defined but not used [-Wunused-function]
+ static int f2py_size(PyArrayObject* var, ...)
+            ^
+gcc: /tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.c
+In file included from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarraytypes.h:1816:0,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarrayobject.h:18,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/arrayobject.h:4,
+                 from /tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.h:13,
+                 from /tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.c:2:
+/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:15:2: warning: #warning "Using deprecated NumPy API, disable it by " "#defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+ #warning "Using deprecated NumPy API, disable it by " \
+  ^
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.c: In function ‘format_def’:
+/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.c:138:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         if (size < sizeof(notalloc)) {
+                  ^
+compiling Fortran sources
+Fortran f77 compiler: /usr/bin/gfortran -Wall -g -ffixed-form -fno-second-underscore -fPIC -fopenmp -lgomp
+Fortran f90 compiler: /usr/bin/gfortran -Wall -g -fno-second-underscore -fPIC -fopenmp -lgomp
+Fortran fix compiler: /usr/bin/gfortran -Wall -g -ffixed-form -fno-second-underscore -Wall -g -fno-second-underscore -fPIC -fopenmp -lgomp
+compile options: '-I/tmp/tmpjfrbaze3/src.linux-x86_64-3.6 -I/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/jruiz/anaconda3/include/python3.6m -c'
+gfortran:f90: w_motion_vectors_parallel_old.f90
+w_motion_vectors_parallel_old.f90:133:56:
+
+         nref(ii-box_size-desp_max,jj-box_size-desp_max)=0.0d0
+                                                        1
+Warning: Possible change of value in conversion from REAL(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:411:6:
+
+     N=N + SUM( C )
+      1
+Warning: Possible change of value in conversion from REAL(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:1237:8:
+
+   ied = nx - 1
+        1
+Warning: Possible change of value in conversion from INTEGER(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:1239:8:
+
+   jed = ny - 1
+        1
+Warning: Possible change of value in conversion from INTEGER(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:1240:15:
+
+     DO i = ist, spec_bdy_width
+               1
+Warning: Possible change of value in conversion from INTEGER(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:1243:10:
+
+     DO i = ied-spec_bdy_width+1, ied
+          1
+Warning: Possible change of value in conversion from INTEGER(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:1246:15:
+
+     DO j = jst, spec_bdy_width
+               1
+Warning: Possible change of value in conversion from INTEGER(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:1249:10:
+
+     DO j = jed-spec_bdy_width+1, jed
+          1
+Warning: Possible change of value in conversion from INTEGER(8) to INTEGER(4) at (1) [-Wconversion]
+w_motion_vectors_parallel_old.f90:433:18:
+
+ INTEGER   :: ii,jj,N
+                  1
+Warning: Unused variable ‘jj’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:433:20:
+
+ INTEGER   :: ii,jj,N
+                    1
+Warning: Unused variable ‘n’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:396:18:
+
+ INTEGER   :: ii,jj,N
+                  1
+Warning: Unused variable ‘jj’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:25:34:
+
+ INTEGER  :: maxi , maxj  , i_point
+                                  1
+Warning: Unused variable ‘i_point’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:84:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                                    1
+Warning: Unused variable ‘contador’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:65:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                 1
+Warning: Unused variable ‘end_i’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:73:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                         1
+Warning: Unused variable ‘end_j’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:35:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                   1
+Warning: Unused variable ‘iii’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:49:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                 1
+Warning: Unused variable ‘ini_i’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:57:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                         1
+Warning: Unused variable ‘ini_j’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:41:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                         1
+Warning: Unused variable ‘jjj’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:269:95:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                                               1
+Warning: Unused variable ‘n_points’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:84:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                                    1
+Warning: Unused variable ‘contador’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:507:31:
+
+ LOGICAL             :: CONVERGE
+                               1
+Warning: Unused variable ‘converge’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:65:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                 1
+Warning: Unused variable ‘end_i’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:73:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                         1
+Warning: Unused variable ‘end_j’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:35:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                   1
+Warning: Unused variable ‘iii’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:49:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                 1
+Warning: Unused variable ‘ini_i’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:57:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                         1
+Warning: Unused variable ‘ini_j’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:41:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                         1
+Warning: Unused variable ‘jjj’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:495:95:
+
+ INTEGER            :: ii , jj , iii , jjj , ini_i , ini_j , end_i , end_j , contador , n_points
+                                                                                               1
+Warning: Unused variable ‘n_points’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:771:39:
+
+ INTEGER  :: i , j , np , ni , npass , n
+                                       1
+Warning: Unused variable ‘n’ declared at (1) [-Wunused-variable]
+w_motion_vectors_parallel_old.f90:1231:18:
+
+   INTEGER :: i,j,k
+                  1
+Warning: Unused variable ‘k’ declared at (1) [-Wunused-variable]
+/usr/bin/gfortran -Wall -g -Wall -g -shared /tmp/tmpjfrbaze3/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/motion_vectorsmodule.o /tmp/tmpjfrbaze3/tmp/tmpjfrbaze3/src.linux-x86_64-3.6/fortranobject.o /tmp/tmpjfrbaze3/w_motion_vectors_parallel_old.o -L/usr/lib/gcc/x86_64-linux-gnu/5 -L/usr/lib/gcc/x86_64-linux-gnu/5 -lgomp -lgfortran -o ./motion_vectors.cpython-36m-x86_64-linux-gnu.so
+Removing build directory /tmp/tmpjfrbaze3

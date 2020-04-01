@@ -1,0 +1,157 @@
+running build
+running config_cc
+unifing config_cc, config, build_clib, build_ext, build commands --compiler options
+running config_fc
+unifing config_fc, config, build_clib, build_ext, build commands --fcompiler options
+running build_src
+build_src
+building extension "common_qc_tools" sources
+f2py options: []
+f2py:> /tmp/tmpfpfop6n8/src.linux-x86_64-3.6/common_qc_toolsmodule.c
+creating /tmp/tmpfpfop6n8/src.linux-x86_64-3.6
+Reading fortran codes...
+	Reading file 'common_qc_tools.f90' (format:free)
+Post-processing...
+	Block: common_qc_tools
+			Block: qc_const
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '3.141592653589793d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '9.81d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '287.0d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '6371.3d3'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "invalid syntax (<string>, line 1)" on '7.292d-5'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '273.15d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "invalid syntax (<string>, line 1)" on '3.1415926535d0/180d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "invalid syntax (<string>, line 1)" on '180d0/3.1415926535d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '299792458.0d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '20.0d4'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '240.0d03'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '500.0d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '500.0d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '5.0d0'
+In: :common_qc_tools:common_qc_tools.f90:qc_const
+get_parameters: got "invalid syntax (<string>, line 1)" on '7.0d0/2.0d0*rd'
+			Block: qc
+				Block: speckle_filter
+				Block: rho_filter
+				Block: get_attenuation
+				Block: compute_tdbz
+				Block: compute_sign
+				Block: box_functions_2d
+				Block: echo_top
+				Block: echo_top_sub
+In: :common_qc_tools:common_qc_tools.f90:qc:echo_top_sub
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '10.0d0'
+In: :common_qc_tools:common_qc_tools.f90:qc:echo_top_sub
+get_parameters: got "unexpected EOF while parsing (<string>, line 1)" on '0.0d0'
+				Block: com_xy2ij
+Post-processing (stage 2)...
+	Block: common_qc_tools
+		Block: unknown_interface
+			Block: qc_const
+			Block: qc
+				Block: speckle_filter
+				Block: rho_filter
+				Block: get_attenuation
+				Block: compute_tdbz
+				Block: compute_sign
+				Block: box_functions_2d
+				Block: echo_top
+				Block: echo_top_sub
+				Block: com_xy2ij
+Building modules...
+	Building module "common_qc_tools"...
+		Constructing F90 module support for "qc_const"...
+		  Variables: r_size r_dble r_sngl pi gg rd cp re r_omega t0c deg2rad rad2deg clight npar_echo_top_3d npar_echo_top_2d max_z_echo_top max_r_echo_top dz_echo_top dx_echo_top max_echo_top_levs dbz_threshold_echo_top undef
+		Constructing F90 module support for "qc"...
+			Constructing wrapper function "qc.speckle_filter"...
+			  speckle = speckle_filter(var,nx,ny,nz,threshold,[na,nr,ne])
+			Constructing wrapper function "qc.rho_filter"...
+			  rho_smooth = rho_filter(var,nx,ny,nz,[na,nr,ne])
+			Constructing wrapper function "qc.get_attenuation"...
+			  attenuation = get_attenuation(var,beaml,cal_error,[na,nr,ne])
+			Constructing wrapper function "qc.compute_tdbz"...
+			  texture = compute_tdbz(var,nx,ny,nz,[na,nr,ne])
+			Constructing wrapper function "qc.compute_sign"...
+			  varsign = compute_sign(var,nx,ny,nz,[na,nr,ne])
+			Constructing wrapper function "qc.box_functions_2d"...
+			  dataout = box_functions_2d(datain,boxx,boxy,boxz,operation,threshold,[na,nr,ne])
+			Constructing wrapper function "qc.echo_top"...
+			  output_data_3d,output_data_2d = echo_top(reflectivity,heigth,rrange,nx,ny,nz,[na,nr,ne])
+			Constructing wrapper function "qc.echo_top_sub"...
+			  output_3d,output_2d = echo_top_sub(reflectivity,z,max_levs,threshold,[nz])
+			Constructing wrapper function "qc.com_xy2ij"...
+			  dist_min_x,dist_min_y,ratio,nearestn = com_xy2ij(fx,fy,datax,datay,[nx,ny])
+	Wrote C/API module "common_qc_tools" to file "/tmp/tmpfpfop6n8/src.linux-x86_64-3.6/common_qc_toolsmodule.c"
+	Fortran 90 wrappers are saved to "/tmp/tmpfpfop6n8/src.linux-x86_64-3.6/common_qc_tools-f2pywrappers2.f90"
+  adding '/tmp/tmpfpfop6n8/src.linux-x86_64-3.6/fortranobject.c' to sources.
+  adding '/tmp/tmpfpfop6n8/src.linux-x86_64-3.6' to include_dirs.
+copying /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/f2py/src/fortranobject.c -> /tmp/tmpfpfop6n8/src.linux-x86_64-3.6
+copying /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/f2py/src/fortranobject.h -> /tmp/tmpfpfop6n8/src.linux-x86_64-3.6
+  adding '/tmp/tmpfpfop6n8/src.linux-x86_64-3.6/common_qc_tools-f2pywrappers2.f90' to sources.
+build_src: building npy-pkg config files
+running build_ext
+customize UnixCCompiler
+customize UnixCCompiler using build_ext
+get_default_fcompiler: matching types: '['gnu95', 'intel', 'lahey', 'pg', 'absoft', 'nag', 'vast', 'compaq', 'intele', 'intelem', 'gnu', 'g95', 'pathf95', 'nagfor']'
+customize Gnu95FCompiler
+Found executable /usr/bin/gfortran
+customize Gnu95FCompiler
+customize Gnu95FCompiler using build_ext
+building 'common_qc_tools' extension
+compiling C sources
+C compiler: gcc -pthread -B /home/jruiz/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+
+creating /tmp/tmpfpfop6n8/tmp
+creating /tmp/tmpfpfop6n8/tmp/tmpfpfop6n8
+creating /tmp/tmpfpfop6n8/tmp/tmpfpfop6n8/src.linux-x86_64-3.6
+compile options: '-I/tmp/tmpfpfop6n8/src.linux-x86_64-3.6 -I/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/jruiz/anaconda3/include/python3.6m -c'
+gcc: /tmp/tmpfpfop6n8/src.linux-x86_64-3.6/common_qc_toolsmodule.c
+In file included from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarraytypes.h:1816:0,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarrayobject.h:18,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/arrayobject.h:4,
+                 from /tmp/tmpfpfop6n8/src.linux-x86_64-3.6/fortranobject.h:13,
+                 from /tmp/tmpfpfop6n8/src.linux-x86_64-3.6/common_qc_toolsmodule.c:16:
+/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:15:2: warning: #warning "Using deprecated NumPy API, disable it by " "#defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+ #warning "Using deprecated NumPy API, disable it by " \
+  ^
+/tmp/tmpfpfop6n8/src.linux-x86_64-3.6/common_qc_toolsmodule.c:142:12: warning: ‘f2py_size’ defined but not used [-Wunused-function]
+ static int f2py_size(PyArrayObject* var, ...)
+            ^
+gcc: /tmp/tmpfpfop6n8/src.linux-x86_64-3.6/fortranobject.c
+In file included from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarraytypes.h:1816:0,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/ndarrayobject.h:18,
+                 from /home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/arrayobject.h:4,
+                 from /tmp/tmpfpfop6n8/src.linux-x86_64-3.6/fortranobject.h:13,
+                 from /tmp/tmpfpfop6n8/src.linux-x86_64-3.6/fortranobject.c:2:
+/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:15:2: warning: #warning "Using deprecated NumPy API, disable it by " "#defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+ #warning "Using deprecated NumPy API, disable it by " \
+  ^
+/tmp/tmpfpfop6n8/src.linux-x86_64-3.6/fortranobject.c: In function ‘format_def’:
+/tmp/tmpfpfop6n8/src.linux-x86_64-3.6/fortranobject.c:138:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         if (size < sizeof(notalloc)) {
+                  ^
+compiling Fortran 90 module sources
+Fortran f77 compiler: gfortran -Wall -g -ffixed-form -fno-second-underscore -g -traceback -fPIC -O3 -funroll-loops
+Fortran f90 compiler: gfortran -g -traceback -fPIC -g -traceback -fPIC -O3 -funroll-loops
+Fortran fix compiler: gfortran -Wall -g -ffixed-form -fno-second-underscore -g -traceback -fPIC -g -traceback -fPIC -O3 -funroll-loops
+compile options: '-I/tmp/tmpfpfop6n8/src.linux-x86_64-3.6 -I/home/jruiz/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/jruiz/anaconda3/include/python3.6m -c'
+extra options: '-J/tmp/tmpfpfop6n8/ -I/tmp/tmpfpfop6n8/'
+gfortran:f90: common_qc_tools.f90
+gfortran: error: unrecognized command line option ‘-traceback’
+gfortran: error: unrecognized command line option ‘-traceback’
+gfortran: error: unrecognized command line option ‘-traceback’
+gfortran: error: unrecognized command line option ‘-traceback’

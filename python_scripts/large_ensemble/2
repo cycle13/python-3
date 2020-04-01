@@ -1,0 +1,237 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov  1 18:45:15 2016
+
+#Compute KLD profile over rainny and non-rainny grid points and store the result in a file.
+
+@author:
+"""
+import sys
+sys.path.append('../../common_python/common_functions/')
+sys.path.append('../../common_python/common_modules/')
+
+import numpy as np
+import datetime as dt
+import ctl_reader as ctlr
+import os
+
+import common_plot_functions as cpf
+import common_mask_functions as cmf
+from common_functions import common_functions as comm 
+
+lat_radar=34.823
+lon_radar=135.523
+radar_range=50.0e3   #Radar range in meters (to define the radar mask)
+
+file_name='kldistance'
+
+basedir='/home/ra001011/a03471/data/output_data/'
+
+expnames=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
+
+deltat=[300,240,300,300,300,300]
+
+init_date = ['20130713050500','20130713050400','20130713050500','20130713050500','20130713050500','20130713050500']
+
+filetypes=['guesgp']   #analgp , analgz , guesgp , guesgz
+
+variable_combination=[['dbz','dbz','dbz','dbz','dbz','v' ,'v' ,'v','v' ],
+                      ['tk' ,'v'  ,'qv' ,'w'  ,'dbz','tk','qv','w','v' ]]
+
+obs_increment = [5.0 , 5.0 , 5.0 , 5.0 , 5.0 , 2.0 , 2.0 , 2.0 , 2.0 ]
+obs_error     = [5.0 , 5.0 , 5.0 , 5.0 , 5.0 , 2.0 , 2.0 , 2.0 , 2.0 ]
+
+
+rain_threshold = 30.0     #Maximum reflectivities above this threshold will be considered rainny points.   
+norain_threshold = 0.0    #Maximum reflectivities below this threshold will be considered no rain points.
+
+#Define initial and end times using datetime module.
+etime = dt.datetime(2013,7,13,5,59,30)  #End time.
+
+#=========================================================
+#  LOOP OVER FILE TYPES
+#=========================================================
+
+for iexp , my_exp in enumerate( expnames ) :
+
+   delta = dt.timedelta(seconds=deltat[iexp])
+
+   itime = dt.datetime.strptime( init_date[iexp] , '%Y%m%d%H%M%S' )
+
+   #Compute the total number of times
+   ntimes=int( 1 + np.around((etime-itime).seconds / delta.seconds) ) #Total number of times.
+
+
+   ctl_file = basedir + '/' + my_exp + '/ctl/update_mean_diff.ctl'
+
+   ctl_file = basedir + '/' + my_exp + '/ctl/moment0001.ctl'
+
+   outputdir=basedir + '/' + my_exp + '/time_mean/guesgp/'
+
+   if not os.path.exists( outputdir)  :
+
+      os.makedirs( outputdir )
+
+   #=========================================================
+   #  READ CTL FILE
+   #=========================================================
+
+   ctl_dict = ctlr.read_ctl( ctl_file )
+
+   ctl_dict_2 = ctlr.read_ctl( ctl_file_2 )
+
+   nx=ctl_dict['nx']
+   ny=ctl_dict['nx']
+   nlev=len( ctl_dict['full_lev_list'] )
+   nt=int(1)             #Force the number of times to be one.
+   ctl_dict['nt']=int(1) #Force the number of times to be one.
+   nz=np.size( ctl_dict['vlevels'] )
+
+   undef=np.float32( ctl_dict['undef'] )
+
+   if  ctl_dict['big_endian']   :
+      dtypein = '>f4'
+      endian='big_endian'
+   else                         :
+      dtypein = 'f4'
+      endian='little_endian'
+
+   if  ctl_dict['sequential']   :
+      access='sequential'
+   else                         :
+      access='direct'
+
+   sequential=ctl_dict['sequential']
+
+   #=========================================================
+   #  READ LAT LON AND GENERATE 2D RADAR MASK.
+   #=========================================================
+
+   if iexp == 0  :
+
+      latlon_file = basedir + my_exp + '/latlon/latlon.grd'
+
+      tmp=ctlr.read_data_records(latlon_file,ctl=ctl_dict,records=np.array([0,1]))
+      lat=tmp[:,:,1]
+      lon=tmp[:,:,0]
+
+      #Exclude areas outside the radar domain.
+      tmp_radar_mask = cmf.distance_range_mask( lon_radar , lat_radar , radar_range , lon , lat )
+
+      #Transform 2D radar mask to 3D.
+      radar_mask = np.zeros( (np.shape(lat)[0], np.shape(lat)[1],nz) ).astype(bool)
+
+      for kk in range(0,nz)   :
+          radar_mask[:,:,kk] = tmp_radar_mask 
+
+   #=========================================================
+   #  START TIME LOOP
+   #=========================================================
+
+   for iv,my_increment in enumerate( obs_increment )   :
+
+      var_obs = variable_combination[0][iv]
+      var_upd = variable_combination[1][iv]
+
+      max_dbz = np.zeros( (np.shape(lat)[0], np.shape(lat)[1],nz) )
+
+      profiles=dict()
+
+      profile_mean_update_rmsd_rain = np.zeros( (nz,ntimes) )
+      profile_mean_update_kf_rain = np.zeros( (nz,ntimes) )
+      profile_update_kld_rain = np.zeros( (nz,ntimes) )
+
+      profile_mean_update_rmsd_norain = np.zeros( (nz,ntimes) )
+      profile_mean_update_kf_norain = np.zeros( (nz,ntimes) )
+      profile_update_kld_norain = np.zeros( (nz,ntimes) )
+
+
+      it=0
+      ctime = itime
+      while ( ctime <= etime )  :
+
+         print( ctime )
+
+         print ( 'Reading data')
+
+         #=========================================================
+         #  OBTAIN THE RAIN MASK
+         #=========================================================
+
+         my_file=basedir + my_exp + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/guesgp/' + '/' + file_name +'.grd'
+
+         #Read all the variables and levels at once
+         tmp_parameter = ctlr.read_data_grads(  my_file , ctl_dict_2 , undef2nan = True ) 
+
+         my_file=basedir + my_exp + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/guesgp/moment0001.grd'       
+ 
+         ensemble_mean = ctlr.read_data_grads(  my_file , ctl_dict_2 , undef2nan = True )
+
+         tmp_max_dbz = np.nanmax( np.delete( ensemble_mean['dbz'] , 4 , 2) , 2 )
+
+         for kk in range(0,nz)   :
+            max_dbz[:,:,kk] = np.squeeze( tmp_max_dbz[:] )
+
+         #Several mask can be defined here.
+
+         rain_mask = np.logical_and( max_dbz > rain_threshold , radar_mask )
+
+         norain_mask = np.logical_and( max_dbz < norain_threshold , radar_mask )
+
+         #=========================================================
+         #  READ THE DATA
+         #=========================================================
+
+         my_file=basedir + '/' + my_exp + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/' + filetype + '/update_comp_meandiff_vobs_' + var_obs + '_upd_obs_' + var_upd + '_ens_size_' + str(nbv) + '_obs_inc_' + str(obs_increment[iv]) + '.grd'
+         update_mean_diff = np.squeeze( ctlr.read_data(  my_file , ctl_dict , undef2nan = True ) )
+         my_file=basedir + '/' + my_exp + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/' + filetype + '/update_comp_update_mean_kf_vobs_' + var_obs + '_upd_obs_' + var_upd + '_ens_size_' + str(nbv) + '_obs_inc_' + str(obs_increment[iv]) + '.grd'
+         update_mean_kf = np.squeeze( ctlr.read_data(  my_file , ctl_dict , undef2nan = True ) )
+         my_file=basedir + '/' + my_exp + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/' + filetype + '/update_comp_kld_vobs_' + var_obs + '_upd_obs_' + var_upd + '_ens_size_' + str(nbv) + '_obs_inc_' + str(obs_increment[iv]) + '.grd'
+         update_kld = np.squeeze( ctlr.read_data(  my_file , ctl_dict , undef2nan = True ) )
+
+         update_mean_diff = np.power( update_mean_diff , 2.0 )
+
+         update_mean_kf   = np.power( update_mean_kf   , 2.0 )
+
+         #Compute the vertical profile
+         for kk in range(0,nz)   :
+
+            profile_mean_update_rmsd_rain[kk,it] = np.nanmean( np.nanmean( update_mean_diff[:,:,kk][ rain_mask ] , 1 ) , 0 )
+            profile_mean_update_rmsd_norain[kk,it] = np.nanmean( np.nanmean( update_mean_diff[:,:,kk][ norain_mask ] , 1 ) , 0 )
+
+            profile_mean_update_kf_rain[kk,it] = np.nanmean( np.nanmean( update_mean_kf[:,:,kk][ rain_mask ] , 1 ) , 0 )
+            profile_mean_update_kf_norain[kk,it] = np.nanmean( np.nanmean( update_mean_kf[:,:,kk][ norain_mask ] , 1 ) , 0 )
+
+            profile_update_kld_rain[kk,it] = np.nanmean( np.nanmean( update_kld[:,:,kk][ rain_mask ] , 1 ) , 0 )
+            profile_update_kld_norain[kk,it] = np.nanmean( np.nanmean( update_kld[:,:,kk][ norain_mask ] , 1 ) , 0 )
+
+ 
+
+         ctime = ctime + delta
+
+         it = it + 1
+
+      print ( "Finish time loop" )
+
+      for my_var in cvars  :
+
+         my_file=outputdir + '/' + file_name + '_' + my_var + '_rain_profile.npz'
+         np.savez(my_file, parameter = parameter_rain[my_var] )
+
+         my_file=outputdir + '/' + file_name +  '_' + my_var + '_norain_profile.npz'
+         np.savez(my_file, parameter = parameter_norain[my_var] )
+
+         print( my_exp )
+         print( np.nanmax( parameter_rain[my_var] ) , np.nanmin( parameter_rain[my_var]) )
+
+      #import matplotlib.pyplot as plt
+      #plt.contourf( np.transpose( parameter_rain[my_var] ) )
+      #plt.colorbar()
+      #plt.show()
+     
+
+     
+
+
+
+
