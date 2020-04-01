@@ -1434,6 +1434,37 @@ moments=0.0e0
 
 END SUBROUTINE compute_moments
 
+!compute the sample linear correlation coefficient between variable 1 and variable 2 at each grid point.
+SUBROUTINE compute_correlation(my_ensemble1,my_ensemble2,my_undefmask1,my_undefmask2  &
+     &                          ,nx,ny,nz,nbv,correlation,undef)
+IMPLICIT NONE
+INTEGER, INTENT(IN)       :: nx,ny,nz,nbv !Ensemble dimensions.
+REAL(r_sngl) , INTENT(IN) :: my_ensemble1(nx,ny,nz,nbv) , my_ensemble2(nx,ny,nz,nbv)
+LOGICAL      , INTENT(IN) :: my_undefmask1(nx,ny,nz) , my_undefmask2(nx,ny,nz)
+REAL(r_sngl), INTENT(IN)  :: undef        !Missing data code.
+REAL(r_sngl), INTENT(OUT) :: correlation(nx,ny,nz)
+INTEGER                   :: ii , jj , kk 
+REAL(r_sngl)              :: w(nbv)
+
+w=1.0e0
+
+correlation=0.0e0
+
+!$OMP PARALLEL DO PRIVATE(ii,jj,kk)
+  DO ii=1,nx
+   DO jj=1,ny
+    DO kk=1,nz
+     if( ( .not. my_undefmask1(ii,jj,kk) ) .and. ( .not. my_undefmask2(ii,jj,kk) )  )then
+       CALL com_correl_sngl(nbv,my_ensemble1(ii,jj,kk,:),my_ensemble2(ii,jj,kk,:),correlation(ii,jj,kk),w)
+      else
+       correlation(ii,jj,kk)=undef
+     endif
+    ENDDO
+   ENDDO
+  ENDDO
+!$OMP END PARALLEL DO
+
+END SUBROUTINE compute_correlation
 
 !Compute the histogram.
 SUBROUTINE compute_histogram(my_ensemble,my_undefmask,nx,ny,nz,nbv,nbins,undef,varmin,varmax,histogram)

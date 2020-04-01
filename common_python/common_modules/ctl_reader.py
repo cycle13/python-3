@@ -301,4 +301,13 @@ def write_data(inputfilename,field,dtypein):
     #Write the data
     field.astype(dtypein).tofile(inputfilename)
 
+def get_var_start_end( ctl , my_var )  :
+#Given a var, if this var is in the ctl var list, return initial and end record 
+#If the variable is not found a warning is printed and -1 is returned for both start and end variable record index.
+    for ii , my_ctl_var in enumerate( ctl['var_list'] )  :
+        if my_ctl_var == my_var :
+            return ctl['ini_record'][ii] ctl['end_record'][ii]
+    print('Warning: variable '+my_var+' not in ctl file list')
+    return -1.0 , -1.0
+
 
