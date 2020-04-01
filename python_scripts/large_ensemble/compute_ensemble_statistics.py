@@ -40,9 +40,11 @@ nmoments=4               #Cantidad total de momentos que vamos a calcular.
 
 get_kldistance=False      #Wether we compute or not the Kullback-Leiber distance.
 
-get_histogram=True       #Wether if histogram will be explicitelly calculated and stored.
+get_histogram=False       #Wether if histogram will be explicitelly calculated and stored.
 
 get_moments=False         #Wether we will be computeing ensemble moments.
+
+get_correlation=True      #Compute correlation between reflectivity, wind and other variables.
 
 itime = dt.datetime(2013,7,13,5,5,0)  #Initial time.
 etime = dt.datetime(2013,7,13,6,0,0)  #End time.
@@ -140,6 +142,25 @@ for iexp , my_exp_name in enumerate( expnames ) :
                                   ,nx=nx,ny=ny,nz=nz,nbv=nbv,undef=undef,nbins=nbins)
              my_file=basedir + '/' + my_exp_name + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/' + my_file_type + '/kldistance.grd'
              comm.write_data(outfile=my_file,mydata=kldist,nx=nx,ny=ny,nz=nz,ie=endian,acc=access)
+
+          if get_correlation   :
+             print("Computing correlation" + ctime.strftime("%Y%m%d%H%M%S") )
+             observed_var_list=['dbz','u','v']
+             full_var_list=['dbz','u','v','w','tk','qv']
+             for my_obs_var in correlation_var_list :
+                 #Get the initial record and end record of the observed variable.
+                 [obs_var_si,obs_var_ei] = ctlr.get_var_start_end( ctl , my_obs_var )
+                 #Compute correlation of this obs_var with the full var list.
+                 for my_var in  full_var_list :
+                     if my_var != my_obs_var :  #Skip correlation of a variable with itself
+                        [my_var_si,my_var_ei] = ctlr.get_var_start_end( ctl , my_var )
+                        nzl=my_var_ei - my_var_si + 1
+                        correlation=comm.compute_correlation(my_ensemble1=my_ensemble[:,:,obs_var_si:obs_var_ei+1],my_ensemble2=my_ensemble[:,:,my_var_si:my_var_ei+1]
+                                  ,my_undefmask1=my_undefmask[:,:,obs_var_si:obs_var_ei+1],my_undefmask2=my_undefmask[:,:,my_var_si:my_var_ei+1]
+                                  ,nx=nx,ny=ny,nz=nzl,nbv=nbv,undef=undef)
+                        my_file=basedir + '/' + my_exp_name + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/' + my_file_type + '/correlation_'+my_obs_var+'_'+my_var+'.grd'
+                        comm.write_data(outfile=my_file,mydata=correlation,nx=nx,ny=ny,nz=nzl,ie=endian,acc=access)
+
 
           if get_histogram     :
              print("Computing histogram" + ctime.strftime("%Y%m%d%H%M%S") )
