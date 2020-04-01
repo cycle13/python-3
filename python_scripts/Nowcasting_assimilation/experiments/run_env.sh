@@ -1,0 +1,3 @@
+
+export OMP_STACKSIZE=1G
+export OMP_NUM_THREADS=10

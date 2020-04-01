@@ -1,0 +1,19 @@
+running build
+running config_cc
+unifing config_cc, config, build_clib, build_ext, build commands --compiler options
+running config_fc
+unifing config_fc, config, build_clib, build_ext, build commands --fcompiler options
+running build_src
+build_src
+building extension "model" sources
+f2py options: []
+f2py:> /tmp/tmpqagnlw56/src.linux-x86_64-3.6/modelmodule.c
+creating /tmp/tmpqagnlw56/src.linux-x86_64-3.6
+IOError: [Errno 2] No such file or directory: 'SFMT.f90'. Skipping file "SFMT.f90".
+IOError: [Errno 2] No such file or directory: 'common_tools.f90'. Skipping file "common_tools.f90".
+IOError: [Errno 2] No such file or directory: 'lorenzN.f90'. Skipping file "lorenzN.f90".
+Reading fortran codes...
+Post-processing...
+Post-processing (stage 2)...
+Building modules...
+error: f2py target file '/tmp/tmpqagnlw56/src.linux-x86_64-3.6/modelmodule.c' not generated
