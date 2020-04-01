@@ -18,7 +18,7 @@ import os
 from common_functions import common_functions as comm
 
 
-basedir='/home/ra001011/a03471/data/output_data/'
+basedir='/dalab/jruiz/EXPERIMENTS_LARGE_ENSEMBLE/'
 
 #expnames  = ['LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min','LE_D1_1km_1min_4D','LE_D1_1km_5min']
 expnames  = ['LE_D1_1km_30sec']
@@ -34,7 +34,7 @@ filetypes=['guesgp']   #analgp , analgz , guesgp , guesgz
 smooth=False             #False- no smooth , True apply smooth
 #smooth_lambda=10         #Smooth length scale (in number of grid points)
 
-nbv=1000                 #Total number of ensemble members.
+nbv=100                 #Total number of ensemble members.
 
 nmoments=4               #Cantidad total de momentos que vamos a calcular.
 
@@ -145,20 +145,19 @@ for iexp , my_exp_name in enumerate( expnames ) :
 
           if get_correlation   :
              print("Computing correlation" + ctime.strftime("%Y%m%d%H%M%S") )
-             observed_var_list=['dbz','u','v']
-             full_var_list=['dbz','u','v','w','tk','qv']
-             for my_obs_var in correlation_var_list :
-                 #Get the initial record and end record of the observed variable.
-                 [obs_var_si,obs_var_ei] = ctlr.get_var_start_end( ctl , my_obs_var )
-                 #Compute correlation of this obs_var with the full var list.
-                 for my_var in  full_var_list :
-                     if my_var != my_obs_var :  #Skip correlation of a variable with itself
-                        [my_var_si,my_var_ei] = ctlr.get_var_start_end( ctl , my_var )
-                        nzl=my_var_ei - my_var_si + 1
-                        correlation=comm.compute_correlation(my_ensemble1=my_ensemble[:,:,obs_var_si:obs_var_ei+1],my_ensemble2=my_ensemble[:,:,my_var_si:my_var_ei+1]
-                                  ,my_undefmask1=my_undefmask[:,:,obs_var_si:obs_var_ei+1],my_undefmask2=my_undefmask[:,:,my_var_si:my_var_ei+1]
+             #Each variable in var_list1 will be correlated with all variables in var_list2
+             var_list1=['dbz','u','v']
+             var_list2=['dbz','u','v','w','tk','qv']
+             for my_var1 in var_list1 :
+                 [var_si1,var_ei1] = ctlr.get_var_start_end( ctl_dict , my_var1 )
+                 nzl=var_ei1 - var_si1 + 1
+                 for my_var2 in  var_list2 :
+                     if my_var2 != my_var1 :  #Skip correlation of a variable with itself
+                        [var_si2,var_ei2] = ctlr.get_var_start_end( ctl_dict , my_var2 )
+                        correlation=comm.compute_correlation(my_ensemble1=my_ensemble[:,:,var_si1:var_ei1+1],my_ensemble2=my_ensemble[:,:,var_si2:var_ei2+1]
+                                  ,my_undefmask1=my_undefmask[:,:,var_si1:var_ei1+1],my_undefmask2=my_undefmask[:,:,var_si2:var_ei2+1]
                                   ,nx=nx,ny=ny,nz=nzl,nbv=nbv,undef=undef)
-                        my_file=basedir + '/' + my_exp_name + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/' + my_file_type + '/correlation_'+my_obs_var+'_'+my_var+'.grd'
+                        my_file=basedir + '/' + my_exp_name + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/' + my_file_type + '/correlation_'+my_var1+'_'+my_var2+'.grd'
                         comm.write_data(outfile=my_file,mydata=correlation,nx=nx,ny=ny,nz=nzl,ie=endian,acc=access)
 
 
