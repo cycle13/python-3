@@ -19,6 +19,9 @@ bin-release/
 *.npy
 *.so
 *.nc
+core*
+*.log
+*.out
 
 
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
