@@ -1,6 +1,6 @@
 #This script compiles the fortran code and generates a python module
-export PATH=$HOME/data/software/anaconda3/bin/:$PATH
-export LD_LIBRARY_PATH=$HOME/data/software/anaconda3/lib/:$LD_LIBRARY_PATH
+#export PATH=$HOME/data/software/anaconda3/bin/:$PATH
+#export LD_LIBRARY_PATH=$HOME/data/software/anaconda3/lib/:$LD_LIBRARY_PATH
 
 export FC=ifort
 export F77=ifort
