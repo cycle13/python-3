@@ -147,14 +147,15 @@ for iexp,my_exp in enumerate( expnames ) :
            wkld[:,:,ii][np.logical_not(mask)]=np.nan
            
        max_loc=np.nanargmax( wkld )
-       print( iexp , np.nanmax( wkld ) )
+       #print( iexp , np.nanmax( wkld ) )
        [tmpnx , tmpny , tmpnz ]=np.shape( np.squeeze( wkld ) )
        [hist_x_5MIN,hist_y_5MIN,hist_z_5MIN]=np.unravel_index( max_loc , (tmpnx,tmpny,tmpnz) )
        lon_hist=lon[hist_x_5MIN,hist_y_5MIN]
        lat_hist=lat[hist_x_5MIN,hist_y_5MIN]
        lev_hist=levels[hist_z_5MIN]
-       print( iexp , wkld[hist_x_5MIN,hist_y_5MIN,hist_z_5MIN] )
-       print( lon_hist , lat_hist , lev_hist )
+       print('xyz 5MIN', hist_x_5MIN , hist_y_5MIN , hist_z_5MIN )
+       #print( iexp , wkld[hist_x_5MIN,hist_y_5MIN,hist_z_5MIN] )
+       #print( lon_hist , lat_hist , lev_hist )
    if iexp == 1 :
        ax = plt.axes([0.245, 0.12, 0.20, 0.84])
        plt.setp(ax.get_yticklabels(), visible=False)
@@ -173,14 +174,15 @@ for iexp,my_exp in enumerate( expnames ) :
            wkld[:,:,ii][np.logical_not(mask)]=np.nan
 
        max_loc=np.nanargmax( wkld )
-       print( iexp , np.nanmax( wkld ) )
+       #print( iexp , np.nanmax( wkld ) )
        [tmpnx , tmpny , tmpnz ]=np.shape( np.squeeze( wkld ) )
        [hist_x_30SEC,hist_y_30SEC,hist_z_30SEC]=np.unravel_index( max_loc , (tmpnx,tmpny,tmpnz) )
-       print( iexp , wkld[hist_x_30SEC,hist_y_30SEC,hist_z_30SEC] )
+       #print( iexp , wkld[hist_x_30SEC,hist_y_30SEC,hist_z_30SEC] )
+       print('xyz 30SEC', hist_x_30SEC , hist_y_30SEC , hist_z_30SEC )
        lon_hist=lon[hist_x_30SEC,hist_y_30SEC]
        lat_hist=lat[hist_x_30SEC,hist_y_30SEC]
        lev_hist=levels[hist_z_30SEC]
-       print( lon_hist , lat_hist , lev_hist )
+       #print( lon_hist , lat_hist , lev_hist )
 
    #PLOTTING W AND DBZ
    minlat = np.nanmin( lat[ mask ] )

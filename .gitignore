@@ -21,7 +21,8 @@ bin-release/
 *.nc
 core*
 *.log
-*.out
+*.out*.o
+*.mod
 
 
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`

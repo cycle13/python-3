@@ -2027,6 +2027,62 @@ ENDDO
 
 END SUBROUTINE compare_update
 
+SUBROUTINE compute_single_obs_update(hxf,ens,mask,nx,ny,nz,nens,yo,obs_error,undef,update_type, &
+                    &     updated_mean , updated_std , updated_mode )
+IMPLICIT NONE
+REAL(r_sngl), INTENT(IN)  :: hxf(nens)   !Ensemble in observation space (1D)
+REAL(r_sngl), INTENT(IN)  :: ens(nx,ny,nz,nens)   !Ensemble in model space 
+REAL(r_sngl), INTENT(IN)  :: undef
+LOGICAL     , INTENT(IN)  :: mask(nx,ny,nz)
+INTEGER     , INTENT(IN)  :: nx,ny,nz,nens        !Dimensions
+REAL(r_sngl), INTENT(IN)  :: yo          !Observed value.
+REAL(r_sngl), INTENT(IN)  :: obs_error   !Observation error standard deviation
+INTEGER     , INTENT(IN)  :: update_type !1-EnKF , 2-PF
+REAL(r_sngl), INTENT(OUT) :: updated_mean(nx,ny,nz)  !Updated ensemble mean
+REAL(r_sngl), INTENT(OUT) :: updated_std(nx,ny,nz)   !Updated ensemble var
+REAL(r_sngl), INTENT(OUT) :: updated_mode(nx,ny,nz)  !Updated ensemble mode
+REAL(r_sngl)              :: alpha
+REAL(r_sngl)              :: w(nens)
+INTEGER                   :: iens , ii , jj , kk 
+REAL(r_sngl)              :: updated_ens(nens)
+
+updated_mean = 0.0e0
+updated_std  = 0.0e0
+updated_mode = 0.0e0
+
+w=1.0e0
+
+!$OMP PARALLEL DO PRIVATE(ii,jj,kk,w,updated_ens)
+
+DO ii = 1 , nx
+  DO jj = 1 , ny
+    DO kk = 1 , nz
+       IF( .not. mask( ii , jj , kk ) )THEN
+         IF ( update_type == 1 ) THEN
+            CALL compute_enkf_update(hxf,ens(ii,jj,kk,:),nens,yo,obs_error,updated_ens)
+         ENDIF 
+         IF ( update_type == 2 ) THEN
+            w=1.0d0
+            updated_ens=ens(ii,jj,kk,:)
+            CALL compute_pf_update(hxf,ens(ii,jj,kk,:),nens,yo,obs_error,w,w)
+         ENDIF
+         CALL com_mean_sngl(nens,updated_ens,updated_mean(ii,jj,kk),w)
+         CALL com_stdev_sngl(nens,updated_ens,updated_std(ii,jj,kk),w)
+         CALL com_mode_sngl(nens,updated_ens,updated_mode(ii,jj,kk),w,.false.)
+       ELSE
+          updated_mean( ii , jj , kk ) = undef
+          updated_std( ii , jj , kk ) = undef
+          updated_mode( ii , jj , kk ) = undef
+       ENDIF
+    ENDDO
+  ENDDO
+ENDDO
+
+!$OMP END PARALLEL DO
+
+
+END SUBROUTINE compute_single_obs_update
+
 
 SUBROUTINE compute_enkf_update(hxf,ens,nens,yo,obs_error,updated_ens)
 IMPLICIT NONE
