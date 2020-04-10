@@ -26,8 +26,6 @@ from common_qc_tools  import qc  #Fortran code routines.
 import common_mask_functions as cmf
 import common_plot_functions as cpf
 
-
-
 basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/home/ra001011/a03471/data/output_data/'
 
 figname='./Figure_reflectivity_dbzmax_domain'
@@ -39,8 +37,8 @@ lat_radar=34.823
 lon_radar=135.523
 radar_range=60.0e3   #Radar range in meters (to define the radar mask)
 
-scale_date = '20130713055000'
-radar_date = '20130713-145010'
+scale_date = '20130713053000'
+radar_date = '20130713-143010'
 
 
 xtick=np.arange(134.0,138.0,0.5)
@@ -209,19 +207,17 @@ rrange=np.transpose(rrange)
 max_dbz_obs=var2d[:,:,6]
 #max_dbz_obs[max_dbz_obs < 0.1]=np.nan
 
-smin=-5
+smin=0
 smax=70
-ncols=75
+ncols=70
 delta = ( smax - smin )/ncols
 clevs=np.arange(smin,smax+delta,delta)
 
 my_map = cm.get_cmap('gist_ncar',ncols+10)
 tmp_colors = my_map( range( ncols +10 ) )
-for ii in range( 5 ) :
+for ii in range( 10 ) :
    tmp_colors[ii,:] =np.array([1.0,1.0,1.0,1.0])
-tmp_colors=np.delete( tmp_colors , np.arange( 80 , 85 ) , axis = 0 )
-#for ii in range( 80 , 85 ) :
-#   tmp_colors[ii,:] = tmp_colors[80,:]
+tmp_colors=np.delete( tmp_colors , np.arange( 70 , 80 ) , axis = 0 )
 my_map = ListedColormap( tmp_colors )
 
 #my_map = cpf.cmap_discretize('gist_ncar',100)
@@ -246,7 +242,7 @@ gl.ylabels_right = False
 ax.set_title('(b)',fontsize=14)
 #ax.text(135.0,35.217,titles[iexp],fontsize=18,color='k',bbox={'facecolor':'white', 'alpha':0.8,'edgecolor':'white'})
 
-ax.plot(np.array([135.28,135.28]),np.array([34.9,35.15]), "r-",linewidth=3, transform=ccrs.PlateCarree())
+ax.plot(np.array([135.28,135.28]),np.array([34.9,35.15]), "k-",linewidth=3, transform=ccrs.PlateCarree())
 ax.set_xlim( axesrange2[0],axesrange2[1] , ccrs.PlateCarree())
 ax.set_ylim( axesrange2[2],axesrange2[3] , ccrs.PlateCarree())
 
@@ -289,7 +285,7 @@ p=ax.contourf(lon , lat ,  np.squeeze( dbz_max ) , clevs ,
 #               transform=ccrs.PlateCarree(),levels=[5,40],linewidths=2,linestyles='-' )
 ax.coastlines('10m',linewidth=1.0)
 ax.set_title('(c)',fontsize=14)
-ax.plot(np.array([135.28,135.28]),np.array([34.9,35.15]), "r-",linewidth=3, transform=ccrs.PlateCarree())
+ax.plot(np.array([135.28,135.28]),np.array([34.9,35.15]), "k-",linewidth=3, transform=ccrs.PlateCarree())
 ax.set_xlim( axesrange2[0],axesrange2[1] , ccrs.PlateCarree())
 ax.set_ylim( axesrange2[2],axesrange2[3] , ccrs.PlateCarree()) 
 
@@ -324,7 +320,7 @@ p=ax.contourf(lon , lat ,  np.squeeze( dbz_max ) , clevs ,
 #               transform=ccrs.PlateCarree(),levels=[5,40],linewidths=2,linestyles='-' )
 ax.coastlines('10m',linewidth=1.0)
 ax.set_title('(d)',fontsize=14)
-ax.plot(np.array([135.28,135.28]),np.array([34.9,35.15]), "r-",linewidth=3, transform=ccrs.PlateCarree())
+ax.plot(np.array([135.28,135.28]),np.array([34.9,35.15]), "k-",linewidth=3, transform=ccrs.PlateCarree())
 ax.set_xlim( axesrange2[0],axesrange2[1] , ccrs.PlateCarree())
 ax.set_ylim( axesrange2[2],axesrange2[3] , ccrs.PlateCarree()) 
 
@@ -339,19 +335,16 @@ gl.ylabel_style = {'size': 12, 'color': 'k' }
 gl.xlabels_top = False
 gl.ylabels_right = False 
 
-
-
 #COLORBAR FOR REFLECTIVITY
 cbar_ax = fig.add_axes([0.565, 0.49, 0.40, 0.02])
 m = plt.cm.ScalarMappable(cmap=my_map)
 m.set_array(np.transpose(dbz_max))
 m.set_clim(smin,smax)
-cb=plt.colorbar(m,cax=cbar_ax,orientation='horizontal',boundaries=np.arange(smin,smax+delta,delta))
+cb=plt.colorbar(m,cax=cbar_ax,orientation='horizontal',boundaries=np.arange(smin,smax+delta,delta),ticks=np.arange(0,80,10))
 
 
-
-#plt.show()
-#plt.savefig( figname + '.eps', format='eps' , dpi=300)
+#pl.show()
+plt.savefig( figname + '.eps', format='eps' , dpi=300)
 plt.savefig( figname + '.png' , format='png' , dpi=300)
 plt.close()
 
