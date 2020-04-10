@@ -132,13 +132,13 @@ fig, axs = plt.subplots( nrows,ncols , figsize=[15,8] , )
 
 fig.subplots_adjust(wspace=0.1,hspace=0.1,bottom=0.095,left=0.045,right=0.98,top=0.96)
 
-titles = ['(a) - T 5MIN','(b) - $q_v$ 5MIN','(c) - W 5MIN','(d) - V 5MIN','(e) - T 30MIN','(f) - $q_v$ 30SEC','(g) - W 30SEC','(h) - V 30SEC']
+titles = ['(a) - T','(b) - $q_v$','(c) - W','(d) - V','(e) - T','(f) - $q_v$','(g) - W','(h) - V']
 
 clevelsneg = [-100,-40,-20,-10]
 clevelspos = [10,20,40,100]
 
 time_index=np.arange( 0 , profile_rain['LE_D1_1km_5min']['tk'].shape[1] ) * 5.0 + 5.0 #Time index in minutes.
-xtick= time_index[1::2]
+xtick= np.array([20,40,60])
 
 cmapb = mpl.cm.Blues_r(np.linspace(0,1,11))
 cmapb = mpl.colors.ListedColormap(cmapb[:-5,:-1])
@@ -177,7 +177,6 @@ for ivar , my_var in enumerate( plot_variables ) :
    #Grid lines
    ax.grid(linewidth=1.0, color='k',alpha=0.5, linestyle='--')
    #Grid and ticks
-   ax.set_xticks(xtick)
    my_levs = levels[[0,3,4,6,8]]
    ytick=-np.log(my_levs)
    ax.set_yticks(ytick)
@@ -200,6 +199,8 @@ for ivar , my_var in enumerate( plot_variables ) :
    c=ax.contour( time_index , -np.log(levels) , kld , levels = cclevs , colors='k' ,linestyles='solid')
    plt.clabel(c, inline=1, fontsize=14,fmt='%1.1f')
 
+   ax.set_xticks(xtick)
+   ax.set_xticklabels(['0520UTC','0540UTC'],fontsize=12)
    ax.set_xlim([5,55])
 
    if icol != 0  :
@@ -227,7 +228,6 @@ for ivar , my_var in enumerate( plot_variables ) :
    #Grid lines
    ax.grid(linewidth=1.0, color='k',alpha=0.5, linestyle='--')
    #Grid and ticks
-   ax.set_xticks(xtick)
    my_levs = levels[[0,3,4,6,8]]
    ytick=-np.log(my_levs)
    ax.set_yticks(ytick)
@@ -236,7 +236,10 @@ for ivar , my_var in enumerate( plot_variables ) :
    for ilev in my_levs  :
       levels_str.append( str(int(ilev)) )
    ax.set_yticklabels(levels_str,fontsize=14,color='k')
-   ax.set_xticklabels([10,20,30,40,50],fontsize=14,color='k')
+   ax.set_xticks(np.array([20,40,60]))
+   ax.set_xticklabels(['0520UTC','0540UTC','0600UTC'],fontsize=12)
+   ax.set_xlim([5,55])
+
    if ivar == 0  :
       cclevs = [2.0,2.5,3.0,3.5,4.0,4.5,5.0]
    if ivar == 1  :
@@ -275,7 +278,7 @@ m.set_clim(smin,smax)
 cb=plt.colorbar(m,cax=cbar_ax,orientation='horizontal',boundaries=np.arange(smin,smax+delta,delta))
 cb.ax.tick_params(labelsize=14)
 
-#plt.show()
+#pl.show()
 plt.savefig( figname + '.png' , format='png' , dpi=300)
 plt.close()
 

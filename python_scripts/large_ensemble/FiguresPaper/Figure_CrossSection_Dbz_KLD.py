@@ -372,7 +372,7 @@ for iexp,my_exp in enumerate( expnames ) :
     ax.text( xmin + 0.7 , 0.14 ,hist_label ,fontsize=17,color='k',bbox={'facecolor':'white', 'alpha':0.0,'edgecolor':'white'})
     ax.set_title( my_title , fontsize=17)
 
-#plt.show()
+plt.show()
 plt.savefig('Figure_CrossSection_dBZ_KLD.png' , format='png' , dpi=300  )
 plt.close()
 
