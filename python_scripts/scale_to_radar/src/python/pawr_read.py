@@ -29,7 +29,7 @@ def pawr_read(filename, endian=''):
     beam_wid_h = buf[3]
     beam_wid_v = buf[4]
     beam_wid_r = buf[5]
-    lambda     = buf[6]
+    rlambda    = buf[6]
     undef      = buf[7]
 
     buf = np.zeros(4, dtype=dtype_int)
@@ -40,10 +40,10 @@ def pawr_read(filename, endian=''):
     nvar = buf[3]
 
     radar = pyart.testing.make_empty_ppi_radar( nr , na , ne )
-    radar.latitude['data'] = radar_lon
-    radar.longitude['data'] = radar_lat
-    radar.altitude['data'] = radar_alt
-    radar.sweep_number['data'] = ne
+    radar.latitude['data'] = np.array([ radar_lat ])
+    radar.longitude['data'] = np.array([ radar_lon ])
+    radar.altitude['data'] = np.array([ radar_alt ])
+    radar.sweep_number['data'] = np.array([ ne ])
     
     radar.ngates=nr
     radar.nrays=na*ne
@@ -70,30 +70,34 @@ def pawr_read(filename, endian=''):
 
     buf = np.zeros((ne, nr, na), dtype=dtype_real)
     for ie in range(ne):
-        fort_seq_read(f, buf[ie])
-    ref = buf
-
+        fort_seq_read(f, buf[ie,:,:])
+    ref = np.copy( buf )
     for ie in range(ne):
-        fort_seq_read(f, ie)
-    wind = buf
+        fort_seq_read(f, buf[ie,:,:])
+    rv = np.copy( buf )
 
     f.close()
 
     #Save variables into radar object
     ref_dict = pyart.config.get_metadata('reflectivity')
-    ref_dict['data'] = np.zeros( na * ne , nr )
+    ref_dict['data'] = np.zeros( (na * ne , nr) )
     rv_dict = pyart.config.get_metadata('velocity')
-    rv_dict['data'] = np.zeros( na * ne , nr )
+    rv_dict['data'] = np.zeros( (na * ne , nr) )
 
     iray=0
     position=0
+    ref_cf=np.zeros( (na * ne , nr) )
+    rv_cf =np.zeros( (na * ne , nr) )
     for jj in range( ne ) :
         for ii in range( na ) :
-            ref_dict['data'][iray,:]=ref[jj,:,ii]
-            rv_dict['data'][iray,:]=rv[jj,:,ii]
+            ref_cf[iray,:]=ref[jj,:,ii]
+            rv_cf[iray,:] =rv[jj,:,ii]
             radar.azimuth['data'][iray] = azim[ii]
-            radar.elevation['data'][iray] = elev[ii]
+            radar.elevation['data'][iray] = elev[jj]
             iray=iray+1
+
+    ref_dict['data'] = ma.masked_values(ref_cf, undef)
+    rv_dict['data']  = ma.masked_values(rv_cf, undef)
 
     radar.fields = {'rv': rv_dict , 'ref':ref_dict}
 
