@@ -21,15 +21,15 @@ from common_functions import common_functions as comm
 basedir='/work/hp150019/f22003/output_data/'
 
 #expnames  = ['LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min','LE_D1_1km_1min_4D','LE_D1_1km_5min']
-expnames  = ['LE_D1_1km_2min_OFP_V2']
+expnames  = ['LE_D1_1km_5min_4D_OFP_V2']
 
 
 #expdeltas = [30,30,60,120,60,300]
-expdeltas = [120]
+expdeltas = [300]
 
 #delta=dt.timedelta(seconds=60)  #Original data is every 30 seconds
 
-filetypes=['analgp']   #analgp , analgz , guesgp , guesgz
+filetypes=['guesgp','analgp']   #analgp , analgz , guesgp , guesgz
 
 smooth=False             #False- no smooth , True apply smooth
 #smooth_lambda=10         #Smooth length scale (in number of grid points)
@@ -46,8 +46,8 @@ get_moments=True         #Wether we will be computeing ensemble moments.
 
 get_correlation=True      #Compute correlation between reflectivity, wind and other variables.
 
-itime = dt.datetime(2013,7,13,5,42,0)  #Initial time.
-etime = dt.datetime(2013,7,13,5,42,0)  #End time.
+itime = dt.datetime(2013,7,13,5,0,0)  #Initial time.
+etime = dt.datetime(2013,7,13,6,0,0)  #End time.
 
 #=========================================================
 #  LOOP OVER FILE TYPES

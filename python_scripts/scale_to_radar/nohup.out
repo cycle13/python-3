@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "./main_scale_to_radar_OFP.py", line 3, in <module>
+    from src.python import calc
+  File "/work/0/hp150019/f22003/codes/python/python_scripts/scale_to_radar/src/python/calc.py", line 6, in <module>
+    from mpl_toolkits.basemap import Basemap
+  File "/home/f22003/anaconda3/lib/python3.7/site-packages/mpl_toolkits/basemap/__init__.py", line 156, in <module>
+    epsgf = open(os.path.join(pyproj_datadir,'epsg'))
+FileNotFoundError: [Errno 2] No such file or directory: '/home/f22003/anaconda3/share/proj/epsg'
