@@ -475,41 +475,60 @@ def radar_int( sio , proj , topo , radar , t=None ) :
     yc_ = np.arange(ny_)
     zc_ = np.arange(nz_)
 
-    radar['model_ref'] = interpn((zc_,yc_,xc_), ref_ , rijk_interp, method='linear', bounds_error=False, fill_value = radar['ref'].fill_value ).reshape(ne_,nr_,na_)
-    radar['model_rv']  = interpn((zc_,yc_,xc_), rv_  , rijk_interp, method='linear', bounds_error=False, fill_value = radar['rv'].fill_value  ).reshape(ne_,nr_,na_)
+    undef = radar['ref'].fill_value
+    nin=na_*nr_*ne_
+
+    radar['model_ref'] = ( calc_for.itpl_3d_vec(var=np.transpose(ref_,axes=[0,2,1]),nlev=nz_,nlon=nx_,nlat=ny_,ri=ri_,rj=rj_,rk=rk_,fill_value=undef,nin=nin) ).reshape( ne_,nr_,na_ )
+    radar['model_rv'] = ( calc_for.itpl_3d_vec(var=np.transpose(rv_,axes=[0,2,1]),nlev=nz_,nlon=nx_,nlat=ny_,ri=ri_,rj=rj_,rk=rk_,fill_value=undef,nin=nin) ).reshape( ne_,nr_,na_ )
+
+
+    #radar['model_ref'] = interpn((zc_,yc_,xc_), ref_ , rijk_interp, method='linear', bounds_error=False, fill_value = radar['ref'].fill_value ).reshape(ne_,nr_,na_)
+    #radar['model_rv']  = interpn((zc_,yc_,xc_), rv_  , rijk_interp, method='linear', bounds_error=False, fill_value = radar['rv'].fill_value  ).reshape(ne_,nr_,na_)
 
     return radar
 
-#cdef get_k( np.ndarray[double, ndim=1] ri , np.ndarray[double, ndim=1] rj , np.ndarray[double, ndim=1] tz , np.ndarray[double, ndim=3] z ) :
-#cdef get_k( double[:] ri , double[:] rj , double[:] tz , double[:,:,:] z ) :
-#
-#    cdef int nx, ny, ii, kk
-#    nz,nx,ny=np.shape(z)
-#    cdef np.ndarray[np.int64_t, ndim=1] i,j 
-#    i=np.round(ri).astype(int)
-#    j=np.round(rj).astype(int)
-#    i[i<0]=0
-#    i[i>=nx]=nx-1
-#    j[j<0]=0
-#    j[j>=ny]=ny-1
+def radar_regrid( radar , grid )  :
 
-#    cdef int nk = ri.size
-#    cdef np.ndarray[double, ndim=1] k = np.zeros(nk)
-#    cdef double[:] tmp_z
+    nvar = 4 #We will process only reflectivity and wind for the model and for the radar.
 
-#    for ii in range(nk) :
-#        tmp_z = z[:,i[ii],j[ii]]
-#        if tz[ii] < tmp_z[0] :
-#            k[ii] = 0
-#        if tz[ii] > tmp_z[nz-1] :
-#            k[ii] = nz-1
-#        if tz[ii] > tmp_z[0] and tz[ii] < tmp_z[nz-1] :
-#           for kk in range(nz-1) :
-#               if tz[ii] >= tmp_z[kk] and tz[ii] <= tmp_z[kk+1] :
-#                   k[ii]=kk + ( tz[ii] - tmp_z[kk] )/( tmp_z[kk+1] - tmp_z[kk] )
-#                   break
-#
-#    return k
+    radar_grid=dict()
+    radar_grid['grid']=grid
+
+
+    weigth=np.zeros(nvar).astype(bool)
+    is_angle=np.zeros(nvar).astype(bool)
+    weigth_ind=(np.zeros(nvar)+1.0).astype(int)
+
+    [ne,nr,na]=np.shape( radar['ref'] )
+    nin = ne*nr*na
+    x=radar['x'].reshape( nin )
+    y=radar['y'].reshape( nin )
+    z=radar['z'].reshape( nin )
+
+    data=np.zeros( ( nin , nvar ) )
+    data[:,0] = (radar['ref'].data).reshape( nin )
+    data[:,1] = (radar['rv'].data).reshape( nin )
+    data[:,2] = (radar['model_ref'].data).reshape( nin )
+    data[:,3] = (radar['model_rv'].data).reshape( nin )
+
+    undef = radar['ref'].fill_value
+    
+    [data_ave , data_max , data_min , data_std , data_n , data_w ] = calc_for.com_interp_boxavereg(xini=grid['xini'],dx=grid['dx'],nx=grid['nx']
+                                                                                                  ,yini=grid['yini'],dy=grid['dy'],ny=grid['ny']
+                                                                                                  ,zini=grid['zini'],dz=grid['dz'],nz=grid['nz']
+                                                                                                  ,nvar=nvar,xin=x,yin=y,zin=z,datain=data
+                                                                                                  ,undef=undef,nin=nin 
+                                                                                                  ,weigth=weigth,weigth_ind=weigth_ind,is_angle=is_angle)
+
+    radar_grid['data_ave']=data_ave
+    radar_grid['data_max']=data_max
+    radar_grid['data_min']=data_min
+    radar_grid['data_std']=data_std
+    radar_grid['data_n']  =data_n
+    radar_grid['var_list']=['ref','rv','model_ref','model_rv']
+
+    return radar_grid
+
 
 
 

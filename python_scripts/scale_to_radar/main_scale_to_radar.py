@@ -1,7 +1,6 @@
 from src.python import io
 from src.python import common_scale_to_radar as cs2r
 from src.python import calc
-#import calc_tmp
 import matplotlib.pyplot as plt
 import datetime as dt
 import numpy as np
@@ -31,6 +30,18 @@ proj = {
 'LC_lat1': 32.5,
 'LC_lat2': 37.5
 }
+
+grid = {
+        'xini':-60000.0,
+        'nx'  :12,
+        'dx'  :10000.0,
+        'yini':-60000.0,
+        'ny'  :12,
+        'dy'  :10000.0,
+        'zini':0.0,
+        'nz'  :3,
+        'dz'  :5000.0,
+        }
 
 
 
@@ -63,6 +74,7 @@ while ( ctime <= etime ) :
         if not ( radar is None ) :  
 
             #Read model data and interpolate it to the radar grid.
+            print('Interpolating to radar grid')
             radar = calc.radar_int( sio , proj , topo , radar , t=forecast_time )
             #Mask model data according to radar data.
             radar['model_ref'][ radar['model_ref'] < radar['minref'] ] = radar['minref']
@@ -70,19 +82,22 @@ while ( ctime <= etime ) :
             radar['model_rv'][ radar['rv'].mask ] = radar['rv'].fill_value
             radar['model_ref'] = np.ma.masked_values( radar['model_ref'] , radar['ref'].fill_value )
             radar['model_rv'] = np.ma.masked_values( radar['model_rv'] , radar['rv'].fill_value )
-
-
-            plt.pcolor( radar['lon_gate'][10,:,:],radar['lat_gate'][10,:,:],radar['model_ref'][10,:,:] )
-            plt.show()
+            #plt.pcolor( radar['lon_gate'][10,:,:] , radar['lat_gate'][10,:,:] , radar['model_ref'][10,:,:] )
+            #plt.show()
 
             #Save the radar structure to disk
+            print('Saving data in radar grid')
             outpath = exp_path + dt.datetime.strftime( fi_time ,'%Y%m%d%H%M%S' ) + '/fcstrad/mean/'
             os.makedirs( outpath , exist_ok=True)
             filehandler = open( outpath + '/fcstrad.pkl',"wb")
-            pickle.dump(radar,filehandler)
+            pkl.dump(radar,filehandler)
 
             #Perform data regriding.
-
+            print('Regriding to rectangular grid')
+            radar_grid = calc.radar_regrid( radar , grid )
+            #filehandler = open( outpath + '/fcstrad_grid.pkl',"wb")
+            #pkl.dump(radar_grid,filehandler)
+            #plt.pcolor( radar_grid['data_ave'][10,:,:]);plt.show()
 
         #radar = None
         forecast_time = forecast_time + 1 
