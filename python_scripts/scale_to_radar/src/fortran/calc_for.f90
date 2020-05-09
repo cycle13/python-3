@@ -179,7 +179,7 @@ END SUBROUTINE itpl_3d_vec
 
 !2D interpolation using box average. Destination grid is assumed to be regular.
 SUBROUTINE com_interp_boxavereg(xini,dx,nx,yini,dy,ny,zini,dz,nz,nvar,xin,yin,zin,datain,undef,nin    &
-               &                ,data_ave,data_max,data_min,data_std,data_n,data_w,weigth,weigth_ind,is_angle)
+               &                ,data_ave,data_max,data_min,data_std,data_n)
   IMPLICIT NONE
   INTEGER,PARAMETER :: r_size=kind(0.0d0)
   INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
@@ -188,47 +188,25 @@ SUBROUTINE com_interp_boxavereg(xini,dx,nx,yini,dy,ny,zini,dz,nz,nvar,xin,yin,zi
   REAL(r_size),INTENT(IN)        :: dx , dy , dz , xini , yini , zini
   REAL(r_size),INTENT(IN)        :: xin(nin),yin(nin),zin(nin),datain(nin,nvar)
   REAL(r_size),INTENT(IN)        :: undef
-  LOGICAL     ,INTENT(IN)        :: weigth(nvar)
-  LOGICAL     ,INTENT(IN)        :: is_angle(nvar)
-  INTEGER     ,INTENT(IN)        :: weigth_ind(nvar)
   REAL(r_size),INTENT(OUT)       :: data_ave(nz,ny,nx,nvar)
   REAL(r_size),INTENT(OUT)       :: data_max(nz,ny,nx,nvar)
   REAL(r_size),INTENT(OUT)       :: data_min(nz,ny,nx,nvar)
   REAL(r_size),INTENT(OUT)       :: data_std(nz,ny,nx,nvar)
-  REAL(r_size),INTENT(OUT)       :: data_w(nz,ny,nx,nvar)
   INTEGER,INTENT(OUT)            :: data_n(nz,ny,nx,nvar)
-  REAL(r_size)                   :: w(nin)
   REAL(r_size)                   :: tmp_data 
 
   INTEGER                        :: ii , ix , iy , iz , iv , tmp_n
 
-
-  write(*,*)nz,nx,ny,nvar,nin
-data_max=undef
-data_min=undef
-data_ave=undef
-data_std=undef
-data_w  =undef
+data_max=-1.0d9
+data_min=1.0d9
+data_ave=0.0d0
+data_std=0.0d0
 data_n  =0
 
-write(*,*)undef 
-
-
-!$OMP PARALLEL DO PRIVATE( tmp_data,w,ii,ix,iy,iz )
-
+!$OMP PARALLEL DO PRIVATE( tmp_data,ii,ix,iy,iz )
 DO iv = 1,nvar !Loop over the variables (we can perform OMP over this loop)
 
-  WRITE(*,*)weigth,weigth_ind
-  IF ( weigth(iv) )THEN
-     w = datain(:,weigth_ind(iv))
-  ELSE
-     w = 1.0e0
-  ENDIF 
-
-
   DO ii = 1,nin  !Loop over the input data 
-
-    WRITE(*,*)ii
 
     !Compute the location of the current point with in grid coordinates (rx,ry)
     ix = int( ( xin(ii) - xini ) / dx ) + 1
@@ -237,29 +215,11 @@ DO iv = 1,nvar !Loop over the variables (we can perform OMP over this loop)
 
     !Check is the data is within the grid.
     IF( ix <= nx .and. ix >= 1 .and. iy <= ny .and. iy >= 1 .and.   &
-        iz <= nz .and. iz >= 1 .and. datain(ii,iv) /= undef .and.   & 
-        w(ii) /= undef )THEN
+        iz <= nz .and. iz >= 1 .and. datain(ii,iv) /= undef )THEN
 
-      IF(  data_n(iz,iy,ix,iv) == 0 )THEN
-        data_max(iz,iy,ix,iv) = datain(ii,iv)
-        data_min(iz,iy,ix,iv) = datain(ii,iv)
-        data_ave(iz,iy,ix,iv) = datain(ii,iv) * w(ii)
-        data_std(iz,iy,ix,iv) = ( datain(ii,iv) ** 2 )*w(ii)
-        data_w  (iz,iy,ix,iv) = w(ii)
-        data_n  (iz,iy,ix,iv) = 1
-
-      ELSE
-        data_w(iz,iy,ix,iv) = data_w(iz,iy,ix,iv) + w(ii)
         data_n(iz,iy,ix,iv) = data_n(iz,iy,ix,iv) + 1
-        IF ( .not. is_angle(iv) )THEN
-            data_ave(iz,iy,ix,iv) = data_ave(iz,iy,ix,iv) + datain(ii,iv) * w(ii)
-            data_std(iz,iy,ix,iv) = data_std(iz,iy,ix,iv) + ( datain(ii,iv) ** 2 )*w(ii)
-        ELSE
-            CALL min_angle_distance( data_ave(iz,iy,ix,iv)/data_n(iz,iy,ix,iv) , datain(ii,iv) , tmp_data )
-            data_ave(iz,iy,ix,iv) = data_ave(iz,iy,ix,iv) + tmp_data * w(ii)
-            data_std(iz,iy,ix,iv) = data_std(iz,iy,ix,iv) + ( tmp_data ** 2 )*w(ii)
-        ENDIF
-
+        data_ave(iz,iy,ix,iv) = data_ave(iz,iy,ix,iv) + datain(ii,iv) 
+        data_std(iz,iy,ix,iv) = data_std(iz,iy,ix,iv) + ( datain(ii,iv) ** 2 )
 
         IF( datain(ii,iv) > data_max(iz,iy,ix,iv) )THEN
           data_max(iz,iy,ix,iv) = datain(ii,iv)
@@ -267,9 +227,6 @@ DO iv = 1,nvar !Loop over the variables (we can perform OMP over this loop)
         IF( datain(ii,iv) < data_min(iz,iy,ix,iv) )THEN
           data_min(iz,iy,ix,iv) = datain(ii,iv)
         ENDIF
-
-      ENDIF
-
 
     ENDIF
 
@@ -279,46 +236,18 @@ DO iv = 1,nvar !Loop over the variables (we can perform OMP over this loop)
        data_ave(:,:,:,iv) = data_ave(:,:,:,iv) / REAL( data_n(:,:,:,iv) , r_sngl )
        data_std(:,:,:,iv) = SQRT( data_std(:,:,:,iv)/REAL( data_n(:,:,:,iv) , r_sngl ) - data_ave(:,:,:,iv) ** 2 )
   ENDWHERE
-
-  !If this is an angle check that the value is between 0-360.
-  IF( is_angle(iv) )THEN
-    WHERE( data_ave(:,:,:,iv) > 360.0e0 )
-       data_ave(:,:,:,iv) = data_ave(:,:,:,iv) - 360.0e0
-    ENDWHERE
-    WHERE( data_ave(:,:,:,iv) < 0.0e0 )
-       data_ave(:,:,:,iv) = data_ave(:,:,:,iv) + 360.0e0
-    ENDWHERE
-  ENDIF
-
+  WHERE( data_n(:,:,:,iv) == 0)
+       data_ave(:,:,:,iv) = undef
+       data_std(:,:,:,iv) = undef
+       data_min(:,:,:,iv) = undef
+       data_max(:,:,:,iv) = undef
+  ENDWHERE
 
 ENDDO
 !$OMP END PARALLEL DO
 
-
-
 END SUBROUTINE com_interp_boxavereg
 
-SUBROUTINE min_angle_distance( ref_val , val , corrected_val )
-IMPLICIT NONE
-INTEGER,PARAMETER :: r_size=kind(0.0d0)
-INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
-
-REAL(r_size),INTENT(IN)  :: ref_val , val 
-REAL(r_size),INTENT(OUT) :: corrected_val
-REAL(r_size)             :: diff
-!Given two angles ref_val and val, find an angle equivalent to val that minimizes the distance between ref_val and val.
-!ref_val and val are [0-360], but corrected_val [-180,540]
-
- diff = ref_val - val 
- IF( diff > 180.0e0 )THEN
-   corrected_val = val + 360.0e0
- ELSEIF( diff < -180.0e0 )THEN
-   corrected_val = val -360.0e0
- ELSE
-   corrected_val = val
- ENDIF
-
-END SUBROUTINE min_angle_distance
 
 
 END MODULE calc_for

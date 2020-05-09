@@ -6,6 +6,9 @@ import datetime as dt
 import numpy as np
 import pickle as pkl
 import os
+import time
+import warnings
+warnings.filterwarnings("ignore")
 
 
 exp_path='/home/juan/tmp_scale_to_radar/output_data/LE_D1_1km_30sec_OFP_V2/'
@@ -33,14 +36,14 @@ proj = {
 
 grid = {
         'xini':-60000.0,
-        'nx'  :12,
-        'dx'  :10000.0,
+        'nx'  :120,
+        'dx'  :1000.0,
         'yini':-60000.0,
-        'ny'  :12,
-        'dy'  :10000.0,
+        'ny'  :120,
+        'dy'  :1000.0,
         'zini':0.0,
-        'nz'  :3,
-        'dz'  :5000.0,
+        'nz'  :22,
+        'dz'  :500.0,
         }
 
 
@@ -74,8 +77,9 @@ while ( ctime <= etime ) :
         if not ( radar is None ) :  
 
             #Read model data and interpolate it to the radar grid.
-            print('Interpolating to radar grid')
+            t0=time.time()
             radar = calc.radar_int( sio , proj , topo , radar , t=forecast_time )
+            print("Model data was interpolated in {:.3f} seconds".format(time.time() - t0))
             #Mask model data according to radar data.
             radar['model_ref'][ radar['model_ref'] < radar['minref'] ] = radar['minref']
             radar['model_ref'][ radar['ref'].mask ] = radar['ref'].fill_value
@@ -86,18 +90,20 @@ while ( ctime <= etime ) :
             #plt.show()
 
             #Save the radar structure to disk
-            print('Saving data in radar grid')
             outpath = exp_path + dt.datetime.strftime( fi_time ,'%Y%m%d%H%M%S' ) + '/fcstrad/mean/'
             os.makedirs( outpath , exist_ok=True)
             filehandler = open( outpath + '/fcstrad.pkl',"wb")
             pkl.dump(radar,filehandler)
 
             #Perform data regriding.
-            print('Regriding to rectangular grid')
+            t0=time.time()
             radar_grid = calc.radar_regrid( radar , grid )
-            #filehandler = open( outpath + '/fcstrad_grid.pkl',"wb")
-            #pkl.dump(radar_grid,filehandler)
-            #plt.pcolor( radar_grid['data_ave'][10,:,:]);plt.show()
+            print("Radar data was regrided in {:.3f} seconds".format(time.time() - t0))
+            filehandler = open( outpath + '/fcstrad_grid.pkl',"wb")
+            pkl.dump(radar_grid,filehandler)
+            #plt.pcolor( radar_grid['data_ave'][10,:,:,0] - radar_grid['data_ave'][10,:,:,2] );plt.colorbar();plt.show()
+            #plt.pcolor( radar_grid['data_ave'][:,:,80,2]);plt.show()
+            #plt.pcolor( radar_grid['data_ave'][:,:,80,0]);plt.show()
 
         #radar = None
         forecast_time = forecast_time + 1 
