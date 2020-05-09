@@ -145,7 +145,7 @@ for var in plot_variables :
    ncols=3
    nrows=2
    fig, axs = plt.subplots( nrows,ncols , subplot_kw=dict(projection=ccrs.PlateCarree() ), figsize=[10,6.5] , sharex = 'col' , sharey = 'row')
-   fig.subplots_adjust(wspace=0.075,hspace=0.11,bottom=0.13,left=0.05,right=0.97,top=0.95)
+   fig.subplots_adjust(wspace=0.075,hspace=0.28,bottom=0.03,left=0.05,right=0.97,top=0.97)
 
 
    for iexp,my_exp in enumerate(exps)  :
@@ -242,7 +242,7 @@ for var in plot_variables :
          gl.xlabel_style = {'size': 14, 'color': 'w' }
       if icol >  0 :
          gl.ylabel_style = {'size': 14, 'color': 'w' }
-         
+         gl.ylable = False 
 
       icol = icol + 1
       if icol > ncols-1   :
@@ -250,7 +250,7 @@ for var in plot_variables :
          irow = irow + 1
 
       if iexp == 0 :
-         cbar_ax = fig.add_axes([0.06, 0.05, 0.4, 0.03])
+         cbar_ax = fig.add_axes([0.06, 0.53, 0.4, 0.03])
          my_map =cpf.cmap_discretize('Blues',10)
          smin = 0
          smax = 5.0
@@ -260,9 +260,11 @@ for var in plot_variables :
          m.set_clim(smin,smax)
          cb=plt.colorbar(m,cax=cbar_ax,boundaries=np.arange(smin,smax+delta,delta),orientation='horizontal')
          cb.ax.tick_params(labelsize=14)
+         cbar_ax.set_xlabel( '[KLD ${10}^{-2}, unitless$]' ,fontsize=12 ,labelpad = -5 )
+         #ax.annotate('[KLD ${10}^{-2}, unitless$]',(0.2,0.49),xycoords='figure fraction',fontsize=12)
 
       if iexp == 1 :
-         cbar_ax = fig.add_axes([0.55 , 0.05 , 0.4 , 0.03])
+         cbar_ax = fig.add_axes([0.55 , 0.53 , 0.4 , 0.03])
          my_map =cpf.cmap_discretize('Spectral',10)
          smin = -50.0
          smax =  50.0
@@ -271,9 +273,9 @@ for var in plot_variables :
          m.set_array(np.transpose(plot_kld_mean[:,:,iexp]))
          m.set_clim(smin,smax)
          cb=plt.colorbar(m,cax=cbar_ax,boundaries=np.arange(smin,smax+delta,delta),orientation='horizontal')
+         cbar_ax.set_xlabel( '[KLD difference, %]' ,fontsize=12 , labelpad = -1)
          cb.ax.tick_params(labelsize=14)
-
-
+         #ax.annotate('[KLD difference, %]',(0.65,0.49),xycoords='figure fraction',fontsize=12)
 
  
    #plt.show()
