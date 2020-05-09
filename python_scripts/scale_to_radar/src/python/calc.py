@@ -494,11 +494,6 @@ def radar_regrid( radar , grid )  :
     radar_grid=dict()
     radar_grid['grid']=grid
 
-
-    weigth=np.zeros(nvar).astype(bool)
-    is_angle=np.zeros(nvar).astype(bool)
-    weigth_ind=(np.zeros(nvar)+1.0).astype(int)
-
     [ne,nr,na]=np.shape( radar['ref'] )
     nin = ne*nr*na
     x=radar['x'].reshape( nin )
@@ -513,17 +508,16 @@ def radar_regrid( radar , grid )  :
 
     undef = radar['ref'].fill_value
     
-    [data_ave , data_max , data_min , data_std , data_n , data_w ] = calc_for.com_interp_boxavereg(xini=grid['xini'],dx=grid['dx'],nx=grid['nx']
+    [data_ave , data_max , data_min , data_std , data_n ] = calc_for.com_interp_boxavereg(xini=grid['xini'],dx=grid['dx'],nx=grid['nx']
                                                                                                   ,yini=grid['yini'],dy=grid['dy'],ny=grid['ny']
                                                                                                   ,zini=grid['zini'],dz=grid['dz'],nz=grid['nz']
                                                                                                   ,nvar=nvar,xin=x,yin=y,zin=z,datain=data
-                                                                                                  ,undef=undef,nin=nin 
-                                                                                                  ,weigth=weigth,weigth_ind=weigth_ind,is_angle=is_angle)
+                                                                                                  ,undef=undef,nin=nin )
 
-    radar_grid['data_ave']=data_ave
-    radar_grid['data_max']=data_max
-    radar_grid['data_min']=data_min
-    radar_grid['data_std']=data_std
+    radar_grid['data_ave']=np.ma.masked_values(data_ave, undef )
+    radar_grid['data_max']=np.ma.masked_values(data_max, undef )
+    radar_grid['data_min']=np.ma.masked_values(data_min, undef )
+    radar_grid['data_std']=np.ma.masked_values(data_std, undef )
     radar_grid['data_n']  =data_n
     radar_grid['var_list']=['ref','rv','model_ref','model_rv']
 
