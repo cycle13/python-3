@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.ma as ma
 from .fortranio import *
+from .radar_tools import radar_tools as rt
 import datetime as dt
 import time
 import struct
@@ -87,9 +88,20 @@ def pawr_read(filename, endian='',minref=0.0):
 
     t0 = time.time()
 
-    data = antenna_to_cartesian( data )
+    [data['z'] , data['lon_gate'] , data['lat_gate'] , data['x'] , data['y'] , data['local_elevation'], data['distance_to_radar'] ]=rt.radar_georeference( 
+                rrange=data['radi']       ,
+                relev=data['elev']        ,
+                razim=data['azim']        ,
+                rlon0=data['radar_lon']   ,
+                rlat0=data['radar_lat']   ,
+                rz0=data['radar_alt']     ,
+                ne=data['ne']             ,
+                nr=data['nr']             ,
+                na=data['na']               )
 
-    data = cartesian_to_geographic_aeqd( data, R=6370997.)
+    #data = antenna_to_cartesian( data )
+
+    #data = cartesian_to_geographic_aeqd( data, R=6370997.)
 
     print("Radar data '{:s}' was georeferenced in {:.3f} seconds".format(filename, time.time() - t0))
 

@@ -461,10 +461,10 @@ def radar_int( sio , proj , topo , radar , t=None ) :
     tz_   = np.reshape( radar['z']  , ne_ * nr_ * na_ ).astype('float64')
 
     ri_, rj_ = bmap(tlon_,tlat_)
-    ri_=ri_/dx_
-    rj_=rj_/dy_
+    ri_=ri_/dx_ + 1.0
+    rj_=rj_/dy_ + 1.0
     rk_ = calc_for.get_k(z_full=np.transpose(z_,axes=[0,2,1]),nlev=nz_,nlon=nx_,nlat=ny_,ri=ri_+1.0,rj=rj_+1.0,rlev=tz_,nin=np.size(tz_) )
-    rk_ = rk_ -1.0
+    rk_ = rk_ 
 
     rijk_interp=np.zeros((na_*nr_*ne_,3))
     rijk_interp[:,0]=rk_
@@ -478,9 +478,12 @@ def radar_int( sio , proj , topo , radar , t=None ) :
     undef = radar['ref'].fill_value
     nin=na_*nr_*ne_
 
+    ref_ = 10.0 ** ( ref_ / 10.0 )
+
     radar['model_ref'] = ( calc_for.itpl_3d_vec(var=np.transpose(ref_,axes=[0,2,1]),nlev=nz_,nlon=nx_,nlat=ny_,ri=ri_,rj=rj_,rk=rk_,fill_value=undef,nin=nin) ).reshape( ne_,nr_,na_ )
     radar['model_rv'] = ( calc_for.itpl_3d_vec(var=np.transpose(rv_,axes=[0,2,1]),nlev=nz_,nlon=nx_,nlat=ny_,ri=ri_,rj=rj_,rk=rk_,fill_value=undef,nin=nin) ).reshape( ne_,nr_,na_ )
 
+    radar['model_ref'] = 10.0 * np.log10( radar['model_ref'] )
 
     #radar['model_ref'] = interpn((zc_,yc_,xc_), ref_ , rijk_interp, method='linear', bounds_error=False, fill_value = radar['ref'].fill_value ).reshape(ne_,nr_,na_)
     #radar['model_rv']  = interpn((zc_,yc_,xc_), rv_  , rijk_interp, method='linear', bounds_error=False, fill_value = radar['rv'].fill_value  ).reshape(ne_,nr_,na_)
@@ -501,9 +504,9 @@ def radar_regrid( radar , grid )  :
     z=radar['z'].reshape( nin )
 
     data=np.zeros( ( nin , nvar ) )
-    data[:,0] = (radar['ref'].data).reshape( nin )
+    data[:,0] = (10.0**( radar['ref'].data / 10.0 ) ).reshape( nin )
     data[:,1] = (radar['rv'].data).reshape( nin )
-    data[:,2] = (radar['model_ref'].data).reshape( nin )
+    data[:,2] = (10.0**( radar['model_ref'].data / 10.0 ) ).reshape( nin )
     data[:,3] = (radar['model_rv'].data).reshape( nin )
 
     undef = radar['ref'].fill_value
@@ -517,9 +520,16 @@ def radar_regrid( radar , grid )  :
     radar_grid['data_ave']=np.ma.masked_values(data_ave, undef )
     radar_grid['data_max']=np.ma.masked_values(data_max, undef )
     radar_grid['data_min']=np.ma.masked_values(data_min, undef )
-    radar_grid['data_std']=np.ma.masked_values(data_std, undef )
     radar_grid['data_n']  =data_n
     radar_grid['var_list']=['ref','rv','model_ref','model_rv']
+
+    radar_grid['data_ave'][:,:,:,0]=10.0 * np.log10( radar_grid['data_ave'][:,:,:,0] )
+    radar_grid['data_ave'][:,:,:,2]=10.0 * np.log10( radar_grid['data_ave'][:,:,:,2] )
+    radar_grid['data_max'][:,:,:,0]=10.0 * np.log10( radar_grid['data_max'][:,:,:,0] )
+    radar_grid['data_max'][:,:,:,2]=10.0 * np.log10( radar_grid['data_max'][:,:,:,2] )
+    radar_grid['data_min'][:,:,:,0]=10.0 * np.log10( radar_grid['data_min'][:,:,:,0] )
+    radar_grid['data_min'][:,:,:,2]=10.0 * np.log10( radar_grid['data_min'][:,:,:,2] )
+
 
     return radar_grid
 
