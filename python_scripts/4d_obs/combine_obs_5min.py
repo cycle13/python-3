@@ -6,11 +6,11 @@ import datetime as dt
 from letkfobsio import *
 import sys
 
-obsdir = '/home/ra001011/a03471/data/input_data/obs/QCED_1KM_v4_v500M_attn0.01/'
-obsoutdir = '/home/ra001011/a03471/data/input_data/obs/QCED_1KM_v4_v500M_attn0.01_4D_5min/'
+obsdir = '/work/hp150019/f22003/input_data/obs/QCED_1KM_v4_v500M_attn0.01/'
+obsoutdir = '/work/hp150019/f22003/input_data/obs/QCED_1KM_v4_v500M_attn0.01_4D_5min_test/'
 
 stime = dt.datetime(2013, 7, 13,  4,  0, 0)
-etime = dt.datetime(2013, 7, 13,  6,  0, 0)
+etime = dt.datetime(2013, 7, 13,  6,  10, 0)
 tintout = dt.timedelta(seconds=300)
 tint = dt.timedelta(seconds=30)
 
@@ -31,6 +31,8 @@ while time <= etime:
         f.close()
 
         obs_tmp = np.array([tuple(i) + ((tint * islot).total_seconds(),) for i in obs], dtype=np.dtype(obsrecords['scale']))
+
+        print( obs_tmp )
 
         if islot == obs4d_slot_s:
            obsout = obs_tmp

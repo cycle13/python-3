@@ -25,9 +25,9 @@ radar_range=50.0e3   #Radar range in meters (to define the radar mask)
 
 file_name='moment0001'
 
-basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/home/ra001011/a03471/data/output_data/'
+basedir='/work/hp150019/f22003/output_data/'
 
-expnames=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
+expnames=['LE_D1_1km_5min_OFP','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
 
 cvars=['dbz','tk','qv','u','v','w']
 
