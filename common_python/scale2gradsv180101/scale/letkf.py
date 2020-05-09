@@ -110,6 +110,7 @@ def letkfout_grads(letkfoutdir, topofile, proj, stime, etime=None, tint=dt.timed
         'gues': dict.fromkeys(('mean', 'meanf', 'mdet', 'sprd', '0001'), False),
         'anal': dict.fromkeys(('mean', 'mdet', 'sprd', '0001'), False)
         }
+        print('pepe1',stime,etime);sys.stdout.flush()
 
         itime = stime
         while itime <= etime:
@@ -122,6 +123,7 @@ def letkfout_grads(letkfoutdir, topofile, proj, stime, etime=None, tint=dt.timed
                             iim = '{:04d}'.format(iim)
 
                         basenametmp = "{:s}/{:s}/{:s}/{:s}/init".format(letkfoutdir, timef, ityp, iim)
+                        print( basenametmp );sys.stdout.flush()
                         if os.path.isfile(basenametmp + ".pe000000.nc"):
                             basename.append(basenametmp)
                             kws.append({'gradsfile': None, 'ctlfile': None, 'gradsfile_ll': None, 'ctlfile_ll': None})

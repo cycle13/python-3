@@ -14,7 +14,7 @@ comm = MPI.COMM_WORLD
 #---
 
 
-sim_read = 50
+sim_read = 1
 nprocs = comm.Get_size()
 myrank = comm.Get_rank()
 
@@ -42,14 +42,14 @@ extrap = False
 dlon = 0.1
 dlat = 0.1
 
-letkfoutdir = '/home/ra001011/a03471/data/output_data/LE_D1_1km_2min/'
+letkfoutdir = '/work/hp150019/f22003/output_data/LE_D1_1km_2min_OFP_V2/'
 topofile = letkfoutdir + 'const/topo/topo'
 
-stime = dt.datetime(2013,  7, 13,  5,  50, 0)
-etime = dt.datetime(2013,  7, 13,  6,   0, 0)
+stime = dt.datetime(2013,  7, 13,  5,  42, 0)
+etime = dt.datetime(2013,  7, 13,  5,  42, 0)
 tint = dt.timedelta(seconds=120)
 
-outtype = ['gues','anal']
+outtype = ['anal']
 member = 1000
 
 start_pp = time.time()
@@ -60,4 +60,4 @@ letkfout_grads(letkfoutdir, topofile=topofile, proj=proj, stime=stime, etime=eti
                varout_3d=varout_3d, varout_2d=varout_2d, extrap=extrap,
                comm=comm, sim_read=sim_read)
 
-print('Post proceesing took', time.time()-start_pp,'seconds. Whit ',nprocs,' processors.' )
+print('Post proceesing took', time.time()-start_pp,'seconds. Whit ',nprocs,' processors.')
