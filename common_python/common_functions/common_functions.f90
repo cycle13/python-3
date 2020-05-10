@@ -2171,7 +2171,7 @@ REAL(r_sngl) , INTENT(OUT) :: ensemble(nx,ny,n_selected_fields,nbv)
 LOGICAL      , INTENT(OUT) :: undef_mask(nx,ny,n_selected_fields)
 REAL(r_sngl)               :: bufr(nx,ny)
 CHARACTER(*) , INTENT(IN)  :: path , ie , acc                           !Data pathand input endian
-INTEGER                    :: ifield , maxfield , i, ibv , iunit , reclength , ii , jj , isf
+INTEGER                    :: ifield , maxfield , i, ibv , iunit , reclength , ii , jj , isf , base_unit
 INTEGER                    :: field_counter
 CHARACTER(40)              :: filename 
 CHARACTER(200)             :: filenamewithpath
@@ -2181,11 +2181,16 @@ reclength=nx*ny*reclength
 
 undef_mask=.false.
 ensemble=0.0e0
+base_unit=200
 
-filename='____.grd'
+!filename='____.grd'
 
+!$OMP PARALLEL DO PRIVATE(ibv,iunit,filename,filenamewithpath,ifield,bufr,ii,jj,maxfield,field_counter,isf)
 DO ibv = 1,nbv
 
+   iunit = base_unit + ibv
+
+   filename='____.grd'
    write(filename(1:4),'(I4.4)')ibv
    WRITE(*,*)"Reading file ", filename
    filenamewithpath= path // filename
@@ -2218,7 +2223,7 @@ DO ibv = 1,nbv
      DO ifield = 1,maxfield
         READ(iunit) bufr
         DO isf = 1 , n_selected_fields
-           IF( ifield == selected_fields(ii) )THEN
+           IF( ifield == selected_fields(isf) )THEN
                ensemble(:,:,field_counter,ibv)=bufr
                field_counter = field_counter + 1
                DO ii=1,nx
@@ -2235,6 +2240,7 @@ DO ibv = 1,nbv
    ENDIF
 
 ENDDO
+!OMP END PARALLEL DO
 
 END SUBROUTINE read_ensemble
 
