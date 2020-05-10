@@ -450,13 +450,31 @@ END SUBROUTINE com_l2norm
 !-----------------------------------------------------------------------
 ! RMS (root mean square)
 !-----------------------------------------------------------------------
-SUBROUTINE com_rms(ndim,var,rmsv)
+SUBROUTINE com_rms(ndim,var,undef,rmsv)
   IMPLICIT NONE
   INTEGER,INTENT(IN) :: ndim
-  REAL(r_size),INTENT(IN) :: var(ndim)
-  REAL(r_size),INTENT(OUT) :: rmsv
+  REAL(r_sngl),INTENT(IN) :: var(ndim)
+  REAL(r_sngl),INTENT(IN) :: undef
+  REAL(r_sngl),INTENT(OUT) :: rmsv
+  REAL(r_sngl)             :: rmsv_tmp
+  INTEGER                  :: nt
+  INTEGER                  :: ii
 
-  rmsv = SQRT( SUM(var*var) / REAL(ndim,r_size) )
+  rmsv=undef
+  rmsv_tmp=0.0d0
+  nt=0
+  
+  !$OMP PARALLEL DO REDUCTION(+:rmsv_tmp,nt)
+  DO ii = 1 , ndim
+     IF( var(ii) /= undef )THEN
+        rmsv_tmp = rmsv_tmp + var(ii)**2
+        nt = nt + 1
+     ENDIF
+  ENDDO
+  !$OMP END PARALLEL DO
+  IF( nt > 0 )THEN
+    rmsv = SQRT( rmsv_tmp / REAL( nt , r_sngl ) )
+  ENDIF
 
   RETURN
 END SUBROUTINE com_rms
@@ -2452,6 +2470,77 @@ ENDDO
 
 !WRITE(*,*)"FINISH GAUSSIAN FILTER"
 END SUBROUTINE GAUSSIAN_FILTER
+
+SUBROUTINE cont_table( dfor , dobs , ndata , thresholds , nthresholds , undef ,  &
+               ets , csi , bias , pod , far , ctable )
+IMPLICIT NONE
+INTEGER      , INTENT(IN)  :: ndata , nthresholds
+REAL(r_sngl) , INTENT(IN)  :: dfor(ndata) , dobs(ndata)
+REAL(r_sngl) , INTENT(IN)  :: thresholds(nthresholds)
+REAL(r_sngl) , INTENT(IN)  :: undef 
+INTEGER      , INTENT(OUT) :: ctable(2,2,nthresholds)
+REAL(r_sngl) , INTENT(OUT) :: ets(nthresholds) , csi(nthresholds) , bias(nthresholds)
+REAL(r_sngl) , INTENT(OUT) :: pod(nthresholds) , far(nthresholds)
+INTEGER                    :: hi , mi , fa , cn , nt 
+INTEGER                    :: it , ii
+REAL(r_sngl)               :: hi_r
+
+ctable=0
+ets=undef
+csi=undef
+bias=undef
+pod=undef
+far=undef
+
+DO it = 1 , nthresholds 
+   hi=0
+   mi=0
+   fa=0
+   cn=0
+   nt=0
+
+   !$OMP PARALLEL DO REDUCTION(+:hi,mi,fa,cn,nt)
+   DO ii = 1,ndata
+      IF( dfor(ii) /= undef .and. dobs(ii) /= undef )THEN
+        nt = nt + 1
+        IF( dfor(ii) > thresholds(it) .and. dobs(ii) > thresholds(it) )THEN
+          hi = hi+1
+        ENDIF  
+        IF( dfor(ii) <= thresholds(it) .and. dobs(ii) <= thresholds(it) )THEN
+          cn = cn+1
+        ENDIF
+        IF( dfor(ii) > thresholds(it) .and. dobs(ii) <= thresholds(it) )THEN
+          fa = fa+1
+        ENDIF
+        IF( dfor(ii) <= thresholds(it) .and. dobs(ii) > thresholds(it) )THEN
+          mi = mi+1
+        ENDIF
+      ENDIF
+   ENDDO
+   !$OMP END PARALLEL DO
+   ctable(1,1,it)=hi
+   ctable(1,2,it)=fa
+   ctable(2,1,it)=mi
+   ctable(2,2,it)=cn
+
+   !Compute scores
+   IF ( nt > 0 ) THEN
+      bias(it) = REAL( hi + fa , r_sngl )/REAL( hi + mi , r_sngl )
+      csi(it)  = REAL( hi , r_sngl )/REAL( hi + mi + fa , r_sngl )
+      pod(it)  = REAL( hi , r_sngl )/REAL( hi + mi , r_sngl )
+      far(it)  = REAL( fa , r_sngl )/REAL( hi + fa , r_sngl )
+      hi_r = REAL( ( hi + mi ) * ( hi + fa ) , r_sngl )/REAL( nt , r_sngl )
+      ets(it) = ( REAL( hi , r_sngl ) - hi_r )/( REAL( hi + mi + fa , r_sngl ) - hi_r )
+   ENDIF
+
+ENDDO
+
+WRITE(*,*)'Contingency table computed, ',REAL(nt,r_sngl)/REAL(ndata),' % valida data'
+
+END SUBROUTINE cont_table
+
+
+
 
 END MODULE common_functions
 

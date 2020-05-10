@@ -86,8 +86,8 @@ while ( ctime <= etime ) :
             radar['model_rv'][ radar['rv'].mask ] = radar['rv'].fill_value
             radar['model_ref'] = np.ma.masked_values( radar['model_ref'] , radar['ref'].fill_value )
             radar['model_rv'] = np.ma.masked_values( radar['model_rv'] , radar['rv'].fill_value )
-            plt.pcolor( radar['lon_gate'][10,:,:] , radar['lat_gate'][10,:,:] , radar['model_ref'][10,:,:] )
-            plt.show()
+            #plt.pcolor( radar['lon_gate'][10,:,:] , radar['lat_gate'][10,:,:] , radar['model_ref'][10,:,:] )
+            #plt.show()
 
             #Save the radar structure to disk
             outpath = exp_path + dt.datetime.strftime( fi_time ,'%Y%m%d%H%M%S' ) + '/fcstrad/mean/'
@@ -101,10 +101,9 @@ while ( ctime <= etime ) :
             print("Radar data was regrided in {:.3f} seconds".format(time.time() - t0))
             filehandler = open( outpath + '/fcstrad_grid' + dt.datetime.strftime( cftime ,'%Y%m%d%H%M%S' ) + '.pkl',"wb")
             pkl.dump(radar_grid,filehandler)
-            plt.pcolor( radar_grid['data_ave'][10,:,:,0] - radar_grid['data_ave'][10,:,:,2] );plt.colorbar();plt.show()
-            plt.pcolor( radar_grid['data_ave'][:,:,80,2]);plt.show()
-            plt.pcolor( radar_grid['data_ave'][:,:,80,0]);plt.show()
-            print(pepe)
+            #plt.pcolor( radar_grid['data_ave'][10,:,:,0] - radar_grid['data_ave'][10,:,:,2] );plt.colorbar();plt.show()
+            #plt.pcolor( radar_grid['data_ave'][:,:,80,2]);plt.show()
+            #plt.pcolor( radar_grid['data_ave'][:,:,80,0]);plt.show()
         #radar = None
         forecast_time = forecast_time + 1 
         cftime = cftime + dt.timedelta( seconds = out_freq )
