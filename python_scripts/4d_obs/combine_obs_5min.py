@@ -32,8 +32,6 @@ while time <= etime:
 
         obs_tmp = np.array([tuple(i) + ((tint * islot).total_seconds(),) for i in obs], dtype=np.dtype(obsrecords['scale']))
 
-        print( obs_tmp )
-
         if islot == obs4d_slot_s:
            obsout = obs_tmp
         else:

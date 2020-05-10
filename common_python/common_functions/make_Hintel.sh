@@ -6,6 +6,4 @@ export FC=ifort
 export F77=ifort
 export F90=ifort
 
-f2py  -c -lgomp --f90flags="-qopenmp -lgomp -O3" -m common_functions common_functions.f90
-
-#f2py3  -c --f90flags="-g" -m common_functions common_functions.f90
+f2py  -c -lgomp --f90flags="-qopenmp -lgomp -O3" -f77flags="-qopenmp -lgomp -O3"  -m common_functions common_functions.f90

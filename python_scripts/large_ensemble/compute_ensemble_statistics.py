@@ -22,6 +22,10 @@ basedir='/work/hp150019/f22003/output_data/'
 
 #expnames  = ['LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min','LE_D1_1km_1min_4D','LE_D1_1km_5min']
 expnames  = ['LE_D1_1km_5min_4D_OFP_V2']
+#basedir='/dalab/jruiz/EXPERIMENTS_LARGE_ENSEMBLE/'
+
+#expnames  = ['LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min','LE_D1_1km_1min_4D','LE_D1_1km_5min']
+#expnames  = ['LE_D1_1km_30sec']
 
 
 #expdeltas = [30,30,60,120,60,300]

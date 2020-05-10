@@ -14,7 +14,7 @@ comm = MPI.COMM_WORLD
 #---
 
 
-sim_read = 1
+sim_read = 50
 nprocs = comm.Get_size()
 myrank = comm.Get_rank()
 
@@ -42,14 +42,13 @@ extrap = False
 dlon = 0.1
 dlat = 0.1
 
-letkfoutdir = '/work/hp150019/f22003/output_data/LE_D1_1km_2min_OFP_V2/'
 topofile = letkfoutdir + 'const/topo/topo'
 
 stime = dt.datetime(2013,  7, 13,  5,  42, 0)
 etime = dt.datetime(2013,  7, 13,  5,  42, 0)
 tint = dt.timedelta(seconds=120)
 
-outtype = ['anal']
+outtype = ['gues','anal']
 member = 1000
 
 start_pp = time.time()
