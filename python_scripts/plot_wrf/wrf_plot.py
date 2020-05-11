@@ -8,7 +8,7 @@ from metpy.units import units
 
 dpi=300
 
-def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ) :
+def plot_momentum_equation_v( my_data , plot_path , show=False , force = False , scale_factor = 1.0 , arrow_scale_factor = 1.0 , ybound = None ) :
     #Ploteo un cross section vertical de la ecuacion de movimiento (una figura para w y otra para u y v)
 
     for it in range( my_data['nt'] ) :
@@ -53,19 +53,19 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False )
       
        ncols=4
        nrows=2
-       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy'  :
+       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy' and ybound is None  :
           ybound=[0,20000]
        fig, axs = plt.subplots( nrows,ncols , figsize=[15,9] , )
        fig.subplots_adjust(wspace=0.15,hspace=0.1,bottom=0.095,left=0.045,right=0.98,top=0.96)
 
        #Ploteo la reflectividad y la velocidad vertical.
        ax = axs[0,0]
-       clevs1=np.arange(0,70,1)
+       clevs1=np.arange(0,70,1) * scale_factor 
        my_map = cmap_discretize('gist_ncar',clevs1.size)
        p1=ax.contourf( dist , z , ref , clevs1 , cmap=my_map)
-       clevs2=np.array([1.0,5.0,10.0,15.0,20.0,30.0,40.0,50.0,60.0,70.0])
+       clevs2=np.array([1.0,5.0,10.0,15.0,20.0,30.0,40.0,50.0,60.0,70.0]) * scale_factor
        p2=ax.contour( dist , z , w , clevs2 , colors='k',linestyles='solid' )
-       clevs2=np.array([-30.0,-20.0,-15.0,-10.0,-5.0,-1.0])
+       clevs2=np.array([-30.0,-20.0,-15.0,-10.0,-5.0,-1.0]) * scale_factor 
        p2=ax.contour( dist , z , w , clevs2 , colors='k',linestyles='dashed' )
        ax.set_ybound( ybound )
        ax.set_title('Reflectividad (sh, dBZ) y W (cont., $ms^{-1}$)')
@@ -115,9 +115,9 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False )
        #Ploteo el aporte de qc al empuje
        ax = axs[0,3]
        p1=ax.contourf( dist , z , bqc , clevs1 , cmap=my_map)
-       clevs2=np.arange(0.1,1.0,0.1)
+       clevs2=np.arange(0.1,1.0,0.1) * scale_factor 
        p2=ax.contour( dist , z , bt + bp + bqv + bqc , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.arange(-1.0,0.0,0.1)
+       clevs2=np.arange(-1.0,0.0,0.1) * scale_factor
        p2=ax.contour( dist , z , bt + bp + bqv + bqc , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -131,16 +131,16 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
-       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx])
+       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=600.0*arrow_scale_factor)
        ax.set_ybound( ybound )
        ax.set_title('$B_P$ (sh., $ms^{-2}$) y viento(U,W) (vectores)')
 
        #Ploteo la componente vertical de la fuerza de presion y las perturbaciones de presion.
        ax = axs[1,1]
        p1=ax.contourf( dist , z , pz , clevs1 , cmap=my_map)
-       clevs2=np.arange(25,500,50)
+       clevs2=np.arange(25,500,50) * scale_factor
        p2=ax.contour( dist , z , ppert , clevs2 , colors='k',linestyles='solid' )
-       clevs3=np.arange(-500,0,50)
+       clevs3=np.arange(-500,0,50) * scale_factor
        p3=ax.contour( dist , z , ppert , clevs3 , colors='k',linestyles='dashed' )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -157,9 +157,9 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False )
        #Ploteo la aceleracion local y el residuo.
        ax = axs[1,3]
        p1=ax.contourf( dist , z , dwdt , clevs1 , cmap=my_map)
-       clevs2=np.arange(0.05,0.5,0.2)
+       clevs2=np.arange(0.05,0.5,0.2) * scale_factor
        p2=ax.contour( dist , z , dwdt - adv - pz - bt -bqv -bqc -bp , clevs2 , colors='k' , linestyles='solid' )
-       clevs2=np.arange(-0.5,-0.05,0.2)
+       clevs2=np.arange(-0.5,-0.05,0.2) * scale_factor
        p3=ax.contour( dist , z , dwdt - adv - pz - bt -bqv -bqc -bp , clevs2 , colors='k' , linestyles='dashed' )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -175,7 +175,7 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False )
 
     return
 
-def plot_termo_equation_v( my_data , plot_path , show=False , force = False ) :
+def plot_termo_equation_v( my_data , plot_path , show=False , force = False , scale_factor = 1.0 , arrow_scale_factor = 1.0 , ybound = None ) :
     #Ploteo un cross section vertical de la ecuacion de movimiento (una figura para w y otra para u y v)
 
     for it in range( my_data['nt'] ) :
@@ -219,12 +219,12 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False ) :
        nrows=2
        fig, axs = plt.subplots( nrows,ncols , figsize=[10,8] , )
        fig.subplots_adjust(wspace=0.04,hspace=0.09,bottom=0.1,left=0.06,right=0.98,top=0.96)
-       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy'  :
+       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy' and ybound is None  :
           ybound=[0,20000]
  
        #Ploteo theta y su perturbacion
        ax = axs[0,0]
-       clevs1=np.arange(-15,15.5,0.5)
+       clevs1=np.arange(-15,15.5,0.5) * scale_factor
        theta_pert[theta_pert > np.max(clevs1)]=np.max(clevs1)
        theta_pert[theta_pert < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('RdBu_r',clevs1.size)
@@ -245,7 +245,7 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False ) :
        cb.ax.tick_params(labelsize=14)
 
        #Defino la escala de colores para la tasa de cambio de theta con el tiempo.
-       clevs1=np.arange(-0.15,0.16,0.01) 
+       clevs1=np.arange(-0.15,0.16,0.01)  * scale_factor
 
        #Ploteo la tasa de cambio local de theta con el tiempo
        ax = axs[0,1]
@@ -280,7 +280,7 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False ) :
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
-       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],u[0::skipz,0::skipx],w[0::skipz,0::skipx])
+       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],u[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=600.0*arrow_scale_factor)
        ax.set_ybound( ybound )
        ax.set_title(r'$-V{\nabla}{\theta}$ (sh., $Ks^{-1}$) y $\theta$ (cont., $K$) y viento (U,W) (vectores)')
        delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
@@ -292,9 +292,9 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False ) :
        h_diabatic[h_diabatic > np.max(clevs1)]=np.max(clevs1)
        h_diabatic[h_diabatic < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( dist , z , h_diabatic , clevs1 , cmap=my_map)
-       clevs2=np.array([0.01,0.05,0.1,0.2])
+       clevs2=np.array([0.01,0.05,0.1,0.2]) * scale_factor
        p2=ax.contour( dist , z , dthetadt_loc - dthetadt_adv - h_diabatic , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.array([-0.2,-0.1,-0.05,-0.01])
+       clevs2=np.array([-0.2,-0.1,-0.05,-0.01]) * scale_factor
        p2=ax.contour( dist , z , dthetadt_loc - dthetadt_adv - h_diabatic , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -311,7 +311,143 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False ) :
 
     return
 
-def plot_vapor_equation_v( my_data , plot_path , show=False , force = False ) :
+
+def plot_termo_equation_2_v( my_data , plot_path , show=False , force = False , scale_factor = 1.0 , arrow_scale_factor = 1.0 , ybound = None ) :
+    #Ploteo un cross section vertical de la ecuacion de movimiento (una figura para w y otra para u y v)
+
+    for it in range( my_data['nt'] ) :
+
+       fig_name = plot_path + '/termo_equation_2_' + my_data['slice_type'] + '_i_' + str(my_data['slice_index']) + '_t' + str(it) + '.png'
+       if my_data['slice_type'] == 'vx' :
+          dist=np.arange(0,my_data['dy']*my_data['ny'],my_data['dy'])
+          dist=np.tile(dist,(my_data['nz'],1))
+          sw=my_data['slice_width']
+          z=my_data['z'][:,:,sw,it]
+          t=my_data['t'][:,:,sw,it]
+          theta=my_data['theta'][:,:,sw,it]
+          theta_pert=my_data['theta'][:,:,sw,it]-my_data['theta0'][:,:,sw,it]
+          qv=my_data['qv'][:,:,sw,it]
+          w=my_data['w'][:,:,sw,it]
+          u=my_data['u'][:,:,sw,it]
+          ref=my_data['ref'][:,:,sw,it]
+          dthetadt_loc =my_data['dthetadt_loc'][:,:,sw,it]
+          dthetadt_adv =my_data['dthetadt_adv'][:,:,sw,it]
+          h_diabatic =my_data['h_diabatic'][:,:,sw,it]                   
+          ppert = my_data['p'][:,:,sw,it] - my_data['p0'][:,:,sw,it]
+          
+       if my_data['slice_type'] == 'vy' :
+          dist=np.arange(0,my_data['dx']*my_data['nx'],my_data['dx'])
+          dist=np.tile(dist,(my_data['nz'],1))
+          sw=my_data['slice_width']
+          z=my_data['z'][:,sw,:,it]
+          t=my_data['t'][:,sw,:,it]
+          theta=my_data['theta'][:,sw,:,it]
+          theta_pert=my_data['theta'][:,sw,:,it]-my_data['theta0'][:,sw,:,it]
+          qv=my_data['qv'][:,sw,:,it]
+          w=my_data['w'][:,sw,:,it]
+          u=my_data['u'][:,sw,:,it]
+          ref=my_data['ref'][:,sw,:,it]
+          dthetadt_loc =my_data['dthetadt_loc'][:,sw,:,it]
+          dthetadt_adv =my_data['dthetadt_adv'][:,sw,:,it]
+          h_diabatic =my_data['h_diabatic'][:,sw,:,it]
+          ppert = my_data['p'][:,sw,:,it] - my_data['p0'][:,sw,:,it]
+          
+       ncols=2
+       nrows=2
+       fig, axs = plt.subplots( nrows,ncols , figsize=[10,8] , )
+       fig.subplots_adjust(wspace=0.04,hspace=0.09,bottom=0.1,left=0.06,right=0.98,top=0.96)
+       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy' and ybound is None  :
+          ybound=[0,20000]
+ 
+       #Ploteo theta y su perturbacion
+       ax = axs[0,0]
+       clevs1=np.arange(-15,15.5,0.5) * scale_factor
+       theta_pert[theta_pert > np.max(clevs1)]=np.max(clevs1)
+       theta_pert[theta_pert < np.min(clevs1)]=np.min(clevs1)
+       my_map = cmap_discretize('RdBu_r',clevs1.size)
+       p1=ax.contourf( dist , z , theta_pert , clevs1 , cmap=my_map)
+       clevs2=np.arange(270,500,5)
+       p2=ax.contour( dist , z , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       ax.set_ybound( ybound )
+       ax.set_title(r'${\theta}^{\prime}$ (sh., $K$) y $\theta$ (cont., $K$)')   
+       ax.set_xticks([])
+       delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
+       cbar_ax = fig.add_axes([0.06, 0.03, 0.4, 0.02])
+       m = plt.cm.ScalarMappable(cmap=my_map )
+       m.set_array(theta_pert)
+       m.set_clim(np.min(clevs1),np.max(clevs1))
+       delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
+       cb=plt.colorbar(m,cax=cbar_ax,boundaries=np.arange(np.min(clevs1),np.max(clevs1)+delta,delta),orientation='horizontal')
+       cb.ax.tick_params(labelsize=14)
+
+       #Defino la escala de colores para la tasa de cambio de theta con el tiempo.
+       clevs1=np.arange(-0.15,0.16,0.01)  * scale_factor
+
+       #Ploteo la tasa de cambio local de theta con el tiempo
+       ax = axs[0,1]
+       dthetadt_tot = dthetadt_loc - dthetadt_adv
+       dthetadt_tot[dthetadt_tot > np.max(clevs1)]=np.max(clevs1)
+       dthetadt_tot[dthetadt_tot < np.min(clevs1)]=np.min(clevs1)
+       my_map = cmap_discretize('bwr',clevs1.size)
+       p1=ax.contourf( dist , z , dthetadt_tot , clevs1 , cmap=my_map)
+       clevs2=np.arange(270,500,5)
+       p2=ax.contour( dist , z , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       skipx=3
+       skipz=3
+       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],u[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=600.0*arrow_scale_factor)
+       ax.set_ybound( ybound )
+       ax.set_title(r'${\frac{d{\theta}}{dt}}$ (sh., $Ks^{-1}$) y $\theta$ (cont., $K$) y viento (U,W) (vectores)')
+       ax.set_xticks([])
+       ax.set_yticks([])
+       delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
+       cbar_ax = fig.add_axes([0.55, 0.03, 0.4, 0.02])
+       m = plt.cm.ScalarMappable(cmap=my_map )
+       m.set_array(dthetadt_loc)
+       m.set_clim(np.min(clevs1),np.max(clevs1))
+       delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
+       cb=plt.colorbar(m,cax=cbar_ax,boundaries=np.arange(np.min(clevs1),np.max(clevs1)+delta,delta),orientation='horizontal')
+       cb.ax.tick_params(labelsize=14)
+
+       #Ploteo el aporte de qv al empuje y qv.
+       ax = axs[1,0]
+       my_map = cmap_discretize('bwr',clevs1.size)
+       h_diabatic[h_diabatic > np.max(clevs1)]=np.max(clevs1)
+       h_diabatic[h_diabatic < np.min(clevs1)]=np.min(clevs1)
+       p1=ax.contourf( dist , z , h_diabatic , clevs1 , cmap=my_map)
+       clevs2=np.arange(270,500,5)
+       p2=ax.contour( dist , z , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       ax.set_ybound( ybound )
+       ax.set_title(r'$\dot{Q}_{lat}$ (sh., $Ks^{-1}$) y $\theta$ (cont., $K$)')
+       delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
+
+       #Ploteo el aporte del calor latente. 
+       ax = axs[1,1]
+       res = dthetadt_loc - dthetadt_adv - h_diabatic
+       my_map = cmap_discretize('bwr',clevs1.size)
+       res[res > np.max(clevs1)]=np.max(clevs1)
+       res[res < np.min(clevs1)]=np.min(clevs1)
+       p1=ax.contourf( dist , z , res , clevs1 , cmap=my_map)
+       clevs2=np.arange(270,500,5)
+       p2=ax.contour( dist , z , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       ax.set_ybound( ybound )
+       ax.set_title(r'${\frac{d{\theta}}{dt}}_{res}$ (cont., $K$) y $\theta$ (cont., $K$)')
+       ax.set_yticks([])
+       delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
+       
+       if show :
+          plt.show()
+
+       plt.savefig(fig_name,dpi=dpi)
+       plt.close()
+
+
+    return
+
+def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , scale_factor = 1.0 , arrow_scale_factor = 1.0 , ybound = None ) :
     #Ploteo un cross section vertical de la ecuacion de movimiento (una figura para w y otra para u y v)
 
     for it in range( my_data['nt'] ) :
@@ -350,12 +486,12 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False ) :
        nrows=2
        fig, axs = plt.subplots( nrows,ncols , figsize=[10,8] , )
        fig.subplots_adjust(wspace=0.04,hspace=0.09,bottom=0.1,left=0.06,right=0.98,top=0.96)
-       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy'  :
+       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy' and ybound is None :
           ybound=[0,20000]
  
        #Ploteo theta y su perturbacion
        ax = axs[0,0]
-       clevs1=np.arange(-5.0,5.05,0.05)
+       clevs1=np.arange(-5.0,5.05,0.05) * scale_factor
        qv_pert[qv_pert > np.max(clevs1)]=np.max(clevs1)
        qv_pert[qv_pert < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('RdBu_r',clevs1.size)
@@ -376,7 +512,7 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False ) :
        cb.ax.tick_params(labelsize=14)
 
        #Defino la escala de colores para la tasa de cambio de theta con el tiempo.
-       clevs1=np.arange(-0.05,0.055,0.005) 
+       clevs1=np.arange(-0.05,0.055,0.005) * scale_factor
 
        #Ploteo la tasa de cambio local de theta con el tiempo
        ax = axs[0,1]
@@ -411,7 +547,7 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False ) :
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
-       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],u[0::skipz,0::skipx],w[0::skipz,0::skipx])
+       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],u[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=600.0*arrow_scale_factor)
        ax.set_ybound( ybound )
        ax.set_title(r'$-V{\nabla}{q_v}$ (sh., $gKg^{-1}$) y $q_v$ (cont., $gKg^{-1}s^{-1}$) y viento (U,W) (vectores)')
        delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
@@ -423,9 +559,9 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False ) :
        qv_diabatic[qv_diabatic > np.max(clevs1)]=np.max(clevs1)
        qv_diabatic[qv_diabatic < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( dist , z , qv_diabatic * 1.0e3 , clevs1 , cmap=my_map)
-       clevs2=np.array([0.005,0.01,0.05,0.1])
+       clevs2=np.array([0.005,0.01,0.05,0.1]) * scale_factor
        p2=ax.contour( dist , z , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) * 1.0e3 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.array([-0.1,-0.05,-0.01,-0.005])
+       clevs2=np.array([-0.1,-0.05,-0.01,-0.005]) * scale_factor
        p2=ax.contour( dist , z , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -442,7 +578,7 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False ) :
     return
 
 
-def plot_water_equation_v( my_data , plot_path , show=False , force = False ) :
+def plot_water_equation_v( my_data , plot_path , show=False , force = False , scale_factor = 1.0 , arrow_scale_factor = 1.0 , ybound = None ) :
     #Ploteo un cross section vertical de la ecuacion de movimiento (una figura para w y otra para u y v)
 
     for it in range( my_data['nt'] ) :
@@ -490,13 +626,13 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False ) :
        ncols=3
        nrows=2
        
-       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy'  :
+       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy' and ybound is None :
           ybound=[0,20000]
           
        #Fijo los niveles para las tasas de cambio local
-       clevs1=np.arange(-0.1,0.1+0.01,0.01)
+       clevs1=np.arange(-0.1,0.1+0.01,0.01) * scale_factor
        my_map = cmap_discretize('bwr',clevs1.size)   
-       clevs2=np.array([0.5,1.0,2.5,5.0,10.0,15.0,20.0,25.0])
+       clevs2=np.array([0.5,1.0,2.5,5.0,10.0,15.0,20.0,25.0]) * scale_factor
        #clevs2=np.arange(0,18,0.5)
           
        fig, axs = plt.subplots( nrows,ncols , figsize=[15,9] , )
@@ -586,7 +722,9 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False ) :
 
     return
 
-def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
+
+
+def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , scale_factor = 1.0 , arrow_scale_factor = 1.0 , ybound = None ) :
     #Ploteo un cross section vertical de la ecuacion de movimiento (una figura para w y otra para u y v)
 
     for it in range( my_data['nt'] ) :
@@ -637,21 +775,21 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
       
        ncols=4
        nrows=2
-       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy'  :
+       if my_data['slice_type'] == 'vx' or my_data['slice_type'] == 'vy' and ybound is None :
           ybound=[0,20000]
        fig, axs = plt.subplots( nrows,ncols , figsize=[15,9] , )
        fig.subplots_adjust(wspace=0.15,hspace=0.1,bottom=0.095,left=0.045,right=0.98,top=0.96)
 
        #Ploteo la perturbacion de presion y la fuerza de presion
        ax = axs[0,0]
-       clevs1=np.arange(-600,650,50)
+       clevs1=np.arange(-600,650,50) * scale_factor
        ppert[ppert > np.max(clevs1)]=np.max(clevs1)
        ppert[ppert < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('RdBu_r',clevs1.size)
        p1=ax.contourf( dist , z , ppert , clevs1 , cmap=my_map)
        skipx=3
        skipz=3
-       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hfppert[0::skipz,0::skipx],vfppert[0::skipz,0::skipx],scale=10)
+       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hfppert[0::skipz,0::skipx],vfppert[0::skipz,0::skipx],scale=600.0*arrow_scale_factor)
 
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -675,7 +813,7 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
-       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx])
+       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=600.0*arrow_scale_factor)
        ax.set_ybound( ybound )
        ax.set_title(r'${P}^{\prime}_{hydro}$ (sh., $Pa$) y viento (vectores)',fontsize=10)
        ax.set_xticks([])
@@ -690,7 +828,7 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
-       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx])
+       ax.quiver(dist[0::skipz,0::skipx],z[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=600.0*arrow_scale_factor)
 
        ax.set_ybound( ybound )
        ax.set_title(r'${P}^{\prime}_{nohydro}$ (sh., $Pa$) y viento (vectores) ',fontsize=10)
@@ -698,7 +836,7 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        ax.set_yticks([])
 
        #Fijo los niveles para las componentes del empuje.
-       clevs1=np.arange(-8.0,8.0+0.05,0.05) 
+       clevs1=np.arange(-8.0,8.0+0.05,0.05) * scale_factor
        my_map = cmap_discretize('bwr',clevs1.size)
 
        #Ploteo laplaciano de la perturbacion de presion por empuje y empuje.
@@ -706,9 +844,9 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        lp_b[lp_b > np.max(clevs1)]=np.max(clevs1) 
        lp_b[lp_b < np.min(clevs1)]=np.min(clevs1) 
        p1=ax.contourf( dist , z , -lp_b * 1.0e4 , clevs1 , cmap=my_map)
-       clevs2=np.arange(0.1,1.0,0.1)*10.0e-1
+       clevs2=np.arange(0.1,1.0,0.1)*10.0e-1 * scale_factor
        p2=ax.contour( dist , z , bouy , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.arange(-1.0,0.0,0.1)*10.0e-1
+       clevs2=np.arange(-1.0,0.0,0.1)*10.0e-1 * scale_factor
        p2=ax.contour( dist , z , bouy , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
 
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
@@ -728,9 +866,9 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        #Ploteo laplaciano de la perturbacion de presion dinamica 
        ax = axs[1,0]
        p1=ax.contourf( dist , z , (-lp_spin_tot -lp_splat_tot) * 1.0e4 , clevs1 , cmap=my_map)
-       clevs2=np.arange(1.0,11,1.0)
+       clevs2=np.arange(1.0,11,1.0) * scale_factor
        p2=ax.contour( dist , z , (-lp_spin_pert -lp_splat_pert) * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.arange(-10.0,0.0,1.0)
+       clevs2=np.arange(-10.0,0.0,1.0) * scale_factor
        p2=ax.contour( dist , z , (-lp_spin_pert -lp_splat_pert) * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -740,9 +878,9 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        #Ploteo laplaciano de la perturbacion por spin total y asociada al viento perturbado
        ax = axs[1,1]
        p1=ax.contourf( dist , z , -lp_spin_pert * 1.0e4 , clevs1 , cmap=my_map)
-       clevs2=np.arange(1.0,11,1.0)
+       clevs2=np.arange(1.0,11,1.0) * scale_factor
        p2=ax.contour( dist , z , -lp_spin_tot * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.arange(-10.0,0.0,1.0)
+       clevs2=np.arange(-10.0,0.0,1.0) * scale_factor
        p2=ax.contour( dist , z , -lp_spin_tot * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -753,9 +891,9 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        ax = axs[1,2]
        p1=ax.contourf( dist , z , -lp_splat_pert * 1.0e4 , clevs1 , cmap=my_map) 
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
-       clevs2=np.arange(1.0,11,1.0)
+       clevs2=np.arange(1.0,11,1.0) * scale_factor
        p2=ax.contour( dist , z , -lp_splat_tot * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.arange(-10.0,0.0,1.0)
+       clevs2=np.arange(-10.0,0.0,1.0) * scale_factor
        p2=ax.contour( dist , z , -lp_splat_tot * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
@@ -765,9 +903,9 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False ) :
        #Ploteo el termino lineal.
        ax = axs[1,3]
        p1=ax.contourf( dist , z , -lp_lineal  * 1.0e4, clevs1 , cmap=my_map)
-       clevs2=np.arange(-7.0,0.0,1.0)
+       clevs2=np.arange(-7.0,0.0,1.0) * scale_factor
        p2=ax.contour( dist , z , -lp_ppert * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       clevs2=np.arange(1.0,8.0,1.0)
+       clevs2=np.arange(1.0,8.0,1.0) * scale_factor
        p2=ax.contour( dist , z , -lp_ppert * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
 
        p3=ax.contour( dist , z , ref , [30.0] , colors='c',linestyles='solid' , linewidths=2.5 )
