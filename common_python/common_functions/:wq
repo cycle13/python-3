@@ -524,14 +524,9 @@ SUBROUTINE com_filter_lanczos(ndim,fc,var)
   IMPLICIT NONE
   INTEGER,PARAMETER :: r_size=kind(0.0d0)
   INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
-  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
-  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
-  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
-  REAL(r_size),PARAMETER :: re=6371.3d3
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: fc    ! critical frequency in [0,pi]
   REAL(r_size),INTENT(INOUT) :: var(ndim)
-
 
   INTEGER,PARAMETER :: lresol=10
 
@@ -584,10 +579,6 @@ SUBROUTINE com_distll(ndim,alon,alat,blon,blat,dist)
   IMPLICIT NONE
   INTEGER,PARAMETER :: r_size=kind(0.0d0)
   INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
-  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
-  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
-  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
-  REAL(r_size),PARAMETER :: re=6371.3d3
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: alon(ndim)
   REAL(r_size),INTENT(IN) :: alat(ndim)
@@ -622,10 +613,6 @@ SUBROUTINE com_distll_1(alon,alat,blon,blat,dist)
   IMPLICIT NONE
   INTEGER,PARAMETER :: r_size=kind(0.0d0)
   INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
-  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
-  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
-  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
-  REAL(r_size),PARAMETER :: re=6371.3d3
   REAL(r_size),INTENT(IN) :: alon
   REAL(r_size),INTENT(IN) :: alat
   REAL(r_size),INTENT(IN) :: blon
@@ -653,10 +640,6 @@ SUBROUTINE com_distll_sngl(alon,alat,blon,blat,dist)
   IMPLICIT NONE
   INTEGER,PARAMETER :: r_size=kind(0.0d0)
   INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
-  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
-  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
-  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
-  REAL(r_size),PARAMETER :: re=6371.3d3
   REAL(r_sngl),INTENT(IN) :: alon
   REAL(r_sngl),INTENT(IN) :: alat
   REAL(r_sngl),INTENT(IN) :: blon
@@ -686,10 +669,6 @@ SUBROUTINE com_compassbearing_sngl(alon,alat,blon,blat,bearing)
   IMPLICIT NONE
   INTEGER,PARAMETER :: r_size=kind(0.0d0)
   INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
-  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
-  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
-  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
-  REAL(r_size),PARAMETER :: re=6371.3d3
   REAL(r_sngl),INTENT(IN) :: alon
   REAL(r_sngl),INTENT(IN) :: alat
   REAL(r_sngl),INTENT(IN) :: blon
@@ -1317,9 +1296,6 @@ SUBROUTINE compute_pdf_metric(my_ensemble,my_undefmask,nx,ny,nz,nbv,nbins,pdf_me
 IMPLICIT NONE  
 INTEGER,PARAMETER :: r_size=kind(0.0d0)
 INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
-REAL(r_size),PARAMETER :: pi=3.141592653589793d0
-REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
-REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
 INTEGER, INTENT(IN)       :: nbins
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbv !Ensemble dimensions.
 REAL(r_sngl) , INTENT(IN) :: my_ensemble(nx,ny,nz,nbv)
@@ -2619,15 +2595,15 @@ IMPLICIT NONE
 INTEGER,PARAMETER :: r_size=kind(0.0d0)
 INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER      , INTENT(IN)  :: ndata , nthresholds
-REAL(r_size) , INTENT(IN)  :: dfor(ndata) , dobs(ndata)
-REAL(r_size) , INTENT(IN)  :: thresholds(nthresholds)
-REAL(r_size) , INTENT(IN)  :: undef 
+REAL(r_sngl) , INTENT(IN)  :: dfor(ndata) , dobs(ndata)
+REAL(r_sngl) , INTENT(IN)  :: thresholds(nthresholds)
+REAL(r_sngl) , INTENT(IN)  :: undef 
 INTEGER      , INTENT(OUT) :: ctable(2,2,nthresholds)
-REAL(r_size) , INTENT(OUT) :: ets(nthresholds) , csi(nthresholds) , bias(nthresholds)
-REAL(r_size) , INTENT(OUT) :: pod(nthresholds) , far(nthresholds)
+REAL(r_sngl) , INTENT(OUT) :: ets(nthresholds) , csi(nthresholds) , bias(nthresholds)
+REAL(r_sngl) , INTENT(OUT) :: pod(nthresholds) , far(nthresholds)
 INTEGER                    :: hi , mi , fa , cn , nt 
 INTEGER                    :: it , ii
-REAL(r_size)               :: hi_r
+REAL(r_sngl)               :: hi_r
 
 ctable=0
 ets=undef
@@ -2682,64 +2658,6 @@ ENDDO
 WRITE(*,*)'Contingency table computed, ',REAL(nt,r_sngl)/REAL(ndata),' % valida data'
 
 END SUBROUTINE cont_table
-
-SUBROUTINE fss_det_2d( dfor , dobs , nx , ny , undef , thresholds , nthresholds , sizes , nsizes , fss )
-   !Computes the Fraction Skill Score ussuming 2D fields and deterministic forecasts.
-   !Computation is done following Skok and Roberts (2016) QJRMS
-   !Undef are allowed and a check is performed to detect them on each box.
-   !If the proportion of undef within the box is larger than (1-per_threshold) then the box is rejected
-   !and is not considered for the computation of the FSS.
-   !This criteria is also apply to handle boxes which are close to the domain boundaries.  
-   !
-   IMPLICIT NONE
-   INTEGER,PARAMETER   :: r_size=kind(0.0d0)
-   INTEGER,PARAMETER   :: r_sngl=kind(0.0e0)
-   INTEGER,INTENT(IN)  :: nx , ny , nthresholds , nsizes 
-   REAL(r_size), INTENT(IN) :: dfor(nx,ny) , dobs(nx,ny) 
-   REAL(r_size), INTENT(IN) :: thresholds(nthresholds) 
-   INTEGER     , INTENT(IN) :: sizes(nsizes) 
-   REAL(r_size), INTENT(IN) :: undef
-   REAL(r_size), INTENT(OUT):: fss(nthresholds,nsizes)
-   REAL(r_size)             :: tmp_dfor(nx,ny,1) , tmp_dobs(nx,ny,1) 
-   REAL(r_size)             :: tmp_sdfor(nx,ny,1) , tmp_sdobs(nx,ny,1)
-   REAL(r_size)             :: tmp_n(nx,ny,1)
-   REAL(r_size)             :: fbs , fbs_ref
-   INTEGER                  :: validn , is , it
-   LOGICAL                  :: mask( nx , ny , 1)
-   INTEGER                  :: maski(nx , ny , 1)
-   REAL(r_size),PARAMETER   :: per_thresh = 0.8
-
-
-   fss = undef 
-   WHERE( tmp_dfor == undef )
-           tmp_dobs = undef
-   ENDWHERE
-   WHERE( tmp_dobs == undef )
-           tmp_dfor = undef 
-   ENDWHERE
-
-   tmp_dfor(:,:,1) = dfor   !box_functions assumes 3D inputs.
-   tmp_dobs(:,:,1) = dobs   !box_functions assumes 3D inputs.
-
-   DO it = 1 , nthresholds
-     DO is = 1 , nsizes 
-        CALL box_functions( tmp_dfor,nx,ny,1,undef,sizes(is),sizes(is),0,'COUN',thresholds(it),tmp_sdfor)
-        CALL box_functions( tmp_dobs,nx,ny,1,undef,sizes(is),sizes(is),0,'COUN',thresholds(it),tmp_sdobs)
-        CALL box_functions( tmp_dfor,nx,ny,1,undef,sizes(is),sizes(is),0,'VALI',0.0d0,tmp_n)
-        tmp_sdfor = tmp_sdfor / REAL( tmp_n , r_size )
-        tmp_sdobs = tmp_sdobs / REAL( tmp_n , r_size ) 
-        tmp_n = tmp_n / REAL( (sizes(is)*2+1) ** 2 ,r_size)  !Compute percentage of valid data within each box.
-        mask  = tmp_n >= per_thresh         !Define the mask of valid elements.
-        maski = mask
-        validn = SUM( maski )
-        fbs = SUM( (tmp_sdfor - tmp_sdobs)**2 , mask )
-        fbs_ref = SUM( (tmp_sdfor )**2 , mask ) + SUM( (tmp_sdobs)**2 , mask )
-        fss(it,is) = 1.0d0 - ( fbs / fbs_ref )
-     ENDDO
-   ENDDO
-
-
-END SUBROUTINE fss_det_2d
 
 SUBROUTINE BOX_FUNCTIONS(datain,nx,ny,nz,undef,boxx,boxy,boxz,operation,threshold,dataout)
 
@@ -2837,10 +2755,8 @@ DO kk=1,nz
           dataout(ii,jj,kk)= REAL( data_count , r_size ) / REAL( NITEMS , r_size )
         ELSE
           dataout(ii,jj,kk) = 0.0d0
+
         ENDIF
-      ELSEIF( OPERATION == 'VALI' )THEN
-        !Count all valid data (i.e. those not equal to undef)
-        dataout(ii,jj,kk) = REAL( NITEMS , r_size )
 
       ELSEIF( OPERATION == 'MAXN')THEN
         IF( NITEMS > 0 )THEN
