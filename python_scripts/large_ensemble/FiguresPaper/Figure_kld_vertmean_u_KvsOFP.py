@@ -15,13 +15,6 @@ import os
 import matplotlib.pyplot as plt
 from common_functions import common_functions as cf
 
-import matplotlib
-#import matplotlib.cm     as cm
-import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
-#from mpl_toolkits.basemap import Basemap
-import cartopy.crs as ccrs
-
 
 import common_plot_functions as cpf
 import common_mask_functions as cmf
@@ -32,19 +25,21 @@ figname='./Figure_kld_vertmean_u'
 
 filename='kldistance_mean.grd'
 
-exps=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
-
-deltat=[300,120,60,30,30,60]
+#exps=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
+exps=['LE_D1_1km_5min','LE_D1_1km_5min_OFP_V2']
+deltat=[300,300]
+#deltat=[300,300,60,30,30,60]
 
 filetype='guesgp'   #analgp , analgz , guesgp , guesgz
 
-plot_variables=['u']
+plot_variables=['u','w']
 
 lat_radar=34.823
 lon_radar=135.523
-radar_range=50.0e3   #Radar range in meters (to define the radar mask)
+radar_range=1000.0e3   #Radar range in meters (to define the radar mask)
 
-init_times = ['20130713050500','20130713050400','20130713050500','20130713050500','20130713050500','20130713050500'] 
+init_times = ['20130713050500','20130713050500'] 
+#init_times = ['20130713050500','20130713050500','20130713050500','20130713050500','20130713050500','20130713050500']
 
 sigma_smooth=2.0
 
@@ -139,32 +134,44 @@ nexp = len( exps )
 plot_kld_mean = np.zeros( [ nx , ny , nexp ] )
 plot_dbz_mean = np.zeros( [ nx , ny , nexp ] )
 
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+import cartopy.crs as ccrs
+
+#Start subplots
+ncols = 2
+nrows = 2
+icoldelta = 1.0/ncols
+irowdelta = 1.0/nrows
+hmargin=0.0
+vmargin=0.0
+hoffset=-0.15
+voffset=0.1
+
+icol = 1
+irow = nrows
+
+xtick=[134.5,135,135.5,136,136.5,137]
+ytick=[34,34.5,35,35.5]
+axesrange=[134.5,136.5,34.0,35.6]
+titles = ['(a)','(b)','(c)','(d)','(e)','(f)']
+
+
 #for key in kld_time_mean  :
-for var in plot_variables :
-
-   ncols=3
-   nrows=2
-   fig, axs = plt.subplots( nrows,ncols , subplot_kw=dict(projection=ccrs.PlateCarree() ), figsize=[10,6.5] , sharex = 'col' , sharey = 'row')
-   fig.subplots_adjust(wspace=0.075,hspace=0.28,bottom=0.03,left=0.05,right=0.97,top=0.97)
-
+for ivar,var in enumerate(plot_variables) :
 
    for iexp,my_exp in enumerate(exps)  :
-
       #Prepare the data for plotting. 
-
       #Smooth output
-
       parameter[my_exp][var][ parameter[my_exp][var] == undef  ] = np.nan
-
       plot_kld_mean[:,:,iexp]  = np.squeeze( np.nanmean( np.delete( parameter[my_exp][var], 4,2) , 2) )
       plot_dbz_mean[:,:,iexp]  = np.squeeze( np.nanmax( ensemble_mean[my_exp]['dbz'] , 2) )
-
       print('Smoothing parameter for var=',var)
-      plot_kld_mean[:,:,iexp]=100 * cf.gaussian_filter(field0=plot_kld_mean[:,:,iexp],dx=1.0,sigma=sigma_smooth,nx=nx,ny=ny,undef=undef)
+      plot_kld_mean[:,:,iexp]=cf.gaussian_filter(field0=plot_kld_mean[:,:,iexp],dx=1.0,sigma=sigma_smooth,nx=nx,ny=ny,undef=undef)
 
-      if iexp > 0  :
- 
-         plot_kld_mean[:,:,iexp] = 100 * ( ( plot_kld_mean[:,:,iexp] - plot_kld_mean[:,:,0] ) / plot_kld_mean[:,:,0] )
+      #if iexp > 0  :
+      #   plot_kld_mean[:,:,iexp] = 100 * ( ( plot_kld_mean[:,:,iexp] - plot_kld_mean[:,:,0] ) / plot_kld_mean[:,:,0] )
 
       tmp = np.copy(plot_kld_mean[:,:,iexp])
       tmp[ np.logical_not( radar_mask ) ] = np.nan 
@@ -177,40 +184,39 @@ for var in plot_variables :
 
    #Plot time mean of the moments.
 
-   icol = 0
-   irow = 0
-
-   xtick=[134.5,135,135.5,136,136.5,137]
-   ytick=[34,34.5,35,35.5] 
-   axesrange=[134.97,136.09,34.36,35.30]
-   titles = ['(a) - 5MIN ','(b) - 2MIN ','(c) - 1MIN ','(d) - 30SEC ','(e) - 30SEC-NS ','(f) - 1MIN-4D ']
+   plt.figure(1,figsize=[10,10])
 
    for iexp,my_exp in enumerate(exps)  : 
  
       varsh = plot_kld_mean[:,:,iexp]
       varc  = plot_dbz_mean[:,:,iexp]
 
-      if iexp == 0 :
-         my_map =cpf.cmap_discretize('Blues',10)
-         smin = 0
-         smax = 5.0
-      else         :
-         my_map =cpf.cmap_discretize('Spectral',10)
-         smin = -50.0
-         smax =  50.0
+      #if iexp == 0 :
+      my_map =cpf.cmap_discretize('Blues',10)
+      #smin = np.nanmin( plot_kld_mean[:,:,iexp] )
+      #smax = np.nanmax( plot_kld_mean[:,:,iexp] )
+      if ivar == 0 :
+        smin = 0
+        smax = 0.05
+      if ivar == 1 :
+        smin = 0
+        smax = 0.25
 
-      ax=axs[irow,icol]
+      #else         :
+      #   my_map =cpf.cmap_discretize('coolwarm',11)
+      #   smin = -60.0
+      #   smax =  60.0
 
       #Axes limits
       #my_axes = [icoldelta*(icol-1)+hmargin+hoffset,irowdelta*(irow-1)+vmargin+voffset,irowdelta-2*hmargin,icoldelta-2*vmargin]
- 
-      #ax = plt.axes( my_axes , facecolor=None , projection=ccrs.PlateCarree() )
+      ax = plt.subplot(2, 2, 1+ivar + (iexp ) * (2) , projection=ccrs.PlateCarree())
+      #ax = plt.axes( ax , facecolor=None , projection=ccrs.PlateCarree() )
 
       #The pcolor
-      p=ax.contourf(lon , lat ,  np.transpose( np.squeeze( varsh ) ) ,
+      p=ax.pcolor(lon , lat ,  np.transpose( np.squeeze( varsh ) ) ,
         transform=ccrs.PlateCarree(),vmin=smin , vmax=smax ,cmap=my_map )
 
-      ax.set_extent( axesrange , ccrs.PlateCarree())
+      ax.set_extent( axesrange , ccrs.PlateCarree() )
 
       #Grid lines
       gl=ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True,
@@ -224,62 +230,43 @@ for var in plot_variables :
       ax.coastlines('10m',linewidth=1.0)
 
       #Colorbar
-      #cb=plt.colorbar(p)
-      #cb.ax.tick_params(labelsize=12)
+      cb=plt.colorbar(p)
+      cb.ax.tick_params(labelsize=12)
 
       #Contour map
       c=ax.contour( lon , lat , np.transpose( np.squeeze( varc ) ) ,
         levels = [1,20] ,colors='k')
  
-      ax.set_title(titles[iexp],fontsize = 15)
+      #Axes label and title
+      #if irow == 1   :
+      #   plt.xlabel('Latitude')
+      #if icol == 1   :
+      #   plt.ylabel('Longitude')
 
-      gl.xlabel_style = {'size': 14, 'color': 'k' }
-      gl.ylabel_style = {'size': 14, 'color': 'k' }
+      if ivar == 0 :
+        if iexp == 0 :
+         plt.title('U FNL',fontsize = 15)
+        if iexp == 1 :
+         plt.title('U D2',fontsize = 15)
+      if ivar == 1 :
+        if iexp == 0 :
+         plt.title('W FNL',fontsize = 15)
+        if iexp == 1 :
+         plt.title('W D2',fontsize = 15)
+
+
+      gl.xlabel_style = {'size': 12, 'color': 'k' }
+      gl.ylabel_style = {'size': 12, 'color': 'k' }
       gl.xlabels_top = False
       gl.ylabels_right = False
 
-      if irow == 0 :
-         gl.xlabel_style = {'size': 14, 'color': 'w' }
-      if icol >  0 :
-         gl.ylabel_style = {'size': 14, 'color': 'w' }
-         gl.ylable = False 
-
-      icol = icol + 1
-      if icol > ncols-1   :
-         icol = 0
-         irow = irow + 1
-
-      if iexp == 0 :
-         cbar_ax = fig.add_axes([0.06, 0.53, 0.4, 0.03])
-         my_map =cpf.cmap_discretize('Blues',10)
-         smin = 0
-         smax = 5.0
-         delta=(smax-smin)/10.0
-         m = plt.cm.ScalarMappable(cmap=my_map )
-         m.set_array(np.transpose(plot_kld_mean[:,:,iexp]))
-         m.set_clim(smin,smax)
-         cb=plt.colorbar(m,cax=cbar_ax,boundaries=np.arange(smin,smax+delta,delta),orientation='horizontal')
-         cb.ax.tick_params(labelsize=14)
-         cbar_ax.set_xlabel( '[KLD ${10}^{-2}, unitless$]' ,fontsize=12 ,labelpad = -5 )
-         #ax.annotate('[KLD ${10}^{-2}, unitless$]',(0.2,0.49),xycoords='figure fraction',fontsize=12)
-
-      if iexp == 1 :
-         cbar_ax = fig.add_axes([0.55 , 0.53 , 0.4 , 0.03])
-         my_map =cpf.cmap_discretize('Spectral',10)
-         smin = -50.0
-         smax =  50.0
-         delta=(smax-smin)/10.0
-         m = plt.cm.ScalarMappable(cmap=my_map )
-         m.set_array(np.transpose(plot_kld_mean[:,:,iexp]))
-         m.set_clim(smin,smax)
-         cb=plt.colorbar(m,cax=cbar_ax,boundaries=np.arange(smin,smax+delta,delta),orientation='horizontal')
-         cbar_ax.set_xlabel( '[KLD difference, %]' ,fontsize=12 , labelpad = -1)
-         cb.ax.tick_params(labelsize=14)
-         #ax.annotate('[KLD difference, %]',(0.65,0.49),xycoords='figure fraction',fontsize=12)
-
+      #icol = icol + 1
+      #if icol > ncols   :
+      #   icol = 1
+      #   irow = irow - 1
  
-   plt.show()
-   plt.savefig( figname + '.png' , format='png' , dpi=300  )
-   plt.close()
+plt.show()
+plt.savefig( figname + '.png' , format='png' , dpi=300  )
+plt.close()
 
 

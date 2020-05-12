@@ -16,9 +16,9 @@ MODULE common_scale
   use common
   use netcdf , only : NF90_WRITE , NF90_NOWRITE
   use common_ncio
-  use common_namelist
+!  use common_namelist
   use scale_const
-  use scale_mapproj
+!  use scale_mapproj
 
   IMPLICIT NONE
   PUBLIC
@@ -87,13 +87,18 @@ MODULE common_scale
 
   INTEGER :: NSUB 
 
+  INTEGER  , public :: IHALO = 2 , JHALO = 2 , KHALO = 2
+
+
 CONTAINS
 
 !-----------------------------------------------------------------------
-SUBROUTINE set_common_scale(file_prefix , topo_file_prefix , file_type )
+SUBROUTINE set_common_scale(file_prefix , topo_file_prefix , file_type , ihalo_in , &
+                            jhalo_in , khalo_in )
 
   IMPLICIT NONE
   character(len=*), intent(in)    :: file_prefix , topo_file_prefix
+  integer         , intent(in)    :: ihalo_in , jhalo_in , khalo_in 
   character(len=100)              :: filename
   integer ,intent(in)             :: file_type
   integer                         :: ncid , ierr
@@ -182,7 +187,7 @@ SUBROUTINE set_common_scale(file_prefix , topo_file_prefix , file_type )
   GRID_DOMAIN_CENTER_Y = 0.5d0 * ( FYG(0) + FYG(nlath+1) )
 
   !Initialize projection routines.
-  CALL MPRJ_setup( GRID_DOMAIN_CENTER_X, GRID_DOMAIN_CENTER_Y )
+  !CALL MPRJ_setup( GRID_DOMAIN_CENTER_X, GRID_DOMAIN_CENTER_Y )
 
   if( allocated(CZ) )deallocate(CZ)
   allocate(CZ(nlev+2*KHALO))
@@ -361,7 +366,6 @@ SUBROUTINE read_file_subdomain(filename,v3dg,v2dg,rtime,file_type)
 
   RETURN
 END SUBROUTINE read_file_subdomain
-
 
 
 SUBROUTINE read_file(filenameprefix,v3dg,v2dg,rtime,file_type)

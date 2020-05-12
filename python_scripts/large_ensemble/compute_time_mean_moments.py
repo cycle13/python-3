@@ -21,18 +21,20 @@ from common_functions import common_functions as comm
 
 file_name='moment0001'
 
-basedir='/home/ra001011/a03471/data/output_data/'
+basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/home/ra001011/a03471/data/output_data/'
 
-expnames=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
+#expnames=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D','LE_D1_1km_5min_OFP_V2']
 
-deltat=[300,480,300,300,300,300]
+expnames=['LE_D1_1km_30sec_OFP_V2']
 
-init_date = ['20130713050500','20130713050400','20130713050500','20130713050500','20130713050500','20130713050500']
+deltat=[300] #[300,480,300,300,300,300,300]
+
+init_date = ['20130713050500']    #['20130713050500','20130713050400','20130713050500','20130713050500','20130713050500','20130713050500','20130713050500']
 
 filetypes=['guesgp','analgp']   #analgp , analgz , guesgp , guesgz
 
 #Define initial and end times using datetime module.
-etime = dt.datetime(2013,7,13,5,59,30)  #End time.
+etime = dt.datetime(2013,7,13,6,0,0)  #End time.
 
 #=========================================================
 #  LOOP OVER FILE TYPES
