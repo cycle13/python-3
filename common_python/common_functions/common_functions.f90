@@ -18,24 +18,24 @@
 !-----------------------------------------------------------------------
 MODULE common_functions
 
-  INTEGER,PARAMETER :: r_size=kind(0.0d0)
-  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+!  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+!  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 
 !-----------------------------------------------------------------------
 ! Constants
 !-----------------------------------------------------------------------
-  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
-  REAL(r_size),PARAMETER :: gg=9.81d0
-  REAL(r_size),PARAMETER :: rd=287.0d0
-  REAL(r_size),PARAMETER :: cp=7.0d0 / 2.0d0 * rd
-  REAL(r_size),PARAMETER :: re=6371.3d3
-  REAL(r_size),PARAMETER :: r_omega=7.292d-5
-  REAL(r_size),PARAMETER :: t0c=273.15d0
-  REAL(r_size),PARAMETER :: undef=9.99d33
-  REAL(r_sngl),PARAMETER :: undefs=9.99e33
-  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
-  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
-  REAL(r_size),PARAMETER :: clight=299792458.0d0 !Speed of light
+!  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+!  REAL(r_size),PARAMETER :: gg=9.81d0
+!  REAL(r_size),PARAMETER :: rd=287.0d0
+!  REAL(r_size),PARAMETER :: cp=7.0d0 / 2.0d0 * rd
+!  REAL(r_size),PARAMETER :: re=6371.3d3
+!  REAL(r_size),PARAMETER :: r_omega=7.292d-5
+!  REAL(r_size),PARAMETER :: t0c=273.15d0
+!  REAL(r_size),PARAMETER :: undef=9.99d33
+!  REAL(r_sngl),PARAMETER :: undefs=9.99e33
+!  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+!  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
+!  REAL(r_size),PARAMETER :: clight=299792458.0d0 !Speed of light
 
 PUBLIC
 
@@ -43,6 +43,9 @@ contains
 
 SUBROUTINE com_mean(ndim,var,amean)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: var(ndim)
   REAL(r_size),INTENT(OUT) :: amean
@@ -60,6 +63,9 @@ END SUBROUTINE com_mean
 
 SUBROUTINE com_mean_sngl(ndim,var,amean,w)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_sngl),INTENT(IN) :: var(ndim)
   REAL(r_sngl),INTENT(IN) :: w(ndim)
@@ -86,6 +92,9 @@ END SUBROUTINE com_mean_sngl
 !-----------------------------------------------------------------------
 SUBROUTINE com_stdev(ndim,var,aout)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: var(ndim)
   REAL(r_size),INTENT(OUT) :: aout
@@ -104,6 +113,9 @@ END SUBROUTINE com_stdev
 
 SUBROUTINE com_stdev_sngl(ndim,var,aout,w)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_sngl),INTENT(IN) :: var(ndim)
   REAL(r_sngl),INTENT(IN) :: w(ndim)
@@ -130,6 +142,9 @@ END SUBROUTINE com_stdev_sngl
 !-----------------------------------------------------------------------
 SUBROUTINE com_covar(ndim,var1,var2,cov)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: var1(ndim)
   REAL(r_size),INTENT(IN) :: var2(ndim)
@@ -151,6 +166,9 @@ END SUBROUTINE com_covar
 
 SUBROUTINE com_covar_sngl(ndim,var1,var2,cov,w)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_sngl),INTENT(IN) :: var1(ndim)
   REAL(r_sngl),INTENT(IN) :: var2(ndim)
@@ -173,6 +191,9 @@ END SUBROUTINE com_covar_sngl
 
 SUBROUTINE com_covar_sngl_sample(ndim,var1,var2,sampleindex,cov,w)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_sngl),INTENT(IN) :: var1(ndim)
   REAL(r_sngl),INTENT(IN) :: var2(ndim)
@@ -208,6 +229,9 @@ END SUBROUTINE com_covar_sngl_sample
 !-----------------------------------------------------------------------
 SUBROUTINE com_correl(ndim,var1,var2,cor)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: var1(ndim)
   REAL(r_size),INTENT(IN) :: var2(ndim)
@@ -226,6 +250,9 @@ END SUBROUTINE com_correl
 
 SUBROUTINE com_correl_sngl(ndim,var1,var2,cor,w)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+
   INTEGER,INTENT(IN) :: ndim
   REAL(r_sngl),INTENT(IN) :: var1(ndim)
   REAL(r_sngl),INTENT(IN) :: var2(ndim)
@@ -249,6 +276,8 @@ END SUBROUTINE com_correl_sngl
 
 RECURSIVE SUBROUTINE com_mode_sngl(ndim,var,mode,w,is_sorted)
 IMPLICIT NONE 
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER,  INTENT(IN)     :: ndim
 REAL(r_sngl), INTENT(IN) :: var(ndim)
 REAL(r_sngl), INTENT(OUT):: mode
@@ -332,6 +361,8 @@ END SUBROUTINE com_mode_sngl
 !!
 RECURSIVE SUBROUTINE com_sort_sngl( ndim , var , vars )
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER     , INTENT(IN) :: ndim
   REAL(r_sngl), INTENT(IN) :: var(ndim)
   REAL(r_sngl), INTENT(OUT):: vars(ndim)
@@ -374,6 +405,8 @@ END SUBROUTINE com_sort_sngl
 !!
 RECURSIVE SUBROUTINE com_cosort_sngl( ndim , var , covar , ncovar , vars , covars )
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER     , INTENT(IN) :: ndim
   REAL(r_sngl), INTENT(IN) :: var(ndim)
   REAL(r_sngl), INTENT(OUT):: vars(ndim)
@@ -419,6 +452,8 @@ END SUBROUTINE com_cosort_sngl
 !-----------------------------------------------------------------------
 SUBROUTINE com_anomcorrel(ndim,var1,var2,varmean,cor)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: var1(ndim)
   REAL(r_size),INTENT(IN) :: var2(ndim)
@@ -439,6 +474,8 @@ END SUBROUTINE com_anomcorrel
 !-----------------------------------------------------------------------
 SUBROUTINE com_l2norm(ndim,var,anorm)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: var(ndim)
   REAL(r_size),INTENT(OUT) :: anorm
@@ -450,13 +487,33 @@ END SUBROUTINE com_l2norm
 !-----------------------------------------------------------------------
 ! RMS (root mean square)
 !-----------------------------------------------------------------------
-SUBROUTINE com_rms(ndim,var,rmsv)
+SUBROUTINE com_rms(ndim,var,undef,rmsv)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER,INTENT(IN) :: ndim
-  REAL(r_size),INTENT(IN) :: var(ndim)
-  REAL(r_size),INTENT(OUT) :: rmsv
+  REAL(r_sngl),INTENT(IN) :: var(ndim)
+  REAL(r_sngl),INTENT(IN) :: undef
+  REAL(r_sngl),INTENT(OUT) :: rmsv
+  REAL(r_sngl)             :: rmsv_tmp
+  INTEGER                  :: nt
+  INTEGER                  :: ii
 
-  rmsv = SQRT( SUM(var*var) / REAL(ndim,r_size) )
+  rmsv=undef
+  rmsv_tmp=0.0d0
+  nt=0
+  
+  !$OMP PARALLEL DO REDUCTION(+:rmsv_tmp,nt)
+  DO ii = 1 , ndim
+     IF( var(ii) /= undef )THEN
+        rmsv_tmp = rmsv_tmp + var(ii)**2
+        nt = nt + 1
+     ENDIF
+  ENDDO
+  !$OMP END PARALLEL DO
+  IF( nt > 0 )THEN
+    rmsv = SQRT( rmsv_tmp / REAL( nt , r_sngl ) )
+  ENDIF
 
   RETURN
 END SUBROUTINE com_rms
@@ -465,9 +522,16 @@ END SUBROUTINE com_rms
 !-----------------------------------------------------------------------
 SUBROUTINE com_filter_lanczos(ndim,fc,var)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
+  REAL(r_size),PARAMETER :: re=6371.3d3
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: fc    ! critical frequency in [0,pi]
   REAL(r_size),INTENT(INOUT) :: var(ndim)
+
 
   INTEGER,PARAMETER :: lresol=10
 
@@ -518,6 +582,12 @@ END SUBROUTINE com_filter_lanczos
 !-----------------------------------------------------------------------
 SUBROUTINE com_distll(ndim,alon,alat,blon,blat,dist)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
+  REAL(r_size),PARAMETER :: re=6371.3d3
   INTEGER,INTENT(IN) :: ndim
   REAL(r_size),INTENT(IN) :: alon(ndim)
   REAL(r_size),INTENT(IN) :: alat(ndim)
@@ -550,6 +620,12 @@ END SUBROUTINE com_distll
 !-----------------------------------------------------------------------
 SUBROUTINE com_distll_1(alon,alat,blon,blat,dist)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
+  REAL(r_size),PARAMETER :: re=6371.3d3
   REAL(r_size),INTENT(IN) :: alon
   REAL(r_size),INTENT(IN) :: alat
   REAL(r_size),INTENT(IN) :: blon
@@ -575,6 +651,12 @@ END SUBROUTINE com_distll_1
 
 SUBROUTINE com_distll_sngl(alon,alat,blon,blat,dist)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
+  REAL(r_size),PARAMETER :: re=6371.3d3
   REAL(r_sngl),INTENT(IN) :: alon
   REAL(r_sngl),INTENT(IN) :: alat
   REAL(r_sngl),INTENT(IN) :: blon
@@ -602,6 +684,12 @@ END SUBROUTINE com_distll_sngl
 
 SUBROUTINE com_compassbearing_sngl(alon,alat,blon,blat,bearing)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+  REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+  REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+  REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
+  REAL(r_size),PARAMETER :: re=6371.3d3
   REAL(r_sngl),INTENT(IN) :: alon
   REAL(r_sngl),INTENT(IN) :: alat
   REAL(r_sngl),INTENT(IN) :: blon
@@ -643,6 +731,12 @@ END SUBROUTINE com_compassbearing_sngl
 
 SUBROUTINE com_ll_arc_distance_sngl(ini_lon,ini_lat,distance,azimuth,final_lon,final_lat)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
+REAL(r_size),PARAMETER :: re=6371.3d3
 REAL(r_sngl), INTENT(IN)  :: ini_lon,ini_lat,distance,azimuth
 REAL(r_sngl), INTENT(OUT) :: final_lon,final_lat
 REAL(r_size)  :: cdist,sdist,sinll1,cosll1,cosaz,sinaz
@@ -675,6 +769,8 @@ END SUBROUTINE com_ll_arc_distance_sngl
 !Convert lat,lon to range,azimuth (with respect to a certain location)
 SUBROUTINE com_ll_to_ra(cen_lon,cen_lat,lon,lat,nx,ny,r,az)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER     ,INTENT(IN)    :: nx,ny
   REAL(r_sngl),INTENT(IN)    :: cen_lon , cen_lat
   REAL(r_sngl),INTENT(IN)    :: lon(nx,ny) , lat(nx,ny)
@@ -702,6 +798,8 @@ END SUBROUTINE com_ll_to_ra
 !Convert range,azimuth with respect to a certain location to lat,lon
 SUBROUTINE com_ra_to_ll(cen_lon,cen_lat,r,a,nr,na,lon,lat)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER     ,INTENT(IN)    :: nr,na
   REAL(r_sngl),INTENT(IN)    :: cen_lon , cen_lat
   REAL(r_sngl),INTENT(OUT)   :: lon(nr,na) , lat(nr,na)
@@ -728,6 +826,8 @@ END SUBROUTINE com_ra_to_ll
 !neigbhor values.
 SUBROUTINE com_complete_missing_2d(field,missing_mask,nx,ny,npass,cfield) 
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER  , INTENT(IN)     :: nx , ny
   REAL(r_sngl),INTENT(IN)   :: field(nx,ny)         !Data field
   REAL(r_sngl),INTENT(OUT)  :: cfield(nx,ny)        !Completed data field.
@@ -790,6 +890,8 @@ END SUBROUTINE com_complete_missing_2d
 SUBROUTINE com_interp_boxavereg(xini,dx,nx,yini,dy,ny,xin,yin,datain,nin    &
                &                ,data_sum,data_max,data_min,data_n,undef)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER , INTENT(IN)        :: nx , ny , nin
   REAL(r_sngl),INTENT(IN)     :: dx , dy , xini , yini
   REAL(r_sngl),INTENT(IN)     :: undef
@@ -845,6 +947,8 @@ END SUBROUTINE com_interp_boxavereg
 !-----------------------------------------------------------------------
 SUBROUTINE com_interp_spline(ndim,x,y,n,x5,y5)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER,INTENT(IN) :: ndim         ! number of grid points
   REAL(r_size),INTENT(IN) :: x(ndim) ! coordinate
   REAL(r_size),INTENT(IN) :: y(ndim) ! variable
@@ -922,6 +1026,8 @@ END SUBROUTINE com_interp_spline
 !-----------------------------------------------------------------------
 SUBROUTINE com_pos2ij(msw,nx,ny,flon,flat,num_obs,olon,olat,oi,oj)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   ! --- inout variables
   INTEGER,INTENT(IN) :: msw   !MODE SWITCH: 1: fast, 2: accurate
   INTEGER,INTENT(IN) :: nx,ny !number of grid points
@@ -1090,6 +1196,8 @@ END SUBROUTINE com_pos2ij
 !-----------------------------------------------------------------------
 SUBROUTINE com_utc2tai(iy,im,id,ih,imin,sec,tai93)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER,INTENT(IN) :: iy,im,id,ih,imin
   REAL(r_size),INTENT(IN) :: sec
   REAL(r_size),INTENT(OUT) :: tai93
@@ -1124,6 +1232,8 @@ END SUBROUTINE com_utc2tai
 !-----------------------------------------------------------------------
 SUBROUTINE com_tai2utc(tai93,iy,im,id,ih,imin,sec)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 
   INTEGER,PARAMETER :: n=8 ! number of leap seconds after Jan. 1, 1993
   INTEGER,PARAMETER :: leapsec(n) = (/  15638399,  47174400,  94608001,&
@@ -1176,6 +1286,8 @@ END SUBROUTINE com_tai2utc
 !Get the missing value mask.
 SUBROUTINE getmask(my_ensemble,my_undefmask,nx,ny,nz,nbv,undef)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 REAL(r_sngl) , INTENT(IN)  :: undef
 REAL(r_sngl) , INTENT(IN)  :: my_ensemble(nx,ny,nz,nbv) 
 LOGICAL      , INTENT(OUT) :: my_undefmask(nx,ny,nz)
@@ -1203,6 +1315,11 @@ END SUBROUTINE getmask
 !compute different pdf metrics.
 SUBROUTINE compute_pdf_metric(my_ensemble,my_undefmask,nx,ny,nz,nbv,nbins,pdf_metrics,undef)
 IMPLICIT NONE  
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+REAL(r_size),PARAMETER :: pi=3.141592653589793d0
+REAL(r_size),PARAMETER :: deg2rad=3.1415926535d0/180d0
+REAL(r_size),PARAMETER :: rad2deg=180d0/3.1415926535d0
 INTEGER, INTENT(IN)       :: nbins
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbv !Ensemble dimensions.
 REAL(r_sngl) , INTENT(IN) :: my_ensemble(nx,ny,nz,nbv)
@@ -1314,6 +1431,9 @@ END SUBROUTINE compute_pdf_metric
 !compute the kld distance
 SUBROUTINE compute_kld(my_ensemble,my_undefmask,nx,ny,nz,nbv,nbins,kld,undef)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+REAL(r_size),PARAMETER :: pi=3.141592653589793d0
 INTEGER, INTENT(IN)       :: nbins
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbv !Ensemble dimensions.
 REAL(r_sngl) , INTENT(IN) :: my_ensemble(nx,ny,nz,nbv)
@@ -1377,6 +1497,8 @@ END SUBROUTINE compute_kld
 SUBROUTINE compute_kld_sub( pdf_1 , pdf_2 , nbin , kld ) 
 
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER      , INTENT(IN) :: nbin                       !Number of bins for pdf discretization.
 REAL(r_sngl) , INTENT(IN) :: pdf_1(nbin) , pdf_2(nbin)  !Input pdf to be compared.
 REAL(r_sngl) , INTENT(OUT):: kld
@@ -1396,6 +1518,8 @@ END SUBROUTINE compute_kld_sub
 !compute the firtst N moments of the PDF centered around the mean.
 SUBROUTINE compute_moments(my_ensemble,my_undefmask,nx,ny,nz,nbv,nmoments,moments,undef)
 IMPLICIT NONE  
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbv !Ensemble dimensions.
 REAL(r_sngl) , INTENT(IN) :: my_ensemble(nx,ny,nz,nbv)
 LOGICAL      , INTENT(IN) :: my_undefmask(nx,ny,nz)
@@ -1438,6 +1562,8 @@ END SUBROUTINE compute_moments
 SUBROUTINE compute_correlation(my_ensemble1,my_ensemble2,my_undefmask1,my_undefmask2  &
      &                          ,nx,ny,nz,nbv,correlation,undef)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbv !Ensemble dimensions.
 REAL(r_sngl) , INTENT(IN) :: my_ensemble1(nx,ny,nz,nbv) , my_ensemble2(nx,ny,nz,nbv)
 LOGICAL      , INTENT(IN) :: my_undefmask1(nx,ny,nz) , my_undefmask2(nx,ny,nz)
@@ -1469,6 +1595,8 @@ END SUBROUTINE compute_correlation
 !Compute the histogram.
 SUBROUTINE compute_histogram(my_ensemble,my_undefmask,nx,ny,nz,nbv,nbins,undef,varmin,varmax,histogram)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbv           !Ensemble dimensions.
 REAL(r_sngl) , INTENT(IN) :: my_ensemble(nx,ny,nz,nbv)
 LOGICAL      , INTENT(IN) :: my_undefmask(nx,ny,nz)
@@ -1521,6 +1649,8 @@ END SUBROUTINE compute_histogram
 !Compute the histogram but using weights and assuming that the output is real. 
 SUBROUTINE compute_histogram_sub(ens , nbv , nbins , varmin , varmax , histogram , w )
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER, INTENT(IN)       :: nbv           !Ensemble dimensions.
 REAL(r_sngl) , INTENT(IN) :: ens(nbv)      !Ensemble size.
 INTEGER, INTENT(IN)       :: nbins         !Number of bins that will be used.
@@ -1551,6 +1681,8 @@ END SUBROUTINE compute_histogram_sub
 !array
 SUBROUTINE compute_histogram_bimodality(histogram,my_undefmask,nx,ny,nz,nbins,smoothw,bmindex)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbins           !Dimensions.
 INTEGER, INTENT(IN)       :: smoothw                  !Smoothing filter length for the histogram.
 LOGICAL      , INTENT(IN) :: my_undefmask(nx,ny,nz)
@@ -1578,6 +1710,8 @@ END SUBROUTINE compute_histogram_bimodality
 !array
 SUBROUTINE compute_histogram_bimodality_improved(histogram,my_undefmask,nx,ny,nz,nbins,smoothw,bmindex)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER, INTENT(IN)       :: nx,ny,nz,nbins           !Dimensions.
 INTEGER, INTENT(IN)       :: smoothw                  !Smoothing filter length for the histogram.
 LOGICAL      , INTENT(IN) :: my_undefmask(nx,ny,nz)
@@ -1603,6 +1737,8 @@ END SUBROUTINE compute_histogram_bimodality_improved
 
 SUBROUTINE histogram_bimodality_index(histogramin,nb,smoothw,bmindex)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER    ,   INTENT(IN) :: histogramin(nb) !histogram values and center location of each bin.
 INTEGER      ,   INTENT(IN) :: nb ! number of bins
 INTEGER      ,   INTENT(IN) :: smoothw  !Length of the smoothing filter for the histogram.
@@ -1762,7 +1898,8 @@ IMPLICIT NONE
 !small, the the resulting basin will be shallow 
 !and will contain less fluid than two strong maxima which are well separated by
 !a deep valley in the histogram. 
-
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER    ,   INTENT(IN) :: histogramin(nb) !histogram values and center location of each bin.
 INTEGER      ,   INTENT(IN) :: nb ! number of bins
 INTEGER      ,   INTENT(IN) :: smoothw  !Length of the smoothing filter for the histogram.
@@ -1920,6 +2057,8 @@ END SUBROUTINE histogram_bimodality_index_improved
 SUBROUTINE compare_update_sub( hxf , ens  , nens , yo , obs_error , mean_diff , mode_diff , std_diff  &
                              , kld , updated_mean_kf , updated_std_kf , updated_mode_kf , weights )  
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER     , INTENT(IN)  :: nens
 REAL(r_sngl), INTENT(IN)  :: hxf(nens) , ens(nens)  !Ensemble in obs space (1D) and ensemble in model space (1D)
 REAL(r_sngl), INTENT(IN)  :: yo                     !Observation value.
@@ -1991,6 +2130,8 @@ SUBROUTINE compare_update( obs_var , state_var , undefmask , nens , nx , ny , nz
                          , updated_mean_kf , updated_std_kf , updated_mode_kf )
 
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER, INTENT(IN)       :: nx,ny,nz,nens               !Dimensions.
 REAL(r_sngl), INTENT(IN) :: obs_var(nx,ny,nz,nens)       !Observed variable.
 REAL(r_sngl), INTENT(IN) :: state_var(nx,ny,nz,nens)     !State variable to be updated.
@@ -2030,6 +2171,8 @@ END SUBROUTINE compare_update
 SUBROUTINE compute_single_obs_update(hxf,ens,mask,nx,ny,nz,nens,yo,obs_error,undef,update_type, &
                     &     updated_mean , updated_std , updated_mode )
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 REAL(r_sngl), INTENT(IN)  :: hxf(nens)   !Ensemble in observation space (1D)
 REAL(r_sngl), INTENT(IN)  :: ens(nx,ny,nz,nens)   !Ensemble in model space 
 REAL(r_sngl), INTENT(IN)  :: undef
@@ -2086,6 +2229,8 @@ END SUBROUTINE compute_single_obs_update
 
 SUBROUTINE compute_enkf_update(hxf,ens,nens,yo,obs_error,updated_ens)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 REAL(r_sngl), INTENT(IN)  :: hxf(nens)   !Ensemble in observation space (1D)
 REAL(r_sngl), INTENT(IN)  :: ens(nens)   !Ensemble in model space (1D)
 INTEGER     , INTENT(IN)  :: nens        !Ensemble size.
@@ -2125,6 +2270,8 @@ END SUBROUTINE compute_enkf_update
 SUBROUTINE compute_pf_update(hxf,ens,nens,yo,obs_error,weights_in,weights_out)
 
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 REAL(r_sngl), INTENT(IN)  :: hxf(nens)   !Ensemble in observation space (1D)
 REAL(r_sngl), INTENT(IN)  :: ens(nens)   !Ensemble in model space (1D)
 INTEGER     , INTENT(IN)  :: nens        !Ensemble size.
@@ -2146,6 +2293,8 @@ END SUBROUTINE compute_pf_update
 
 SUBROUTINE read_ensemble(path,ensemble,undef_mask,nx,ny,nbv,selected_fields,n_selected_fields,undef,ie,acc)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER , INTENT(IN)       :: selected_fields(n_selected_fields)
 INTEGER , INTENT(IN)       :: nx , ny , nbv , n_selected_fields 
 REAL(r_sngl) , INTENT(IN)  :: undef
@@ -2153,7 +2302,7 @@ REAL(r_sngl) , INTENT(OUT) :: ensemble(nx,ny,n_selected_fields,nbv)
 LOGICAL      , INTENT(OUT) :: undef_mask(nx,ny,n_selected_fields)
 REAL(r_sngl)               :: bufr(nx,ny)
 CHARACTER(*) , INTENT(IN)  :: path , ie , acc                           !Data pathand input endian
-INTEGER                    :: ifield , maxfield , i, ibv , iunit , reclength , ii , jj , isf
+INTEGER                    :: ifield , maxfield , i, ibv , iunit , reclength , ii , jj , isf , base_unit
 INTEGER                    :: field_counter
 CHARACTER(40)              :: filename 
 CHARACTER(200)             :: filenamewithpath
@@ -2163,11 +2312,16 @@ reclength=nx*ny*reclength
 
 undef_mask=.false.
 ensemble=0.0e0
+base_unit=200
 
-filename='____.grd'
+!filename='____.grd'
 
+!$OMP PARALLEL DO PRIVATE(ibv,iunit,filename,filenamewithpath,ifield,bufr,ii,jj,maxfield,field_counter,isf)
 DO ibv = 1,nbv
 
+   iunit = base_unit + ibv
+
+   filename='____.grd'
    write(filename(1:4),'(I4.4)')ibv
    WRITE(*,*)"Reading file ", filename
    filenamewithpath= path // filename
@@ -2200,7 +2354,7 @@ DO ibv = 1,nbv
      DO ifield = 1,maxfield
         READ(iunit) bufr
         DO isf = 1 , n_selected_fields
-           IF( ifield == selected_fields(ii) )THEN
+           IF( ifield == selected_fields(isf) )THEN
                ensemble(:,:,field_counter,ibv)=bufr
                field_counter = field_counter + 1
                DO ii=1,nx
@@ -2217,12 +2371,15 @@ DO ibv = 1,nbv
    ENDIF
 
 ENDDO
+!OMP END PARALLEL DO
 
 END SUBROUTINE read_ensemble
 
 
 SUBROUTINE write_data(outfile,mydata,nx,ny,nz,ie,acc)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER , INTENT(IN)       :: nx , ny , nz
 REAL(r_sngl) , INTENT(IN)  :: mydata(nx,ny,nz)
 CHARACTER(*) , INTENT(IN)  :: outfile , ie , acc                           !Data
@@ -2258,6 +2415,8 @@ END SUBROUTINE write_data
 !Perform a 2D smoothing of the ensemble using a Lanczos filter.
 SUBROUTINE smooth_2d(mydata,myfdata,my_undefmask,nx,ny,nz,dx,xfs)
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER      , INTENT(IN)       :: nx,ny,nz               !Grid dimensions
 LOGICAL      , INTENT(IN)       :: my_undefmask(nx,ny,nz)
 REAL(r_sngl) , INTENT(IN)       :: mydata(nx,ny,nz)       !Model Data
@@ -2292,10 +2451,9 @@ END SUBROUTINE smooth_2d
 SUBROUTINE lanczos_2d(inputvar2d,outputvar2d,mask,lambda,nx,ny)
 !This is a single-routine lanczos filter. This routine has been prepared in
 !order to be used
-!with openmp (common_smooth_2d module shares variables among different routines
-!and can not be
-!safely used with openmp)
   IMPLICIT NONE
+  INTEGER,PARAMETER :: r_size=kind(0.0d0)
+  INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
   INTEGER,INTENT(IN)        :: nx,ny 
   REAL(r_sngl) , INTENT(IN) :: inputvar2d(nx,ny) 
   REAL(r_sngl) , INTENT(OUT):: outputvar2d(nx,ny)
@@ -2408,6 +2566,8 @@ SUBROUTINE lanczos_2d(inputvar2d,outputvar2d,mask,lambda,nx,ny)
 SUBROUTINE GAUSSIAN_FILTER(field0,field1,dx,sigma,nx,ny,undef)
 
 IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
 INTEGER            :: ii , jj , iii , jjj
 REAL(r_sngl), INTENT(IN) :: undef 
 REAL(r_sngl), INTENT(IN) :: field0(nx,ny),dx,sigma
@@ -2452,6 +2612,265 @@ ENDDO
 
 !WRITE(*,*)"FINISH GAUSSIAN FILTER"
 END SUBROUTINE GAUSSIAN_FILTER
+
+SUBROUTINE cont_table( dfor , dobs , ndata , thresholds , nthresholds , undef ,  &
+               ets , csi , bias , pod , far , ctable )
+IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+INTEGER      , INTENT(IN)  :: ndata , nthresholds
+REAL(r_size) , INTENT(IN)  :: dfor(ndata) , dobs(ndata)
+REAL(r_size) , INTENT(IN)  :: thresholds(nthresholds)
+REAL(r_size) , INTENT(IN)  :: undef 
+INTEGER      , INTENT(OUT) :: ctable(2,2,nthresholds)
+REAL(r_size) , INTENT(OUT) :: ets(nthresholds) , csi(nthresholds) , bias(nthresholds)
+REAL(r_size) , INTENT(OUT) :: pod(nthresholds) , far(nthresholds)
+INTEGER                    :: hi , mi , fa , cn , nt 
+INTEGER                    :: it , ii
+REAL(r_size)               :: hi_r
+
+ctable=0
+ets=undef
+csi=undef
+bias=undef
+pod=undef
+far=undef
+
+DO it = 1 , nthresholds 
+   hi=0
+   mi=0
+   fa=0
+   cn=0
+   nt=0
+
+   !$OMP PARALLEL DO REDUCTION(+:hi,mi,fa,cn,nt)
+   DO ii = 1,ndata
+      IF( dfor(ii) /= undef .and. dobs(ii) /= undef )THEN
+        nt = nt + 1
+        IF( dfor(ii) > thresholds(it) .and. dobs(ii) > thresholds(it) )THEN
+          hi = hi+1
+        ENDIF  
+        IF( dfor(ii) <= thresholds(it) .and. dobs(ii) <= thresholds(it) )THEN
+          cn = cn+1
+        ENDIF
+        IF( dfor(ii) > thresholds(it) .and. dobs(ii) <= thresholds(it) )THEN
+          fa = fa+1
+        ENDIF
+        IF( dfor(ii) <= thresholds(it) .and. dobs(ii) > thresholds(it) )THEN
+          mi = mi+1
+        ENDIF
+      ENDIF
+   ENDDO
+   !$OMP END PARALLEL DO
+   ctable(1,1,it)=hi
+   ctable(1,2,it)=fa
+   ctable(2,1,it)=mi
+   ctable(2,2,it)=cn
+
+   !Compute scores
+   IF ( nt > 0 ) THEN
+      bias(it) = REAL( hi + fa , r_sngl )/REAL( hi + mi , r_sngl )
+      csi(it)  = REAL( hi , r_sngl )/REAL( hi + mi + fa , r_sngl )
+      pod(it)  = REAL( hi , r_sngl )/REAL( hi + mi , r_sngl )
+      far(it)  = REAL( fa , r_sngl )/REAL( hi + fa , r_sngl )
+      hi_r = REAL( ( hi + mi ) * ( hi + fa ) , r_sngl )/REAL( nt , r_sngl )
+      ets(it) = ( REAL( hi , r_sngl ) - hi_r )/( REAL( hi + mi + fa , r_sngl ) - hi_r )
+   ENDIF
+
+ENDDO
+
+WRITE(*,*)'Contingency table computed, ',REAL(nt,r_sngl)/REAL(ndata),' % valida data'
+
+END SUBROUTINE cont_table
+
+SUBROUTINE fss_det_2d( dfor , dobs , nx , ny , undef , thresholds , nthresholds , sizes , nsizes , fss )
+   !Computes the Fraction Skill Score ussuming 2D fields and deterministic forecasts.
+   !Computation is done following Skok and Roberts (2016) QJRMS
+   !Undef are allowed and a check is performed to detect them on each box.
+   !If the proportion of undef within the box is larger than (1-per_threshold) then the box is rejected
+   !and is not considered for the computation of the FSS.
+   !This criteria is also apply to handle boxes which are close to the domain boundaries.  
+   !
+   IMPLICIT NONE
+   INTEGER,PARAMETER   :: r_size=kind(0.0d0)
+   INTEGER,PARAMETER   :: r_sngl=kind(0.0e0)
+   INTEGER,INTENT(IN)  :: nx , ny , nthresholds , nsizes 
+   REAL(r_size), INTENT(IN) :: dfor(nx,ny) , dobs(nx,ny) 
+   REAL(r_size), INTENT(IN) :: thresholds(nthresholds) 
+   INTEGER     , INTENT(IN) :: sizes(nsizes) 
+   REAL(r_size), INTENT(IN) :: undef
+   REAL(r_size), INTENT(OUT):: fss(nthresholds,nsizes)
+   REAL(r_size)             :: tmp_dfor(nx,ny,1) , tmp_dobs(nx,ny,1) 
+   REAL(r_size)             :: tmp_sdfor(nx,ny,1) , tmp_sdobs(nx,ny,1)
+   REAL(r_size)             :: tmp_n(nx,ny,1)
+   REAL(r_size)             :: fbs , fbs_ref
+   INTEGER                  :: validn , is , it
+   LOGICAL                  :: mask( nx , ny , 1)
+   INTEGER                  :: maski(nx , ny , 1)
+   REAL(r_size),PARAMETER   :: per_thresh = 0.8
+
+
+   fss = undef 
+   WHERE( tmp_dfor == undef )
+           tmp_dobs = undef
+   ENDWHERE
+   WHERE( tmp_dobs == undef )
+           tmp_dfor = undef 
+   ENDWHERE
+
+   tmp_dfor(:,:,1) = dfor   !box_functions assumes 3D inputs.
+   tmp_dobs(:,:,1) = dobs   !box_functions assumes 3D inputs.
+
+   DO it = 1 , nthresholds
+     DO is = 1 , nsizes 
+        CALL box_functions( tmp_dfor,nx,ny,1,undef,sizes(is),sizes(is),0,'COUN',thresholds(it),tmp_sdfor)
+        CALL box_functions( tmp_dobs,nx,ny,1,undef,sizes(is),sizes(is),0,'COUN',thresholds(it),tmp_sdobs)
+        CALL box_functions( tmp_dfor,nx,ny,1,undef,sizes(is),sizes(is),0,'VALI',0.0d0,tmp_n)
+        tmp_sdfor = tmp_sdfor / REAL( tmp_n , r_size )
+        tmp_sdobs = tmp_sdobs / REAL( tmp_n , r_size ) 
+        tmp_n = tmp_n / REAL( (sizes(is)*2+1) ** 2 ,r_size)  !Compute percentage of valid data within each box.
+        mask  = tmp_n >= per_thresh         !Define the mask of valid elements.
+        maski = mask
+        validn = SUM( maski )
+        fbs = SUM( (tmp_sdfor - tmp_sdobs)**2 , mask )
+        fbs_ref = SUM( (tmp_sdfor )**2 , mask ) + SUM( (tmp_sdobs)**2 , mask )
+        fss(it,is) = 1.0d0 - ( fbs / fbs_ref )
+     ENDDO
+   ENDDO
+
+
+END SUBROUTINE fss_det_2d
+
+SUBROUTINE BOX_FUNCTIONS(datain,nx,ny,nz,undef,boxx,boxy,boxz,operation,threshold,dataout)
+
+IMPLICIT NONE
+INTEGER,PARAMETER :: r_size=kind(0.0d0)
+INTEGER,PARAMETER :: r_sngl=kind(0.0e0)
+INTEGER     ,INTENT(IN) :: nx,ny,nz    !Grid dimension
+INTEGER     ,INTENT(IN) :: boxx,boxy,boxz  !Box dimension
+REAL(r_size),INTENT(IN) :: datain(nx,ny,nz)
+REAL(r_size),INTENT(IN) :: undef
+CHARACTER(4),INTENT(IN) :: operation     
+REAL(r_size),INTENT(IN) :: threshold
+REAL(r_size),INTENT(OUT) :: dataout(nx,ny,nz) !Result
+REAL(r_size),ALLOCATABLE :: tmp_field(:) 
+REAL(r_size)             :: tmp_mean , tmp_var
+INTEGER                  :: NITEMS
+INTEGER                  :: ii , jj , kk , bii , bjj , bkk , box_size , iin ,ii_index , data_count
+
+box_size=(2*boxx+1)*(2*boxy+1)*(2*boxz+1)
+
+!DO kk=1,nz
+!WRITE(*,*)maxval( datain(:,:,kk) )
+!ENDDO
+
+ALLOCATE( tmp_field(box_size) )
+
+dataout=undef
+
+!$OMP PARALLEL DO SCHEDULE(DYNAMIC) PRIVATE(kk,ii,jj,bkk,bii,bjj,ii_index,NITEMS,tmp_field,tmp_mean,tmp_var,data_count,iin)
+DO kk=1,nz
+ DO ii=1,nx
+  DO jj=1,ny
+
+
+     NITEMS=0
+     tmp_field=0.0d0
+      DO bkk=kk-boxz,kk+boxz
+       DO bii=ii-boxx,ii+boxx
+         DO bjj=jj-boxy,jj+boxy
+            IF( bkk >= 1 .AND. bkk <= nz .AND. bjj >= 1 .AND. bjj <= ny )THEN
+              !Boundary condition in X
+              ii_index=bii
+              IF( bii < 1 )ii_index=bii+nx
+              IF( bii > nx)ii_index=bii-nx
+              IF( OPERATION == 'MEA2' .AND. bii== ii .AND. bjj==jj .AND. bkk==kk)CYCLE !We will not count the center of the box.
+
+              IF( OPERATION /= 'COU2' )THEN !For COU2 operation count all the data even those flagged as undef.
+                IF( datain(ii_index,bjj,bkk) /= UNDEF )THEN
+                  NITEMS=NITEMS + 1
+                  tmp_field(NITEMS)=datain(ii_index,bjj,bkk)
+                ENDIF
+              ELSE
+                NITEMS=NITEMS+1   
+                tmp_field(NITEMS)=datain(ii_index,bjj,bkk)
+              ENDIF
+            ENDIF
+         ENDDO
+       ENDDO
+      ENDDO 
+      !Perform the operation and save the result in dataout
+      IF( OPERATION .EQ. 'MEAN' .OR. OPERATION .EQ. 'MEA2' )THEN
+        IF (NITEMS > 0 )THEN
+          dataout(ii,jj,kk)=sum( tmp_field(1:NITEMS) )/ REAL( NITEMS , r_size )
+          !WRITE(*,*)NITEMS,tmp_field
+        ENDIF
+
+      ELSEIF( OPERATION == 'SIGM')THEN
+        !Undef values won't be considered.
+        tmp_mean=0.0d0
+        tmp_var=0.0d0
+        data_count=0
+        DO iin=1,NITEMS
+          IF( tmp_field(iin) .ne. UNDEF )THEN
+            data_count=data_count+1
+            tmp_mean=tmp_mean+tmp_field(iin)
+            tmp_var=tmp_var+tmp_field(iin) ** 2
+          ENDIF
+        ENDDO
+        IF( data_count .GT. 0)THEN
+         tmp_mean=tmp_mean/REAL(data_count,r_size)
+         tmp_var=tmp_var/REAL(data_count,r_size)
+         dataout(ii,jj,kk)=SQRT(tmp_var - tmp_mean**2 )
+        ENDIF
+
+      ELSEIF( OPERATION == 'COUN' .OR. OPERATION == 'COU2' )THEN
+        !Count values over a certain threshold (note that undef values will be 
+        !always below the threshold.
+        data_count=0
+        IF(  NITEMS > 0 )THEN
+          DO iin=1,NITEMS
+             IF( tmp_field( iin ) >= threshold .AND. tmp_field( iin ) /= UNDEF )THEN
+               data_count = data_count + 1
+             ENDIF
+          ENDDO
+          dataout(ii,jj,kk)= REAL( data_count , r_size ) / REAL( NITEMS , r_size )
+        ELSE
+          dataout(ii,jj,kk) = 0.0d0
+        ENDIF
+      ELSEIF( OPERATION == 'VALI' )THEN
+        !Count all valid data (i.e. those not equal to undef)
+        dataout(ii,jj,kk) = REAL( NITEMS , r_size )
+
+      ELSEIF( OPERATION == 'MAXN')THEN
+        IF( NITEMS > 0 )THEN
+           !Local maximum tacking care of undef values.
+           dataout(ii,jj,kk)=maxval( tmp_field(1:NITEMS) )
+        ELSE
+           dataout(ii,jj,kk)=UNDEF
+        ENDIF 
+
+      ELSEIF( OPERATION == 'MINN')THEN
+        IF( NITEMS > 0 )THEN
+          !Local maximum tacking care of undef values.
+          dataout(ii,jj,kk)=minval( tmp_field(1:NITEMS) )
+        ELSE
+          dataout(ii,jj,kk)=UNDEF
+        ENDIF
+
+      ENDIF
+
+  ENDDO
+ ENDDO
+ENDDO 
+!$OMP END PARALLEL DO
+
+RETURN
+END SUBROUTINE BOX_FUNCTIONS
+
+
+
+
 
 END MODULE common_functions
 

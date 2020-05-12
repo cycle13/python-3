@@ -21,7 +21,12 @@ bin-release/
 *.nc
 core*
 *.log
+<<<<<<< HEAD
+*.out
+*.o
+=======
 *.out*.o
+>>>>>>> 3a92053f0b66cb0091e4f175e6d2be77763fa149
 *.mod
 
 
