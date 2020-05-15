@@ -23,19 +23,23 @@ wrf_data = wrf.get_data_vslice( data_path , slice_type='vy' , slice_index = 80 ,
 
 #wrf_data = wrf.get_moment_equation( wrf_data , force=False )
 
-#wrf_data = wrf.get_termo_equation( wrf_data , force=False )
+wrf_data = wrf.get_termo_equation( wrf_data , force=False )
 
-wrf_data = wrf.get_water_equation( wrf_data , force=False )
+#wrf_data = wrf.get_water_equation( wrf_data , force=False )
 
 #wrf_data = wrf.get_ppert_equation(  wrf_data , force=False )
 
 
-#wrfp.plot_momentum_equation_v( wrf_data , plot_path )
+#wrfp.plot_momentum_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
 
-#wrfp.plot_termo_equation_v( wrf_data , plot_path )
+#wrfp.plot_termo_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
 
-#wrfp.plot_vapor_equation_v( wrf_data , plot_path )
+#wrfp.plot_vapor_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
 
-wrfp.plot_water_equation_v( wrf_data , plot_path )
+#wrfp.plot_water_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
 
-#wrfp.plot_ppert_equation_v( wrf_data , plot_path )
+#wrfp.plot_thetas_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
+
+wrfp.plot_termo_equation_hov_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 , h_ini=75 , h_end=85  )
+
+#wrfp.plot_ppert_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
