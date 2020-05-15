@@ -408,14 +408,14 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
 
     mask_ = np.logical_not( np.logical_and( dlon_ == 0.0 , dlat_ == 0.0 ) )
     az_ = np.zeros( dlon_.shape )
-    az_[mask_] = np.arctan2(dlon_[mask_]*np.cos(radar['radar_alt']*d2r)*d2r,dlat_[mask_]*d2r)
-    az_[ az_ < 0.0 ] = 2.0*np.pi + az_[az_ < 0.0]
+    az_[mask_] = np.arctan2(-dlon_[mask_]*np.cos(radar['radar_lat']*d2r)*d2r,-dlat_[mask_]*d2r) + np.pi
+    #az_[ az_ < 0.0 ] = 2.0*np.pi + az_[az_ < 0.0]
     sin_az_ = np.sin( az_ )
     cos_az_ = np.cos( az_ )
     sin_az_ = np.repeat(sin_az_[np.newaxis,:,:], nz, axis=0)
     cos_az_ = np.repeat(cos_az_[np.newaxis,:,:], nz, axis=0)
 
-    cosd_ =np.sin( lat_ * d2r )*np.sin( radar['radar_alt'] * d2r ) + np.cos( lat_*d2r )*np.cos( radar['radar_lat'] * d2r )*np.cos( ( lon_ - radar['radar_lon'] )*d2r )
+    cosd_ =np.sin( lat_ * d2r )*np.sin( radar['radar_lat'] * d2r ) + np.cos( lat_*d2r )*np.cos( radar['radar_lat'] * d2r )*np.cos( ( lon_ - radar['radar_lon'] )*d2r )
     cosd_[cosd_ > 1.0 ]=1.0
     cosd_[cosd_ <-1.0 ]=-1.0
     dist_ = np.arccos( cosd_ ) * re_
@@ -431,8 +431,8 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
     else  :
        rv = rv + (w_)*np.sin(elev_)
 
-    plt.pcolor( lon_ , lat_ , w_[10,:,:] );plt.show()
-
+    #import matplotlib.pyplot as plt
+    #plt.pcolor( lon_ , lat_ , rv[10,:,:]) ; plt.colorbar() ; plt.show()
     return dbz,rv,max_dbz
 
 def radar_int( sio , proj , topo , radar , t=None ) :
@@ -440,7 +440,7 @@ def radar_int( sio , proj , topo , radar , t=None ) :
 
     bmap = set_bmap(sio, proj, resolution=None, rtol=1.e-6)
 
-    [ref_,rv_,max_ref_]=calc_ref_rv(sio, bmap , radar , topo ,  min_dbz=-20. , t=t )
+    [ref_,rv_,max_ref_]=calc_ref_rv(sio, bmap , radar , topo ,  min_dbz=-20.0 , t=t )
 
     if sio.bufsize == 0:
         lon_ = np.copy(sio.lon)
