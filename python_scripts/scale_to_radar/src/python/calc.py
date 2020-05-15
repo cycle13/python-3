@@ -438,7 +438,6 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
     else  :
        rv = rv + (w_)*np.sin(elev_)
 
-
     #import matplotlib.pyplot as plt
     #plt.pcolor( lon_ , lat_ , rv[10,:,:]) ; plt.colorbar() ; plt.show()
     return dbz,rv,max_dbz

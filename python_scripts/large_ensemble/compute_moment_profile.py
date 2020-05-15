@@ -25,9 +25,9 @@ radar_range=50.0e3   #Radar range in meters (to define the radar mask)
 
 file_name='moment0001'
 
-basedir='/work/hp150019/f22003/output_data/'
+basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/'
 
-expnames=['LE_D1_1km_5min_OFP','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
+expnames=['LE_D1_1km_5min_OFP_V2','LE_D1_1km_2min_OFP_V2','LE_D1_1km_1min','LE_D1_1km_30sec_OFP_V2','LE_D1_1km_5min_4D_OFP_V2','LE_D1_1km_1min_4D']
 #basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/home/ra001011/a03471/data/output_data/'
 #expnames=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
 
@@ -37,13 +37,13 @@ deltat=[300,240,300,300,300,300]
 
 init_date = ['20130713050500','20130713050400','20130713050500','20130713050500','20130713050500','20130713050500']
 
-filetypes=['guesgp']   #analgp , analgz , guesgp , guesgz
+filetypes=['guesgp','analgp']   #analgp , analgz , guesgp , guesgz
 
 rain_threshold = 30.0     #Maximum reflectivities above this threshold will be considered rainny points.   
 norain_threshold = 0.0    #Maximum reflectivities below this threshold will be considered no rain points.
 
 #Define initial and end times using datetime module.
-etime = dt.datetime(2013,7,13,5,59,30)  #End time.
+etime = dt.datetime(2013,7,13,6,0,30)  #End time.
 
 #=========================================================
 #  LOOP OVER FILE TYPES
@@ -144,7 +144,7 @@ for iexp , my_exp in enumerate( expnames ) :
          #Read all the variables and levels at once
          tmp_parameter = ctlr.read_data_grads(  my_file , ctl_dict ) 
 
-         my_file=basedir + my_exp + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/guesgp/moment0001.grd'       
+         my_file=basedir + my_exp + '/' + ctime.strftime("%Y%m%d%H%M%S") + '/'+ my_file_type + '/moment0001.grd'       
  
          ensemble_mean = ctlr.read_data_grads(  my_file , ctl_dict )
  

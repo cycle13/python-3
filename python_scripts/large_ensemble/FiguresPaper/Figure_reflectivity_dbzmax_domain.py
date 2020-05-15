@@ -343,7 +343,7 @@ m.set_clim(smin,smax)
 cb=plt.colorbar(m,cax=cbar_ax,orientation='horizontal',boundaries=np.arange(smin,smax+delta,delta),ticks=np.arange(0,80,10))
 
 
-#pl.show()
+plt.show()
 plt.savefig( figname + '.eps', format='eps' , dpi=300)
 plt.savefig( figname + '.png' , format='png' , dpi=300)
 plt.close()

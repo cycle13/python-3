@@ -34,7 +34,7 @@ smooth_range=2                                #To smooth the histogram
 
 basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/home/ra001011/a03471/data/output_data/'
 
-expnames = ['/LE_D1_1km_5min/','/LE_D1_1km_2min/','/LE_D1_1km_1min/','/LE_D1_1km_30sec/']
+expnames = ['/LE_D1_1km_5min_OFP_V2/','/LE_D1_1km_2min/','/LE_D1_1km_1min/','/LE_D1_1km_30sec_OFP_V2/']
 
 #cen_lon = [135.28]
 cen_lon = [135.29]
@@ -335,7 +335,7 @@ for iexp,my_exp in enumerate( expnames ) :
    ax.text( xmin + 0.25 , 0.30 ,hist_label ,fontsize=14,color='k',bbox={'facecolor':'white', 'alpha':0.0,'edgecolor':'white'})
 
 
-#plt.show()
+plt.show()
 plt.savefig('Figure_CrossSection_dBZ_KLD.png' , format='png' , dpi=300  )
 plt.close()
 
