@@ -1,10 +1,6 @@
 import numpy as np
 import numpy.ma as ma
-<<<<<<< HEAD
-import ncphysio
-=======
 from . import ncphysio
->>>>>>> a0d162cdb30ab918d4e179a2ecc8603f7455ad3e
 import os.path
 import datetime as dt
 import warnings

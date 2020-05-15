@@ -431,6 +431,8 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
     else  :
        rv = rv + (w_)*np.sin(elev_)
 
+    plt.pcolor( lon_ , lat_ , w_[10,:,:] );plt.show()
+
     return dbz,rv,max_dbz
 
 def radar_int( sio , proj , topo , radar , t=None ) :

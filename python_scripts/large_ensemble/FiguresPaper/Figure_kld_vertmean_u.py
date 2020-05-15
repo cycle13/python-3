@@ -26,15 +26,15 @@ import cartopy.crs as ccrs
 import common_plot_functions as cpf
 import common_mask_functions as cmf
 
-basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/home/ra001011/a03471/data/output_data/'
+basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/'
 
 figname='./Figure_kld_vertmean_u'
 
 filename='kldistance_mean.grd'
 
-exps=['LE_D1_1km_5min','LE_D1_1km_2min','LE_D1_1km_1min','LE_D1_1km_30sec','LE_D1_1km_30sec_nospinup','LE_D1_1km_1min_4D']
+exps=['LE_D1_1km_5min_OFP_V2','LE_D1_1km_2min_OFP_V2','LE_D1_1km_1min','LE_D1_1km_30sec_OFP_V2','LE_D1_1km_5min_4D_OFP_V2','LE_D1_1km_1min_4D']
 
-deltat=[300,120,60,30,30,60]
+deltat=[300,120,60,30,300,60]
 
 filetype='guesgp'   #analgp , analgz , guesgp , guesgz
 
@@ -50,7 +50,7 @@ sigma_smooth=2.0
 
 #Define initial and end times using datetime module.
 #itime = dt.datetime(2013,7,13,5, 5,0)  #Initial time.
-etime = dt.datetime(2013,7,13,5,55,0)  #End time.
+etime = dt.datetime(2013,7,13,6,0,0)  #End time.
 
 #=========================================================
 #  LOOP OVER FILE TYPES
@@ -114,7 +114,7 @@ for iexp , my_exp in enumerate(exps)   :
   print( my_exp )
   for var in parameter[my_exp] :
      print( var )
-     print( np.min( parameter[my_exp][var] ) , np.max( parameter[my_exp][var] ) )
+     print( np.nanmin( parameter[my_exp][var] ) , np.nanmax( parameter[my_exp][var] ) )
 
   my_file=basedir + '/' + my_exp + '/time_mean/'+ filetype + '/' + '/moment0001_mean.grd'
 
@@ -183,7 +183,7 @@ for var in plot_variables :
    xtick=[134.5,135,135.5,136,136.5,137]
    ytick=[34,34.5,35,35.5] 
    axesrange=[134.97,136.09,34.36,35.30]
-   titles = ['(a) - 5MIN ','(b) - 2MIN ','(c) - 1MIN ','(d) - 30SEC ','(e) - 30SEC-NS ','(f) - 1MIN-4D ']
+   titles = ['(a) - 5MIN ','(b) - 2MIN ','(c) - 1MIN ','(d) - 30SEC ','(e) - 5MIN-4D ','(f) - 1MIN-4D ']
 
    for iexp,my_exp in enumerate(exps)  : 
  
