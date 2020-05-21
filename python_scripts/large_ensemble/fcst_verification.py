@@ -8,8 +8,8 @@ import time
 import warnings
 warnings.filterwarnings("ignore")
 
-exp_path='/home/juan/tmp_scale_to_radar/output_data/LE_D1_1km_30sec_OFP_V2/'
-rad_path='/home/juan/tmp_scale_to_radar/radar_data/'
+exp_path='/home/jruiz/share/LARGE_ENSEMBLE/output_data/LE_D1_1km_5min_4D_OFP_V2/'
+rad_path='/home/jruiz/share/LARGE_ENSEMBLE/radar_data/'
 outfile=exp_path + '/time_mean/fcst_scores.pkl'
 
 init_freq=600   #Forecast initialization frequency in seconds.
@@ -26,8 +26,8 @@ sizes_fss      = np.array([0,2,5,10]).astype(int)
 nt=np.size( thresholds_ref )
 ns=np.size( sizes_fss )
 
-itime = dt.datetime(2013,7,13,5,5,0)  #Initial time.
-etime = dt.datetime(2013,7,13,5,5,0)   #End time.
+itime = dt.datetime(2013,7,13,5,10,0)  #Initial time.
+etime = dt.datetime(2013,7,13,6,0,0)   #End time.
 
 radar_files=None
 

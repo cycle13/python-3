@@ -20,11 +20,11 @@ from scipy.ndimage.filters import gaussian_filter
 import common_plot_functions as cpf
 import common_mask_functions as cmf
 
-basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/home/ra001011/a03471/data/output_data/'
+basedir='/home/jruiz/share/LARGE_ENSEMBLE/output_data/'
 
 figname='./Figure_kld_profiles_diff_variables'
 
-exps=['LE_D1_1km_5min','LE_D1_1km_30sec']
+exps=['LE_D1_1km_5min_OFP_V2','LE_D1_1km_30sec_OFP_V2']
 
 deltat=[300,120,60,30,30,60]
 
@@ -137,7 +137,7 @@ titles = ['(a) - T','(b) - $q_v$','(c) - W','(d) - V','(e) - T','(f) - $q_v$','(
 clevelsneg = [-100,-40,-20,-10]
 clevelspos = [10,20,40,100]
 
-time_index=np.arange( 0 , profile_rain['LE_D1_1km_5min']['tk'].shape[1] ) * 5.0 + 5.0 #Time index in minutes.
+time_index=np.arange( 0 , profile_rain['LE_D1_1km_5min_OFP_V2']['tk'].shape[1] ) * 5.0 + 5.0 #Time index in minutes.
 xtick= np.array([20,40,60])
 
 cmapb = mpl.cm.Blues_r(np.linspace(0,1,11))
@@ -168,8 +168,8 @@ for ivar , my_var in enumerate( plot_variables ) :
    ax = axs[irow,icol]
 
    #Shaded
-   profile_rain['LE_D1_1km_5min'][my_var][ profile_rain['LE_D1_1km_5min'][my_var] == 0 ] = np.nan
-   percent_diff = 100 * np.squeeze( ( profile_rain[ 'LE_D1_1km_30sec' ][my_var] - profile_rain['LE_D1_1km_5min'][my_var] ) / profile_rain['LE_D1_1km_5min'][my_var]  )
+   profile_rain['LE_D1_1km_5min_OFP_V2'][my_var][ profile_rain['LE_D1_1km_5min_OFP_V2'][my_var] == 0 ] = np.nan
+   percent_diff = 100 * np.squeeze( ( profile_rain[ 'LE_D1_1km_30sec_OFP_V2' ][my_var] - profile_rain['LE_D1_1km_5min_OFP_V2'][my_var] ) / profile_rain['LE_D1_1km_5min_OFP_V2'][my_var]  )
    percent_diff[ percent_diff < smin ] = smin
    percent_diff[ percent_diff > smax ] = smax
    p=ax.contourf( time_index , -np.log( levels ) , percent_diff , clevs ,cmap=my_map )
@@ -195,7 +195,7 @@ for ivar , my_var in enumerate( plot_variables ) :
       cclevs = [2.0,2.5,3.0,3.5,4.0,4.5,5.0]
       #clevs = [2.5,5,10,20,50]
 
-   kld = 100*np.squeeze( profile_rain['LE_D1_1km_5min'][my_var] )
+   kld = 100*np.squeeze( profile_rain['LE_D1_1km_5min_OFP_V2'][my_var] )
    c=ax.contour( time_index , -np.log(levels) , kld , levels = cclevs , colors='k' ,linestyles='solid')
    plt.clabel(c, inline=1, fontsize=14,fmt='%1.1f')
 
@@ -220,8 +220,8 @@ for ivar , my_var in enumerate( plot_variables ) :
    ax = axs[irow,icol]
 
    #Shaded
-   profile_norain['LE_D1_1km_5min'][my_var][ profile_norain['LE_D1_1km_5min'][my_var] == 0 ] = np.nan
-   percent_diff = 100 * np.squeeze( ( profile_norain[ 'LE_D1_1km_30sec' ][my_var] - profile_norain['LE_D1_1km_5min'][my_var] ) / profile_norain['LE_D1_1km_5min'][my_var]  )
+   profile_norain['LE_D1_1km_5min_OFP_V2'][my_var][ profile_norain['LE_D1_1km_5min_OFP_V2'][my_var] == 0 ] = np.nan
+   percent_diff = 100 * np.squeeze( ( profile_norain[ 'LE_D1_1km_30sec_OFP_V2' ][my_var] - profile_norain['LE_D1_1km_5min_OFP_V2'][my_var] ) / profile_norain['LE_D1_1km_5min_OFP_V2'][my_var]  )
 
    p=ax.contourf( time_index , -np.log( levels ) , percent_diff , clevs  ,cmap=my_map )
 
@@ -250,7 +250,7 @@ for ivar , my_var in enumerate( plot_variables ) :
       cclevs = [2.0,2.5,3.0,3.5,4.0,4.5,5.0]
       #clevs = [25,50,100,150,200,250]
 
-   kld = 100*np.squeeze( profile_norain['LE_D1_1km_5min'][my_var] )
+   kld = 100*np.squeeze( profile_norain['LE_D1_1km_5min_OFP_V2'][my_var] )
    c=ax.contour( time_index , -np.log(levels) , kld , levels = cclevs , colors='k' ,linestyles='solid')
    plt.clabel(c, inline=1, fontsize=14,fmt='%1.1f')
    #ax.spines['right'].set_visible(False)
@@ -278,7 +278,7 @@ m.set_clim(smin,smax)
 cb=plt.colorbar(m,cax=cbar_ax,orientation='horizontal',boundaries=np.arange(smin,smax+delta,delta))
 cb.ax.tick_params(labelsize=14)
 
-#pl.show()
+plt.show()
 plt.savefig( figname + '.png' , format='png' , dpi=300)
 plt.close()
 

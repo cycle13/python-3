@@ -270,7 +270,7 @@ def calc_destagger_uvw(sio, rho=None, momx=None, momy=None, momz=None, destagger
     return u, v, w, momx_, momy_, momz_
 
 
-def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=None , w=None , rho=None, qr=None, qs=None, qg=None, t=None, dryrun=False , use_wt=True ):
+def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=None , w=None , rho=None, qr=None, qs=None, qg=None, t=None, dryrun=False , use_wt=True , new_version=True ):
     """
     Calculate radar reflectivity
 
@@ -304,7 +304,6 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
     """
     import math
 
-
     #Define constants 
     min_q_ = 1.0e-10
     d2r = np.pi / 180.0
@@ -312,10 +311,15 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
 
     nor_=8.0e-2      #[cm^-4]
     nos_=3.0e-2      #[cm^-4]
-    nog_=4.0e-4      #[cm^-4]
+    if new_version :
+       nog_=4.0e-2
+       rog_=0.917       #[g/cm3]
+    else :
+       nog_=4.0e-4      #[cm^-4]
+       rog_=0.4         #[g/cm3]
     ror_=1.0         #[g/cm3]
     ros_=0.1         #[g/cm3]
-    rog_=0.917       #[g/cm3]
+    #rog_=0.917       #[g/cm3]
     gg_=9.81         #Gravity
     re_=6371.3e3     #Earth radious
 
@@ -364,7 +368,10 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
     #Compute reflectivity 
     refr_= 2.53e4 * (rho_ * qr_ * 1.0e3) ** 1.84
     refs_= 3.48e3 * (rho_ * qs_ * 1.0e3) ** 1.66
-    refg_= 8.18e4 * (rho_ * qg_ * 1.0e3) ** 1.50
+    if new_version :
+       refg_= 5.54e3 * (rho_ * qg_ * 1.0e3) ** 1.70
+    else :
+       refg_= 8.18e4 * (rho_ * qg_ * 1.0e3) ** 1.50
 
     dbz = 10. * np.log10(refr_ + refs_ + refg_ )
     dbz[dbz < min_dbz] = min_dbz
@@ -430,7 +437,6 @@ def calc_ref_rv(sio, bmap , radar , topo , min_dbz=-20., z=None ,  u=None , v=No
        rv = rv + (w_ - wt_)*np.sin(elev_)
     else  :
        rv = rv + (w_)*np.sin(elev_)
-
 
     #import matplotlib.pyplot as plt
     #plt.pcolor( lon_ , lat_ , rv[10,:,:]) ; plt.colorbar() ; plt.show()
