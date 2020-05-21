@@ -11,7 +11,7 @@ import numpy as np
 import os
 
 
-exp_path = '../celda_ordinaria_200m'    #Carpeta base del experimento.
+exp_path = '../cortante_cuartocirculo_fuerte_250m'    #Carpeta base del experimento.
 
 data_path = exp_path + '/run/'                                                       #Carpeta donde estan los datos.
 
@@ -19,27 +19,37 @@ plot_path = exp_path + '/figuras/'                                              
 os.makedirs(plot_path,exist_ok=True)
 
 
-wrf_data = wrf.get_data_vslice( data_path , slice_type='vy' , slice_index = 80 , force=False ) 
+#wrf_data = wrf.get_data_vslice( data_path , slice_type='vy' , slice_index = 80 , force=False ) 
 
-#wrf_data = wrf.get_moment_equation( wrf_data , force=False )
+#wrf_data = wrf.get_data_vslice( data_path , slice_type='vy' , slice_index = 80 , force=False ) 
 
-wrf_data = wrf.get_termo_equation( wrf_data , force=False )
+wrf_data = wrf.get_data_vslice( data_path , slice_type='h' , slice_z = 500.0 , zres=200.0 , slice_index = 80 , force=False ) 
 
-#wrf_data = wrf.get_water_equation( wrf_data , force=False )
+# wrf_data = wrf.get_moment_equation( wrf_data , force=False , save = True )
 
-#wrf_data = wrf.get_ppert_equation(  wrf_data , force=False )
+# wrf_data = wrf.get_termo_equation( wrf_data , force=False , save = True )
 
+# wrf_data = wrf.get_water_equation( wrf_data , force=False , save = True )
 
-#wrfp.plot_momentum_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
+# wrf_data = wrf.get_ppert_equation(  wrf_data , force=True , save=True )
 
-#wrfp.plot_termo_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
+wrf_data = wrf.get_vorticity_equation(  wrf_data , force=True , save=True )
 
-#wrfp.plot_vapor_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
+#wrfp.plot_momentum_equation_v( wrf_data , plot_path  , ybound=[20000,40000] , xbound=[30000,50000] , scale_factor = 1.0 )
 
-#wrfp.plot_water_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
+wrfp.plot_vortz_equation_v( wrf_data , plot_path  , ybound=[20000,40000] , xbound=[30000,50000] , scale_factor = 1.0 )
+
+#wrfp.plot_momentum_equation_2_v( wrf_data , plot_path , ybound=[11900.0,19900.0] , xbound=[11900.0,19900.0], scale_factor = 1.0 )
+
+#wrfp.plot_termo_equation_2_v( wrf_data , plot_path , ybound=[11900.0,19900.0] , xbound=[11900.0,19900.0], scale_factor = 1.0 )
+
+#wrfp.plot_vapor_equation_2_v( wrf_data , plot_path , ybound=[11900.0,19900.0] , xbound=[11900.0,19900.0] , scale_factor = 1.5 )
+
+#wrfp.plot_water_equation_2_v( wrf_data , plot_path , ybound=[11900.0,19900.0] , xbound=[11900.0,19900.0] , scale_factor = 1.5 )
 
 #wrfp.plot_thetas_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
 
-wrfp.plot_termo_equation_hov_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 , h_ini=75 , h_end=85  )
+#wrfp.plot_ppert_equation_v( wrf_data , plot_path , ybound=[11900.0,19900.0] , xbound=[11900.0,19900.0] , scale_factor = 1.0 )
 
-#wrfp.plot_ppert_equation_2_v( wrf_data , plot_path , ybound=[0,12500] , scale_factor = 1.5 )
+#wrfp.plot_vortz_equation_v( wrf_data , plot_path , ybound=[11900.0,19900.0] , xbound=[11900.0,19900.0] , scale_factor = 1.0 )
+
