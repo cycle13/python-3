@@ -1,4 +1,6 @@
-import matplotlib.pyplot as plt 
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
 import numpy as np
 import wrf_module as wrf
 import metpy.calc as mpcalc 
@@ -388,7 +390,6 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
           ax.quiver(x[0::skipz,0::skipx],y[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=400.0*arrow_scale_factor)
        if my_data['slice_type'] == 'h'  :
           ax.quiver(x[0::skipz],y[0::skipz],uwind[0::skipz,0::skipx],vwind[0::skipz,0::skipx],scale=100.0*arrow_scale_factor)
-         
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title('$B_P$ (sh., $ms^{-2}$) y viento(U,W) (vectores)')
@@ -750,7 +751,7 @@ def plot_termo_equation_2_v( my_data , plot_path , show=False , force = False , 
        ax.grid()
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
-       ax.set_title(r'${\frac{d{\theta}}{dt}}_{res}$ (cont., $K$) y $\theta$ (cont., $K$)')
+       ax.set_title(r'${\frac{d{\theta}}{dt}}_{res}$ (sh., $K$) y $\theta$ (cont., $K$)')
        #ax.set_yticks([])
        delta= ( np.max(clevs1)-np.min(clevs1) )/ (clevs1.size-1)
        
@@ -1054,12 +1055,13 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
        #Ploteo theta y su perturbacion
        ax = axs[0,0]
        clevs1=np.arange(-5.0,5.05,0.05) * scale_factor
+       qv_pert = qv_pert * 1000.0
        qv_pert[qv_pert > np.max(clevs1)]=np.max(clevs1)
        qv_pert[qv_pert < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('RdBu_r',clevs1.size)
-       p1=ax.contourf( x , y , qv_pert * 1000 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y , qv_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
-       p2=ax.contour( x , y , qv * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p2=ax.contour( x , y , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -1080,12 +1082,13 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
 
        #Ploteo la tasa de cambio local de theta con el tiempo
        ax = axs[0,1]
+       dqvdt_loc = dqvdt_loc 
        dqvdt_loc[dqvdt_loc > np.max(clevs1)]=np.max(clevs1)
        dqvdt_loc[dqvdt_loc < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('bwr',clevs1.size)
-       p1=ax.contourf( x , y , dqvdt_loc * 1.0e3 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y , dqvdt_loc , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
-       p2=ax.contour( x , y , qv * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p2=ax.contour( x , y , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -1103,11 +1106,12 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
        #Ploteo el aporte de qv al empuje y qv.
        ax = axs[1,0]
        my_map = cmap_discretize('bwr',clevs1.size)
+       dqvdt_adv =  dqvdt_adv 
        dqvdt_adv[dqvdt_adv > np.max(clevs1)]=np.max(clevs1)
        dqvdt_adv[dqvdt_adv < np.min(clevs1)]=np.min(clevs1)
-       p1=ax.contourf( x , y , dqvdt_adv * 1.0e3 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y , dqvdt_adv , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
-       p2=ax.contour( x , y , qv * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p2=ax.contour( x , y , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
@@ -1126,13 +1130,14 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
        #TODO reemplazar la estimacion del calor latente por el calor latente posta.
        ax = axs[1,1]
        my_map = cmap_discretize('bwr',clevs1.size)
+       qv_diabatic = qv_diabatic 
        qv_diabatic[qv_diabatic > np.max(clevs1)]=np.max(clevs1)
        qv_diabatic[qv_diabatic < np.min(clevs1)]=np.min(clevs1)
-       p1=ax.contourf( x , y , qv_diabatic * 1.0e3 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y , qv_diabatic , clevs1 , cmap=my_map)
        clevs2=np.array([0.005,0.01,0.05,0.1]) * scale_factor
-       p2=ax.contour( x , y , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) * 1.0e3 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
+       p2=ax.contour( x , y , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.array([-0.1,-0.05,-0.01,-0.005]) * scale_factor
-       p2=ax.contour( x , y , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p2=ax.contour( x , y , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -1164,42 +1169,41 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
           x=np.tile(x,(my_data['nz'],1))
           sw=my_data['slice_width']
           y=my_data['z'][:,:,sw,it]
-          qv=my_data['qv'][:,:,sw,it]
-          qv_pert=my_data['qv'][:,:,sw,it]-my_data['qv0'][:,:,sw,it]
-          qv=my_data['qv'][:,:,sw,it] 
+          qv_pert=( my_data['qv'][:,:,sw,it]-my_data['qv0'][:,:,sw,it])  * 1.0e3
+          qv=my_data['qv'][:,:,sw,it] * 1.0e3 
           w=my_data['w'][:,:,sw,it]
           hwind=my_data['v'][:,:,sw,it]
           ref=my_data['ref'][:,:,sw,it]
-          dqvdt_loc =my_data['dqvdt_loc'][:,:,sw,it]
-          dqvdt_adv =my_data['dqvdt_adv'][:,:,sw,it]
-          qv_diabatic =my_data['qv_diabatic'][:,:,sw,it]                   
+          dqvdt_loc =my_data['dqvdt_loc'][:,:,sw,it] * 1.0e3
+          dqvdt_adv =my_data['dqvdt_adv'][:,:,sw,it] * 1.0e3
+          qv_diabatic =my_data['qv_diabatic'][:,:,sw,it] * 1.0e3                   
           
        if my_data['slice_type'] == 'vy' :
           x=np.arange(0,my_data['dx']*my_data['nx'],my_data['dx'])
           x=np.tile(x,(my_data['nz'],1))
           sw=my_data['slice_width']
           y=my_data['z'][:,sw,:,it]
-          qv=my_data['qv'][:,sw,:,it]
-          qv_pert=my_data['qv'][:,sw,:,it]-my_data['qv0'][:,sw,:,it]
+          qv_pert= ( my_data['qv'][:,sw,:,it]-my_data['qv0'][:,sw,:,it] ) * 1.0e3
+          qv=my_data['qv'][:,sw,:,it] * 1.0e3
           w=my_data['w'][:,sw,:,it]
           hwind=my_data['u'][:,sw,:,it]
           ref=my_data['ref'][:,sw,:,it]
-          dqvdt_loc =my_data['dqvdt_loc'][:,sw,:,it]
-          dqvdt_adv =my_data['dqvdt_adv'][:,sw,:,it]
-          qv_diabatic =my_data['qv_diabatic'][:,sw,:,it]
+          dqvdt_loc =my_data['dqvdt_loc'][:,sw,:,it] * 1.0e3
+          dqvdt_adv =my_data['dqvdt_adv'][:,sw,:,it] * 1.0e3
+          qv_diabatic =my_data['qv_diabatic'][:,sw,:,it] * 1.0e3
 
        if my_data['slice_type'] == 'h' :
           x=np.arange(0,my_data['dx']*my_data['nx'],my_data['dx'])
           y=np.arange(0,my_data['dy']*my_data['ny'],my_data['dy'])
-          qv=my_data['qv'][1,:,:,it]
-          qv_pert=my_data['qv'][1,:,:,it]-my_data['qv0'][1,:,:,it]
+          qv_pert=( my_data['qv'][1,:,:,it]-my_data['qv0'][1,:,:,it] ) * 1.0e3
+          qv=my_data['qv'][1,:,:,it] * 1.0e3
           w=my_data['w'][1,:,:,it]
           uwind=my_data['u'][1,:,:,it]
           vwind=my_data['v'][1,:,:,it]
           ref=my_data['ref'][1,:,:,it]
-          dqvdt_loc =my_data['dqvdt_loc'][1,:,:,it]
-          dqvdt_adv =my_data['dqvdt_adv'][1,:,:,it]
-          qv_diabatic =my_data['qv_diabatic'][1,:,:,it]
+          dqvdt_loc =my_data['dqvdt_loc'][1,:,:,it] * 1.0e3
+          dqvdt_adv =my_data['dqvdt_adv'][1,:,:,it] * 1.0e3
+          qv_diabatic =my_data['qv_diabatic'][1,:,:,it] * 1.0e3
           
        ncols=2
        nrows=2
@@ -1213,12 +1217,13 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
        #Ploteo theta y su perturbacion
        ax = axs[0,0]
        clevs1=np.arange(-5.0,5.05,0.05) * scale_factor
+       qv_pert = qv_pert 
        qv_pert[qv_pert > np.max(clevs1)]=np.max(clevs1)
        qv_pert[qv_pert < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('RdBu_r',clevs1.size)
-       p1=ax.contourf( x , y  , qv_pert * 1000 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y  , qv_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
-       p2=ax.contour( x , y  , qv * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p2=ax.contour( x , y  , qv  , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -1239,12 +1244,13 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
 
        #Ploteo la tasa de cambio local de theta con el tiempo
        ax = axs[0,1]
-       dqvdt_loc[dqvdt_loc > np.max(clevs1)]=np.max(clevs1)
-       dqvdt_loc[dqvdt_loc < np.min(clevs1)]=np.min(clevs1)
+       dqvdt_tot = ( dqvdt_loc - dqvdt_adv ) 
+       dqvdt_tot[dqvdt_tot > np.max(clevs1)]=np.max(clevs1)
+       dqvdt_tot[dqvdt_tot < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('bwr',clevs1.size)
-       p1=ax.contourf( x , y  , ( dqvdt_loc - dqvdt_adv ) * 1.0e3 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y  , dqvdt_tot , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
-       p2=ax.contour( x , y  , qv * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p2=ax.contour( x , y  , qv  , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -1270,11 +1276,12 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
        #Ploteo el aporte de qv al empuje y qv.
        ax = axs[1,0]
        my_map = cmap_discretize('bwr',clevs1.size)
-       dqvdt_adv[dqvdt_adv > np.max(clevs1)]=np.max(clevs1)
-       dqvdt_adv[dqvdt_adv < np.min(clevs1)]=np.min(clevs1)
-       p1=ax.contourf( x , y  , qv_diabatic * 1.0e3 , clevs1 , cmap=my_map)
+       qv_diabatic = qv_diabatic 
+       qv_diabatic[qv_diabatic > np.max(clevs1)]=np.max(clevs1)
+       qv_diabatic[qv_diabatic < np.min(clevs1)]=np.min(clevs1)
+       p1=ax.contourf( x , y  , qv_diabatic , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
-       p2=ax.contour( x , y  , qv * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       p2=ax.contour( x , y  , qv  , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -1285,10 +1292,11 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
        #Ploteo el aporte del cambio de estado 
        ax = axs[1,1]
        my_map = cmap_discretize('bwr',clevs1.size)
-       qv_diabatic[qv_diabatic > np.max(clevs1)]=np.max(clevs1)
-       qv_diabatic[qv_diabatic < np.min(clevs1)]=np.min(clevs1)
-       p1=ax.contourf( x , y  , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) * 1.0e3  , clevs1 , cmap=my_map)
-       p2=ax.contour( x , y  , qv * 1.0e3 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
+       dqvdt_res = ( dqvdt_loc - dqvdt_adv - qv_diabatic ) 
+       dqvdt_res[dqvdt_res > np.max(clevs1)]=np.max(clevs1)
+       dqvdt_res[dqvdt_res < np.min(clevs1)]=np.min(clevs1)
+       p1=ax.contourf( x , y  , dqvdt_res  , clevs1 , cmap=my_map)
+       p2=ax.contour( x , y  , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -1794,9 +1802,10 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
 
        #Ploteo laplaciano de la perturbacion de presion por empuje y empuje.
        ax = axs[0,3]
+       lp_b = lp_b * 1.0e4
        lp_b[lp_b > np.max(clevs1)]=np.max(clevs1) 
        lp_b[lp_b < np.min(clevs1)]=np.min(clevs1) 
-       p1=ax.contourf( x , y , -lp_b * 1.0e4 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y , -lp_b , clevs1 , cmap=my_map)
        clevs2=np.arange(0.1,1.0,0.1)*10.0e-1 * scale_factor
        p2=ax.contour( x , y , bouy , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.arange(-1.0,0.0,0.1)*10.0e-1 * scale_factor
@@ -1989,9 +1998,10 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
 
        #Ploteo laplaciano de la perturbacion de presion por empuje y empuje.
        ax = axs[0,1]
+       lp_b = lp_b * 1.0e4
        lp_b[lp_b > np.max(clevs1)]=np.max(clevs1) 
        lp_b[lp_b < np.min(clevs1)]=np.min(clevs1) 
-       p1=ax.contourf( x , y , -lp_b * 1.0e4 , clevs1 , cmap=my_map)
+       p1=ax.contourf( x , y , -lp_b , clevs1 , cmap=my_map)
        clevs2=np.arange(0.1,1.0,0.1)*10.0e-1 * scale_factor
        p2=ax.contour( x , y , bouy , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.arange(-1.0,0.0,0.1)*10.0e-1 * scale_factor
@@ -2083,7 +2093,7 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
-       ax.set_title(r'$-{\nabla}^{2}{P}^{\prime}$ (cont. $10^{-4}ms^{-2}$) y P\' (sh. Pa)',fontsize=10)
+       ax.set_title(r'$-{\nabla}^{2}{P}^{\prime}$ (sh. $10^{-4}ms^{-2}$) y $P \prime$ (cont. Pa)',fontsize=10)
        #ax.set_yticks([])
 
        if show :

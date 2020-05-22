@@ -21,13 +21,13 @@ os.makedirs(plot_path,exist_ok=True)
 
 wrf_data = wrf.get_data_vslice( data_path , slice_type='vy' , slice_index = 80 , force=False ) 
 
-wrf_data = wrf.get_moment_equation( wrf_data )
+wrf_data = wrf.get_moment_equation( wrf_data , save=True )
 
-wrf_data = wrf.get_termo_equation( wrf_data )
+wrf_data = wrf.get_termo_equation( wrf_data , save=True )
 
-wrf_data = wrf.get_water_equation( wrf_data )
+wrf_data = wrf.get_water_equation( wrf_data , save=True )
 
-wrf_data = wrf.get_ppert_equation(  wrf_data )
+wrf_data = wrf.get_ppert_equation(  wrf_data , save=True )
 
 wrfp.plot_momentum_equation_2_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 )
 
