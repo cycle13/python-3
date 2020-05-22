@@ -11,7 +11,7 @@ import numpy as np
 import os
 
 
-exp_path = '/home/jruiz/datosalertar1/SIMULACIONES_CYM_2017/cortante_cuartocirculo_fuerte_250m/'    #Carpeta base del experimento.
+exp_path = '/home/jruiz/datosalertar1/SIMULACIONES_CYM_2017/cortante_fuerte_250m/'    #Carpeta base del experimento.
 
 data_path = exp_path + '/run/'                                                       #Carpeta donde estan los datos.
 

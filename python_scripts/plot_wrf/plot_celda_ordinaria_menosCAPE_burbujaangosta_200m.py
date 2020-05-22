@@ -21,21 +21,29 @@ os.makedirs(plot_path,exist_ok=True)
 
 wrf_data = wrf.get_data_vslice( data_path , slice_type='vy' , slice_index = 80 , force=False ) 
 
-wrf_data = wrf.get_moment_equation( wrf_data , force=False )
+wrf_data = wrf.get_moment_equation( wrf_data  )
 
-wrf_data = wrf.get_termo_equation( wrf_data , force=False )
+wrf_data = wrf.get_termo_equation( wrf_data  )
 
-wrf_data = wrf.get_water_equation( wrf_data , force=False )
+wrf_data = wrf.get_water_equation( wrf_data  )
 
-wrf_data = wrf.get_ppert_equation(  wrf_data , force=False )
+frf_data = wrf.get_ppert_equation(  wrf_data )
 
 
-wrfp.plot_momentum_equation_v( wrf_data , plot_path )
+wrfp.plot_momentum_equation_2_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 )
 
-wrfp.plot_termo_equation_v( wrf_data , plot_path )
+wrfp.plot_termo_equation_2_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 )
 
-wrfp.plot_vapor_equation_v( wrf_data , plot_path )
+wrfp.plot_vapor_equation_2_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 )
 
-wrfp.plot_water_equation_v( wrf_data , plot_path )
+wrfp.plot_water_equation_2_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 )
 
-wrfp.plot_ppert_equation_v( wrf_data , plot_path )
+wrfp.plot_thetas_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 )
+
+wrfp.plot_termo_equation_hov_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 , h_ini=75 , h_end=85  )
+
+wrfp.plot_ppert_equation_2_v( wrf_data , plot_path , ybound=[0,15000] , scale_factor = 0.8 )
+
+
+
+

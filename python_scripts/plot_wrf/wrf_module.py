@@ -48,7 +48,7 @@ def get_data_vslice( data_path , slice_width=1 , slice_index=0 , slice_z=None , 
        nz=tmp.shape[0]
        nt=len( my_data['file_list'] )
 
-       if ( t_start != 0 | t_end != 0 ) & t_end > t_start :
+       if ( t_start != 0 or t_end != 0 ) and ( t_end > t_start ) :
          ts=t_start
          te=t_end
        else    :
@@ -180,9 +180,10 @@ def get_data_vslice( data_path , slice_width=1 , slice_index=0 , slice_z=None , 
 
                 
              my_data['times'].append( dt.datetime.strptime( os.path.basename( my_data['file_list'][ctime] )[11:]  , '%Y-%m-%d_%H:%M:%S' ) )
-                 
-       for iz,my_z in enumerate( z_levels ) :
-           my_data['z'][iz,:,:,:] = my_z
+       
+       if slice_type == 'h' :
+          for iz,my_z in enumerate( z_levels ) :
+             my_data['z'][iz,:,:,:] = my_z
 
              
        if nt == 1 :
