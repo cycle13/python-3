@@ -237,7 +237,7 @@ def get_profile( data_path , xp = 0 , yp = 0 , tp = 0 )   :
 
   ncfile = Dataset(my_data['file_list'][tp])
   my_data['p']=to_np(getvar(ncfile,"pressure"))[:,yp,xp]
-  my_data['h']=to_np(getvar(ncfile,"height"))[:,yp,xp]
+  my_data['z']=to_np(getvar(ncfile,"height"))[:,yp,xp]
   my_data['t']=to_np(getvar(ncfile,"temp",units='degC'))[:,yp,xp]
   my_data['td']=to_np(getvar(ncfile,"td",units='degC'))[:,yp,xp]
   my_data['u']=to_np(getvar(ncfile,"ua",units='ms-1'))[:,yp,xp]
@@ -273,11 +273,11 @@ def get_ref_state( my_data , force = False )   :
       for my_var in variables :
 
          if my_data['slice_type'] != 'h'  :
-            var0 = my_data[my_var][:,0,0,0]
+            var0 = my_data[my_var][:,0,0,3]
             my_data[my_var + '0' ]=np.zeros(( my_data[my_var].shape ))
-            int_z = my_data['z'][:,0,0,0] 
-            int_z[0] = int_z[0] - 2.0 ; int_z[-1] = int_z[-1] + 2.0
-            interpolator = interp1d(  my_data['z'][:,0,0,0] , var0 , bounds_error=False, fill_value=np.nan )
+            int_z = my_data['z'][:,0,0,3]  #Uso el tiempo 1 en lugar del 0 ya que en el tiempo inicial por algun motivo el primer nivel de P esta mal.
+            int_z[0] = int_z[0] - 1.0 ; int_z[-1] = int_z[-1] + 1.0
+            interpolator = interp1d(  int_z , var0 , bounds_error=False, fill_value=np.nan )
             for ii in range( my_data[my_var].shape[1] ) :
                for jj in range( my_data[my_var].shape[2] ) :
                    for kk in range( my_data[my_var].shape[3]  ) :

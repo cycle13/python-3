@@ -120,7 +120,8 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ,
        p1=ax.contourf( x , y , bt , clevs1 , cmap=my_map)
        clevs2=np.arange(100,320,5)
        p2=ax.contour( x , y , t , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
 
@@ -142,7 +143,8 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ,
        p1=ax.contourf( x , y , bqv , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y , qv * 1000 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
 
@@ -154,11 +156,12 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ,
        #Ploteo el aporte de qc al empuje
        ax = axs[0,3]
        p1=ax.contourf( x , y , bqc , clevs1 , cmap=my_map)
-       clevs2=np.arange(0.1,1.0,0.1) * scale_factor 
+       clevs2=np.arange(0.05,1.0,0.05) * scale_factor 
        p2=ax.contour( x , y , bt + bp + bqv + bqc , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.arange(-1.0,0.0,0.1) * scale_factor
+       clevs2=np.arange(-1.0,0.0,0.05) * scale_factor
        p2=ax.contour( x , y , bt + bp + bqv + bqc , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
 
@@ -170,7 +173,8 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ,
        #Ploteo el aporte de P al empuje
        ax = axs[1,0]
        p1=ax.contourf( x , y , bp , clevs1 , cmap=my_map) 
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -190,7 +194,8 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ,
        p2=ax.contour( x , y , ppert , clevs2 , colors='k',linestyles='solid' )
        clevs3=np.arange(-500,0,50) * scale_factor
        p3=ax.contour( x , y , ppert , clevs3 , colors='k',linestyles='dashed' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$-{\frac{1}{{\rho}_0}}{{\nabla}_z}{P}^{\prime}$ (sh., $ms^{-2}$) y ${P}^{\prime}$ (cont., Pa)')
@@ -200,7 +205,8 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ,
        #Ploteo el termino advectivo.
        ax = axs[1,2]
        p1=ax.contourf( x , y , adv , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_title(r'$-{V}{\nabla}{w}$ (sh., ms{-2})')
        #ax.set_yticks([])
@@ -211,7 +217,8 @@ def plot_momentum_equation_v( my_data , plot_path , show=False , force = False ,
        p2=ax.contour( x , y , dwdt - adv - pz - bt -bqv -bqc -bp , clevs2 , colors='k' , linestyles='solid' )
        clevs2=np.arange(-0.5,-0.05,0.2) * scale_factor
        p3=ax.contour( x , y , dwdt - adv - pz - bt -bqv -bqc -bp , clevs2 , colors='k' , linestyles='dashed' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        
@@ -336,7 +343,8 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
        p1=ax.contourf( x , y , bt , clevs1 , cmap=my_map)
        clevs2=np.arange(100,320,5)
        p2=ax.contour( x , y , t , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title('$B_T$ (sh., $ms^{-2}$) y T (cont., K)')
@@ -357,7 +365,8 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
        p1=ax.contourf( x , y , bqv , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y , qv * 1000 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title('$B_{q_v}$ (sh., $ms^{-2}$) y $q_v$ (cont., K)')
@@ -368,11 +377,12 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
        #Ploteo el aporte de qc al empuje
        ax = axs[0,3]
        p1=ax.contourf( x , y , bqc , clevs1 , cmap=my_map)
-       clevs2=np.arange(0.1,1.0,0.1) * scale_factor 
+       clevs2=np.arange(0.05,1.0,0.05) * scale_factor 
        p2=ax.contour( x , y , bt + bp + bqv + bqc , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       clevs2=np.arange(-1.0,0.0,0.1) * scale_factor
+       clevs2=np.arange(-1.0,0.0,0.05) * scale_factor
        p2=ax.contour( x , y , bt + bp + bqv + bqc , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title('$B_{q_c}$ (sh., $ms^{-2}$) y Empuje total (cont., $ms^{-2}$) ')
@@ -383,7 +393,8 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
        #Ploteo el aporte de P al empuje
        ax = axs[1,0]
        p1=ax.contourf( x , y , bp , clevs1 , cmap=my_map) 
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -402,7 +413,8 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
        p2=ax.contour( x , y , ppert , clevs2 , colors='k',linestyles='solid' )
        clevs3=np.arange(-500,0,50) * scale_factor
        p3=ax.contour( x , y , ppert , clevs3 , colors='k',linestyles='dashed' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$-{\frac{1}{{\rho}_0}}{{\nabla}_z}{P}^{\prime}$ (sh., $ms^{-2}$) y ${P}^{\prime}$ (cont., Pa)')
@@ -412,7 +424,8 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
        #Ploteo el residuo.
        ax = axs[1,2]
        p1=ax.contourf( x , y , dwdt - adv - pz - bt -bqv -bqc -bp , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'Residuo (cont. $ms^-2$)')
@@ -423,7 +436,8 @@ def plot_momentum_equation_2_v( my_data , plot_path , show=False , force = False
        #Ploteo el residuo
        ax = axs[1,3]
        p1=ax.contourf( x , y , dwdt - adv , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
@@ -511,7 +525,8 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False , sc
        p1=ax.contourf( x , y , theta_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( x , y , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\theta}^{\prime}$ (sh., $K$) y $\theta$ (cont., $K$)')   
@@ -537,7 +552,8 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False , sc
        p1=ax.contourf( x , y , dthetadt_loc , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( x , y , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{\partial{\theta}}{{\partial}t}}$ (sh., $Ks^{-1}$) y $\theta$ (cont., $K$)')
@@ -561,7 +577,8 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False , sc
        p1=ax.contourf( x , y , dthetadt_adv , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( x , y , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -584,7 +601,8 @@ def plot_termo_equation_v( my_data , plot_path , show=False , force = False , sc
        p2=ax.contour( x , y , dthetadt_loc - dthetadt_adv - h_diabatic , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.array([-0.2,-0.1,-0.05,-0.01]) * scale_factor
        p2=ax.contour( x , y , dthetadt_loc - dthetadt_adv - h_diabatic , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$\dot{Q}_{lat}$ (sh., $Ks^{-1}$) y ${\frac{d{\theta}}{dt}}_{res}$ (cont., $K$)')
@@ -672,7 +690,8 @@ def plot_termo_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y , theta_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( x , y  , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
@@ -700,7 +719,8 @@ def plot_termo_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y  , dthetadt_tot , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( x , y , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -730,7 +750,8 @@ def plot_termo_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y , h_diabatic , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( x , y , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.grid()
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -747,7 +768,8 @@ def plot_termo_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y  , res , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( x , y , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.grid()
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
@@ -933,7 +955,8 @@ def plot_thetas_v( my_data , plot_path , show=False , force = False , scale_fact
        p1=ax.contourf( dist , z , t_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(0,320,5)
        p2=ax.contour( dist , z , t , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( dist , z , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( dist , z , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.grid()
        ax.set_title(r'${T}^{\prime}$ (sh., $K$) y T (cont., $K$)')   
@@ -957,7 +980,8 @@ def plot_thetas_v( my_data , plot_path , show=False , force = False , scale_fact
        p1=ax.contourf( dist , z , theta_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( dist , z , theta , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( dist , z , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( dist , z , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.grid()
        ax.set_title(r'${\theta}^{\prime}$ (sh., $K$) y $\theta$ (cont., $K$)')   
@@ -973,7 +997,8 @@ def plot_thetas_v( my_data , plot_path , show=False , force = False , scale_fact
        p1=ax.contourf( dist , z , thetae_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(270,500,5)
        p2=ax.contour( dist , z , thetae , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( dist , z , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( dist , z , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.grid()
        ax.set_title(r'${{\theta}_{e}}^{\prime}$ (sh., $K$) y ${\theta}_{e}$ (cont., $K$)')   
@@ -1062,7 +1087,8 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
        p1=ax.contourf( x , y , qv_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${q_v}^{\prime}$ (sh., $gKg^{-1}$) y $q_v$ (cont., $gKg^{-1}$)')   
@@ -1089,7 +1115,8 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
        p1=ax.contourf( x , y , dqvdt_loc , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{\partial{q_v}}{{\partial}t}}$ (sh., $gKg^{-1}s^{-1}$) y $q_v$ (cont., $gKg^{-1}$)')
@@ -1112,7 +1139,8 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
        p1=ax.contourf( x , y , dqvdt_adv , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -1138,7 +1166,8 @@ def plot_vapor_equation_v( my_data , plot_path , show=False , force = False , sc
        p2=ax.contour( x , y , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.array([-0.1,-0.05,-0.01,-0.005]) * scale_factor
        p2=ax.contour( x , y , ( dqvdt_loc - dqvdt_adv - qv_diabatic ) , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$cond.$ (sh., $gKg^{-1}s^{-1}$) y ${\frac{d{q_v}}{dt}}_{res}$ (cont., $gKg^{-1}$)')
@@ -1224,7 +1253,8 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y  , qv_pert , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y  , qv  , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${q_v}^{\prime}$ (sh., $gKg^{-1}$) y $q_v$ (cont., $gKg^{-1}$)')   
@@ -1251,7 +1281,8 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y  , dqvdt_tot , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y  , qv  , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        skipx=3
@@ -1282,7 +1313,8 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y  , qv_diabatic , clevs1 , cmap=my_map)
        clevs2=np.arange(0,18,1)
        p2=ax.contour( x , y  , qv  , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$cond.$ (sh., $gKg^{-1}s^{-1}$) y $q_v$ (cont., $gKg^{-1}s^{-1}$)')
@@ -1297,7 +1329,8 @@ def plot_vapor_equation_2_v( my_data , plot_path , show=False , force = False , 
        dqvdt_res[dqvdt_res < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y  , dqvdt_res  , clevs1 , cmap=my_map)
        p2=ax.contour( x , y  , qv , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y  , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{d{q_v}}{dt}}_{res}$ (cont., $gKg^{-1}$)')
@@ -1404,7 +1437,8 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False , sc
        dqvdt[dqvdt < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , dqvdt , clevs1 , cmap=my_map )
        p2=ax.contour( x , y , qv , clevs2 , colors='k',linestyles='solid' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{dq_v}{dt}}$ (sh, $gKg^{-1}s{-1}$) y $q_v$ (cont., $gKg^{-1}$)')
@@ -1424,7 +1458,8 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False , sc
        dqcdt[dqcdt < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , dqcdt , clevs1 , cmap=my_map )
        p2=ax.contour( x , y , qc , clevs2 , colors='k',linestyles='solid' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{dq_c}{dt}}$ (sh, $gKg^{-1}s{-1}$) y $q_c$ (cont., $gKg^{-1}$)')
@@ -1438,7 +1473,8 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False , sc
        dqrdt[dqrdt < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , dqrdt , clevs1 , cmap=my_map )
        p2=ax.contour( x , y , qr , clevs2 , colors='k',linestyles='solid' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{dq_r}{dt}}$ (sh, $gKg^{-1}s{-1}$) y $q_r$ (cont., $gKg^{-1}$)')
@@ -1452,7 +1488,8 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False , sc
        dqidt[dqidt < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , dqidt , clevs1 , cmap=my_map )
        p2=ax.contour( x , y , qi , clevs2 , colors='k',linestyles='solid' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{dq_i}{dt}}$ (sh, $gKg^{-1}s{-1}$) y $q_i$ (cont., $gKg^{-1}$)')
@@ -1464,7 +1501,8 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False , sc
        dqsdt[dqsdt < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , dqsdt , clevs1 , cmap=my_map )
        p2=ax.contour( x , y , qs , clevs2 , colors='k',linestyles='solid' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{dq_s}{dt}}$ (sh, $gKg^{-1}s{-1}$) y $q_s$ (cont., $gKg^{-1}$)')
@@ -1477,7 +1515,8 @@ def plot_water_equation_v( my_data , plot_path , show=False , force = False , sc
        dqgdt[dqgdt < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , dqgdt , clevs1 , cmap=my_map )
        p2=ax.contour( x , y , qg , clevs2 , colors='k',linestyles='solid' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${\frac{dq_g}{dt}}$ (sh, $gKg^{-1}s{-1}$) y $q_g$ (cont., $gKg^{-1}$)')
@@ -1511,7 +1550,7 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
           sw=my_data['slice_width']
           y=my_data['z'][:,:,sw,it]
           ref=my_data['ref'][:,:,sw,it]
-          t=my_data['t'][:,:,sw,it]
+          t=my_data['t'][:,:,sw,it] - 273.0
           qc=my_data['qc'][:,:,sw,it] * 1000.0
           qr=my_data['qr'][:,:,sw,it] * 1000.0
           qi=my_data['qi'][:,:,sw,it] * 1000.0
@@ -1525,7 +1564,7 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
           sw=my_data['slice_width']
           y=my_data['z'][:,sw,:,it]
           ref=my_data['ref'][:,sw,:,it]
-          t=my_data['t'][:,sw,:,it]
+          t=my_data['t'][:,sw,:,it] - 273.0
           qc=my_data['qc'][:,sw,:,it] * 1000.0
           qr=my_data['qr'][:,sw,:,it] * 1000.0
           qi=my_data['qi'][:,sw,:,it] * 1000.0
@@ -1538,7 +1577,7 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
           y=np.arange(0,my_data['dy']*my_data['ny'],my_data['dy'])
           sw=my_data['slice_width']
           ref=my_data['ref'][1,:,:,it]
-          t=my_data['t'][1,:,:,it]
+          t=my_data['t'][1,:,:,it] - 273.0
           qc=my_data['qc'][1,:,:,it] * 1000.0
           qr=my_data['qr'][1,:,:,it] * 1000.0
           qi=my_data['qi'][1,:,:,it] * 1000.0
@@ -1546,7 +1585,6 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
           qg=my_data['qg'][1,:,:,it] * 1000.0
           dqvdt=( my_data['dqvdt_loc'][1,:,:,it] - my_data['dqvdt_adv'][1,:,:,it] ) * 1000.0
         
-           
        ncols=3
        nrows=2
        if ybound is None :
@@ -1567,8 +1605,9 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
        ax = axs[0,0]
        p1=ax.contourf( x , y , qc+qr+qi+qs+qg , clevs1 , cmap=my_map )
        p3=ax.contour( x , y , t , [-40.0,-20.0,0.0] , colors='k',linestyles='dashed' , linewidths=2.0 )
-       ax.clabel(p3, fontsize=12)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       ax.clabel(p3, fontsize=12 , fmt='%3.0f')
+       if np.max( ref ) > 30.0 :
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$q_{tot}$ (cont., $gKg^{-1}$)')
@@ -1587,7 +1626,8 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y , qc , clevs1 , cmap=my_map )
        p3=ax.contour( x , y , t , [-40.0,-20.0,0.0] , colors='k',linestyles='dashed' , linewidths=2.0 )
        ax.clabel(p3, inline=1, fontsize=12 , fmt='%3.0f')
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$q_c$ (cont., $gKg^{-1}$)')
@@ -1600,7 +1640,8 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y , qr , clevs1 , cmap=my_map )
        p3=ax.contour( x , y , t , [-40.0,-20.0,0.0] , colors='k',linestyles='dashed' , linewidths=2.0 )
        ax.clabel(p3, inline=1, fontsize=12 , fmt='%3.0f')
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$q_r$ (cont., $gKg^{-1}$)')
@@ -1613,7 +1654,8 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y , qi , clevs1 , cmap=my_map )
        p3=ax.contour( x , y , t , [-40.0,-20.0,0.0] , colors='k',linestyles='dashed' , linewidths=2.0 )
        ax.clabel(p3, inline=1, fontsize=12, fmt='%3.0f')
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+            p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$q_i$ (cont., $gKg^{-1}$)')
@@ -1624,7 +1666,8 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y , qs , clevs1 , cmap=my_map )
        p3=ax.contour( x , y , t , [-40.0,-20.0,0.0] , colors='k',linestyles='dashed' , linewidths=2.0 )
        ax.clabel(p3, inline=1, fontsize=12, fmt='%3.0f')
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+            p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$q_s$ (cont., $gKg^{-1}$)')
@@ -1636,7 +1679,8 @@ def plot_water_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contourf( x , y , qg , clevs1 , cmap=my_map )
        p3=ax.contour( x , y , t , [-40.0,-20.0,0.0] , colors='k',linestyles='dashed' , linewidths=2.0 )
        ax.clabel(p3, inline=1, fontsize=12, fmt='%3.0f')
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+            p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$q_g$ (cont., $gKg^{-1}$)')
@@ -1669,7 +1713,7 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
           y=my_data['z'][:,:,sw,it]
           bouy=my_data['bouy'][:,:,sw,it]
           w=my_data['w'][:,:,sw,it]
-          hwind=my_data['u'][:,:,sw,it]
+          hwind=my_data['v'][:,:,sw,it]
           ref=my_data['ref'][:,:,sw,it]
           lp_ppert=my_data['lp_ppert'][:,:,sw,it]
           lp_spin_tot=my_data['lp_spin_tot'][:,:,sw,it]
@@ -1681,6 +1725,8 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
           ppert = my_data['p'][:,:,sw,it] - my_data['p0'][:,:,sw,it]
           ppert_hy = my_data['ppert_hy'][:,:,sw,it]
           ppert_nhy= my_data['ppert_nhy'][:,:,sw,it]
+          fpperth = my_data['fpperty'][:,:,sw,it]
+          fppertz = my_data['fppertz'][:,:,sw,it]
        if my_data['slice_type'] == 'vy' :
           x=np.arange(0,my_data['dx']*my_data['nx'],my_data['dx'])
           x=np.tile(x,(my_data['nz'],1))
@@ -1688,7 +1734,7 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
           y=my_data['z'][:,sw,:,it]
           bouy=my_data['bouy'][:,sw,:,it]
           w=my_data['w'][:,sw,:,it]
-          hwind=my_data['v'][:,sw,:,it]
+          hwind=my_data['u'][:,sw,:,it]
           ref=my_data['ref'][:,sw,:,it]
           lp_ppert=my_data['lp_ppert'][:,sw,:,it]
           lp_spin_tot=my_data['lp_spin_tot'][:,sw,:,it]
@@ -1700,6 +1746,8 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
           ppert = my_data['p'][:,sw,:,it] - my_data['p0'][:,sw,:,it]
           ppert_hy = my_data['ppert_hy'][:,sw,:,it]
           ppert_nhy= my_data['ppert_nhy'][:,sw,:,it]
+          fpperth = my_data['fppertx'][:,sw,:,it]
+          fppertz = my_data['fppertz'][:,sw,:,it]
        if my_data['slice_type'] == 'h' :
           x=np.arange(0,my_data['dx']*my_data['nx'],my_data['dx'])
           y=np.arange(0,my_data['dy']*my_data['ny'],my_data['dy'])
@@ -1718,7 +1766,9 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
           lp_b =my_data['lp_b'][1,:,:,it]
           ppert = my_data['p'][1,:,:,it] - my_data['p0'][1,:,:,it]
           ppert_hy = my_data['ppert_hy'][1,:,:,it]
-          ppert_nhy= my_data['ppert_nhy'][1,:,:,it]          
+          ppert_nhy= my_data['ppert_nhy'][1,:,:,it]       
+          fppertx = my_data['fppertx'][1,:,:,it]
+          fpperty = my_data['fpperty'][1,:,:,it]
       
        ncols=4
        nrows=2
@@ -1740,10 +1790,11 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
-          ax.quiver(x[0::skipz,0::skipx],y[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=400.0*arrow_scale_factor)
+          ax.quiver(x[0::skipz,0::skipx],y[0::skipz,0::skipx],fpperth[0::skipz,0::skipx],fppertz[0::skipz,0::skipx],scale=5.0*arrow_scale_factor)
        if my_data['slice_type'] == 'h'  :
-          ax.quiver(x[0::skipz],y[0::skipz],uwind[0::skipz,0::skipx],vwind[0::skipz,0::skipx],scale=100.0*arrow_scale_factor)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+          ax.quiver(x[0::skipz],y[0::skipz],fppertx[0::skipz,0::skipx],fpperty[0::skipz,0::skipx],scale=5.0*arrow_scale_factor)
+       if np.max( ref ) > 30.0 :          
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'${P}^{\prime}$ (sh., $Pa$) y $-{\frac{1}{{\rho}_0}}{\nabla}{P}^{\prime}$ (vectores)',fontsize=10)
@@ -1764,7 +1815,8 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        ppert_hy[ppert_hy < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('RdBu_r',clevs1.size)
        p1=ax.contourf( x , y , ppert_hy , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -1783,7 +1835,8 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        ppert_nhy[ppert_nhy < np.min(clevs1)]=np.min(clevs1)
        my_map = cmap_discretize('RdBu_r',clevs1.size)
        p1=ax.contourf( x , y , ppert_nhy , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -1797,7 +1850,7 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        ax.grid()
 
        #Fijo los niveles para las componentes del empuje.
-       clevs1=np.arange(-8.0,8.0+0.05,0.05) * scale_factor
+       clevs1=np.arange(-5.0,5.0+0.05,0.05) * scale_factor
        my_map = cmap_discretize('bwr',clevs1.size)
 
        #Ploteo laplaciano de la perturbacion de presion por empuje y empuje.
@@ -1810,7 +1863,8 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        p2=ax.contour( x , y , bouy , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.arange(-1.0,0.0,0.1)*10.0e-1 * scale_factor
        p2=ax.contour( x , y , bouy , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+           p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$-{\nabla}^{2}{P}^{\prime}_b$ (sh., $10^{-4} ms^{-2}$) y B (cont., $10^{-1}ms^{-2}$)',fontsize=10)
@@ -1834,11 +1888,12 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        p2=ax.contour( x , y , (-lp_spin_pert -lp_splat_pert) * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.arange(-10.0,0.0,1.0) * scale_factor
        p2=ax.contour( x , y , (-lp_spin_pert -lp_splat_pert) * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
-       ax.set_title(r'$-{\nabla}^{2}{P}^{\prime}_{dyn}$ pert (sh. $10^{-4}ms^{-2}$) y tot (cont) ($ms^{-2}$)',fontsize=10)
+       ax.set_title(r'$-{\nabla}^{2}{P}^{\prime}_{dyn}$ tot (sh. $10^{-4}ms^{-2}$) y pert (cont) ($ms^{-2}$)',fontsize=10)
 
        
        #Ploteo laplaciano de la perturbacion por spin total y asociada al viento perturbado
@@ -1851,7 +1906,8 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        p2=ax.contour( x , y , -lp_spin_tot * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.arange(-10.0,0.0,1.0) * scale_factor
        p2=ax.contour( x , y , -lp_spin_tot * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
@@ -1863,12 +1919,14 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        lp_splat_pert[lp_splat_pert > np.max(clevs1)]=np.max(clevs1)
        lp_splat_pert[lp_splat_pert < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , -lp_splat_pert , clevs1 , cmap=my_map) 
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        clevs2=np.arange(1.0,11,1.0) * scale_factor
        p2=ax.contour( x , y , -lp_splat_tot * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.arange(-10.0,0.0,1.0) * scale_factor
        p2=ax.contour( x , y , -lp_splat_tot * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
@@ -1884,7 +1942,8 @@ def plot_ppert_equation_v( my_data , plot_path , show=False , force = False , sc
        p2=ax.contour( x , y , -lp_ppert * 1.0e4 , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
        clevs2=np.arange(1.0,8.0,1.0) * scale_factor
        p2=ax.contour( x , y , -lp_ppert * 1.0e4 , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
@@ -1916,28 +1975,32 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
           y=my_data['z'][:,:,sw,it]
           bouy=my_data['bouy'][:,:,sw,it]
           w=my_data['w'][:,:,sw,it]
-          hwind=my_data['u'][:,:,sw,it]
+          hwind=my_data['v'][:,:,sw,it]
           ref=my_data['ref'][:,:,sw,it]
           lp_ppert=my_data['lp_ppert'][:,:,sw,it]
           lp_spin_tot=my_data['lp_spin_tot'][:,:,sw,it]
           lp_splat_tot=my_data['lp_splat_tot'][:,:,sw,it]
           lp_b =my_data['lp_b'][:,:,sw,it]
           ppert = my_data['p'][:,:,sw,it] - my_data['p0'][:,:,sw,it]
+          fpperth = my_data['fpperty'][:,:,sw,it]
+          fppertz = my_data['fppertz'][:,:,sw,it]
 
        if my_data['slice_type'] == 'vy' :
           x=np.arange(0,my_data['dx']*my_data['nx'],my_data['dx'])
           x=np.tile(x,(my_data['nz'],1))
           sw=my_data['slice_width']
-          y=my_data['z'][:,:,sw,it]
+          y=my_data['z'][:,sw,:,it]
           bouy=my_data['bouy'][:,sw,:,it]
           w=my_data['w'][:,sw,:,it]
-          hwind=my_data['v'][:,sw,:,it]
+          hwind=my_data['u'][:,sw,:,it]
           ref=my_data['ref'][:,sw,:,it]
           lp_ppert=my_data['lp_ppert'][:,sw,:,it]
           lp_spin_tot=my_data['lp_spin_tot'][:,sw,:,it]
           lp_splat_tot=my_data['lp_splat_tot'][:,sw,:,it]
           lp_b =my_data['lp_b'][:,sw,:,it]
           ppert = my_data['p'][:,sw,:,it] - my_data['p0'][:,sw,:,it]
+          fpperth = my_data['fppertx'][:,sw,:,it]
+          fppertz = my_data['fppertz'][:,sw,:,it]
 
        if my_data['slice_type'] == 'h' :
           x=np.arange(0,my_data['dx']*my_data['nx'],my_data['dx'])
@@ -1953,7 +2016,8 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
           lp_splat_tot=my_data['lp_splat_tot'][1,:,:,it]
           lp_b =my_data['lp_b'][1,:,:,it]
           ppert = my_data['p'][1,:,:,it] - my_data['p0'][1,:,:,it]
-    
+          fppertx = my_data['fppertx'][1,:,:,it]
+          fpperty = my_data['fpperty'][1,:,:,it]
       
        ncols=3
        nrows=2
@@ -1975,10 +2039,11 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
-          ax.quiver(x[0::skipz,0::skipx],y[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=400.0*arrow_scale_factor)
+          ax.quiver(x[0::skipz,0::skipx],y[0::skipz,0::skipx],fpperth[0::skipz,0::skipx],fppertz[0::skipz,0::skipx],scale=5.0*arrow_scale_factor)
        if my_data['slice_type'] == 'h'  :
-          ax.quiver(x[0::skipz],y[0::skipz],uwind[0::skipz,0::skipx],vwind[0::skipz,0::skipx],scale=100.0*arrow_scale_factor)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+          ax.quiver(x[0::skipz],y[0::skipz],fppertx[0::skipz,0::skipx],fpperty[0::skipz,0::skipx],scale=5.0*arrow_scale_factor)
+       if np.max( ref ) > 30.0 :   
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_title(r'${P}^{\prime}$ (sh., $Pa$) y $-{\frac{1}{{\rho}_0}}{\nabla}{P}^{\prime}$ (vectores)',fontsize=10)
        #ax.set_xticks([])
@@ -1993,7 +2058,7 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        cb.ax.tick_params(labelsize=labelsize_colorbar)
 
        #
-       clevs1=np.arange(-8.0,8.0+0.05,0.05) * scale_factor
+       clevs1=np.arange(-5.0,5.0+0.05,0.05) * scale_factor
        my_map = cmap_discretize('bwr',clevs1.size)
 
        #Ploteo laplaciano de la perturbacion de presion por empuje y empuje.
@@ -2006,7 +2071,8 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        p2=ax.contour( x , y , bouy , clevs2 , colors='k',linestyles='solid' , linewidths=0.5 )
        clevs2=np.arange(-1.0,0.0,0.1)*10.0e-1 * scale_factor
        p2=ax.contour( x , y , bouy , clevs2 , colors='k',linestyles='dashed' , linewidths=0.5 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$-{\nabla}^{2}{P}^{\prime}_b$ (sh., $10^{-4} ms^{-2}$) y B (cont., $10^{-1}ms^{-2}$)',fontsize=10)
@@ -2028,7 +2094,8 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        lp_dyn_tot[lp_dyn_tot > np.max(clevs1)]=np.max(clevs1)
        lp_dyn_tot[lp_dyn_tot < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , -lp_dyn_tot , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -2047,7 +2114,8 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        lp_spin_tot[lp_spin_tot > np.max(clevs1)]=np.max(clevs1)
        lp_spin_tot[lp_spin_tot < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , -lp_spin_tot , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -2066,7 +2134,8 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        lp_splat_tot[lp_splat_tot > np.max(clevs1)]=np.max(clevs1)
        lp_splat_tot[lp_splat_tot < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , -lp_splat_tot , clevs1 , cmap=my_map) 
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -2089,7 +2158,8 @@ def plot_ppert_equation_2_v( my_data , plot_path , show=False , force = False , 
        p1=ax.contour( x , y , ppert , clevs2 , colors='k' , linestyles='solid' , linewidths=2.0 )
        clevs2=np.arange(-600,0,50) * scale_factor
        p1=ax.contour( x , y , ppert , clevs2 , colors='k' , linestyles='dashed' , linewidths=2.0 )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
@@ -2193,7 +2263,8 @@ def plot_vortz_equation_v( my_data , plot_path , show=False , force = False , sc
           ax.quiver(x[0::skipz,0::skipx],y[0::skipz,0::skipx],hwind[0::skipz,0::skipx],w[0::skipz,0::skipx],scale=800.0*arrow_scale_factor)
        if my_data['slice_type'] == 'h'  :
           ax.quiver(x[0::skipz],y[0::skipz],uwind[0::skipz,0::skipx],vwind[0::skipz,0::skipx],scale=800.0*arrow_scale_factor)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :          
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_title(r'${\omega}_{z}$ (sh., ${s}^{-1}$) y viento (vectores)',fontsize=10)
        ax.grid()
@@ -2215,7 +2286,8 @@ def plot_vortz_equation_v( my_data , plot_path , show=False , force = False , sc
        dvortzdt_loc[dvortzdt_loc > np.max(clevs1)]=np.max(clevs1) 
        dvortzdt_loc[dvortzdt_loc < np.min(clevs1)]=np.min(clevs1) 
        p1=ax.contourf( x , y , dvortzdt_loc , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.set_title(r'$\frac{\partial{\omega_z}}{{\partial}t}$ (sh., ${s}^{-2}$)',fontsize=10)
@@ -2234,7 +2306,8 @@ def plot_vortz_equation_v( my_data , plot_path , show=False , force = False , sc
        advh_vortz[advh_vortz > np.max(clevs1)]=np.max(clevs1)
        advh_vortz[advh_vortz < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , advh_vortz , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        skipx=3
        skipz=3
        if my_data['slice_type'] == 'vy' or my_data['slice_type'] == 'vx' :
@@ -2251,7 +2324,8 @@ def plot_vortz_equation_v( my_data , plot_path , show=False , force = False , sc
        tilt_vortz[tilt_vortz > np.max(clevs1)]=np.max(clevs1)
        tilt_vortz[tilt_vortz < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , tilt_vortz , clevs1 , cmap=my_map)
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        clevs2=np.arange(10,100,10) * scale_factor
        p1=ax.contour( x , y , w , clevs2 , colors='k' , linestyles='solid' , linewidths=2.0 )
        clevs2=np.arange(-20,0,5) * scale_factor
@@ -2272,7 +2346,8 @@ def plot_vortz_equation_v( my_data , plot_path , show=False , force = False , sc
        str_vortz[str_vortz > np.max(clevs1)]=np.max(clevs1)
        str_vortz[str_vortz < np.min(clevs1)]=np.min(clevs1)
        p1=ax.contourf( x , y , str_vortz , clevs1 , cmap=my_map) 
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        clevs2=np.arange(2.0e-2,12.0e-2,2.0e-2) * scale_factor
        p1=ax.contour( x , y , vortz , clevs2 , colors='k' , linestyles='solid' , linewidths=2.0 )
        clevs2=np.arange(-10.0e-2,0,2.0e-2) * scale_factor
@@ -2301,7 +2376,8 @@ def plot_vortz_equation_v( my_data , plot_path , show=False , force = False , sc
        #p1=ax.contour( x , y , res_vortz , clevs2, colors='k' , linestyles='solid' )
        #clevs2=np.arange(-50.0e-5,0,5.0e-5) * scale_factor
        #p1=ax.contour( x , y , res_vortz , clevs2, colors='k' , linestyles='dashed' )
-       p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
+       if np.max( ref ) > 30.0 :       
+          p3=ax.contour( x , y , ref , [30.0,60.0] , colors='c',linestyles='solid' , linewidths=2.5 )
        ax.set_ybound( ybound )
        ax.set_xbound( xbound )
        ax.grid()
@@ -2325,36 +2401,30 @@ def plot_vortz_equation_v( my_data , plot_path , show=False , force = False , sc
 #Modified from http://wiki.scipy.org/Cookbook/Matplotlib/ColormapTransformations
 
 def plot_sounding( my_data , plot_path , show=False )  :
-
     fig_name = plot_path + '/profile' + '_i_' + str(my_data['xp']) + '_j_' + str(my_data['yp']) + '_t' + str(my_data['tp']) + '.png'
     #Ejemplo tomado de https://unidata.github.io/MetPy/latest/examples/plots/Skew-T_Layout.html#sphx-glr-examples-plots-skew-t-layout-py
     # Create a new figure. The dimensions here give a good aspect ratio
     fig = plt.figure(figsize=(9, 7))
     #add_metpy_logo(fig, 630, 80, size='large')
-
     # Grid for plots
     #rotation controla la inclinacion de las isotermas. Si es 0 el grafico se asemeja a un emagrama pero 
     #si es 45 entonces se obtiene un skew-T.
     skew = SkewT(fig, rotation=0)
-
     p=my_data['p'].data * units.hPa
     t=my_data['t'].data * units.degC
     td=my_data['td'] * units.degC
     u=my_data['u'] * units.meter / units.second
     v=my_data['v'] * units.meter / units.second
-
     # Plot the data using normal plotting functions, in this case using
     # log scaling in Y, as dictated by the typical meteorological plot
     skew.plot(p , t , 'r')
     skew.plot(p , td , 'g')
     skew.plot_barbs(p,u,v)
     skew.ax.set_ylim(1000, 100)
-
     # Add the relevant special lines
     skew.plot_dry_adiabats()
     skew.plot_moist_adiabats()
     skew.plot_mixing_lines()
-
     # Calculate LCL height and plot as black dot. Because `p`'s first value is
     # ~1000 mb and its last value is ~250 mb, the `0` index is selected for
     # `p`, `T`, and `Td` to lift the parcel from the surface. If `p` was inverted,
@@ -2362,17 +2432,14 @@ def plot_sounding( my_data , plot_path , show=False )  :
     # should be selected.
     lcl_pressure, lcl_temperature = mpcalc.lcl(p[0] , t[0] , td[0]  )
     skew.plot(lcl_pressure, lcl_temperature, 'ko', markerfacecolor='black')
-
     # Calculate full parcel profile and add to plot as black line
     prof = mpcalc.parcel_profile(p , t[0] , td[0] ).to('degC')
     skew.plot(p, prof, 'k', linewidth=2)
-
     # Shade areas of CAPE and CIN
     skew.shade_cin(p,t,prof)
     skew.shade_cape(p,t,prof)
     # Good bounds for aspect ratio
     skew.ax.set_xlim(-70, 40)
-
     # Create a hodograph
     ax = fig.add_axes([0.72,0.66,0.2,0.2])
     h = Hodograph(ax, component_range=60.)
@@ -2384,6 +2451,30 @@ def plot_sounding( my_data , plot_path , show=False )  :
 
     plt.savefig(fig_name,dpi=dpi)
     plt.close()
+
+def plot_pz( my_data , plot_path , show=False )  :
+    fig_name = plot_path + '/pz' + '_i_' + str(my_data['xp']) + '_j_' + str(my_data['yp']) + '_t' + str(my_data['tp']) + '.png'
+    #Ejemplo tomado de https://unidata.github.io/MetPy/latest/examples/plots/Skew-T_Layout.html#sphx-glr-examples-plots-skew-t-layout-py
+    # Create a new figure. The dimensions here give a good aspect ratio
+    fig = plt.figure(figsize=(9, 7))
+    #add_metpy_logo(fig, 630, 80, size='large')
+    # Grid for plots
+    #rotation controla la inclinacion de las isotermas. Si es 0 el grafico se asemeja a un emagrama pero 
+    #si es 45 entonces se obtiene un skew-T.
+    p=my_data['p']
+    z=my_data['z']
+    plt.figure()
+    plt.plot( z , p )
+    plt.xlabel('Height (m)')
+    plt.ylabel('Pressure (hPa)')
+
+    if show :
+       plt.show()
+
+    plt.savefig(fig_name,dpi=dpi)
+    plt.close()
+
+
 
 
 def cmap_map(function,cmap):

@@ -18,6 +18,12 @@ data_path = exp_path + '/run/'                                                  
 plot_path = exp_path + '/figuras/'                                                   #Carpeta donde se generan las figuras.
 os.makedirs(plot_path,exist_ok=True)
 
+wrf_data = wrf.get_profile( data_path , xp=0 , yp=0 , tp=0 )
+
+wrfp.plot_sounding( wrf_data , plot_path , show=False )
+
+wrfp.plot_pz( wrf_data , plot_path , show=False )
+
 
 wrf_data = wrf.get_data_vslice( data_path , slice_type='vy' , slice_index = 80 , force=False ) 
 
